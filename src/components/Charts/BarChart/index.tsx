@@ -7,14 +7,15 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { DEFAULT_DATA } from '../constants';
 
 type BarChartProps = {
   color: string;
   data: any[];
   height: number;
   width: number;
+  xAxisTitle: string;
   xKey: string;
+  yAxisTitle: string;
   yKey: string;
 };
 
@@ -23,7 +24,9 @@ export default function BarChart({
   data,
   height,
   width,
+  xAxisTitle,
   xKey,
+  yAxisTitle,
   yKey,
 }: BarChartProps): JSX.Element {
   return (
@@ -32,8 +35,8 @@ export default function BarChart({
         <CartesianGrid strokeDasharray='3 3' />
         <Bar dataKey={yKey} fill={color} />
         <Tooltip />
-        <XAxis dataKey={xKey} />
-        <YAxis dataKey={yKey} />
+        <XAxis dataKey={xKey} name={xAxisTitle} />
+        <YAxis dataKey={yKey} name={yAxisTitle} />
       </RechartsBarChart>
     </ResponsiveContainer>
   );

@@ -7,14 +7,15 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { DEFAULT_DATA } from '../constants';
 
 type AreaChartProps = {
   color: string;
   data: any[];
   height: number;
   width: number;
+  xAxisTitle: string;
   xKey: string;
+  yAxisTitle: string;
   yKey: string;
 };
 
@@ -23,7 +24,9 @@ export default function AreaChart({
   data,
   height,
   width,
+  xAxisTitle,
   xKey,
+  yAxisTitle,
   yKey,
 }: AreaChartProps): JSX.Element {
   return (
@@ -41,8 +44,16 @@ export default function AreaChart({
           type='monotone'
         />
         <Tooltip />
-        <XAxis dataKey={xKey} />
-        <YAxis dataKey={yKey} />
+        <XAxis dataKey={xKey} label={{ value: xAxisTitle }} />
+        <YAxis
+          dataKey={yKey}
+          label={{
+            angle: -90,
+            position: 'insideLeft',
+            style: { textAnchor: 'middle' },
+            value: yAxisTitle,
+          }}
+        />
       </RechartsAreaChart>
     </ResponsiveContainer>
   );

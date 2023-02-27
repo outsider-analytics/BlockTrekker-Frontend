@@ -64,7 +64,7 @@ export default function Modal({
       style={modalStyles}
       contentLabel='modal'
     >
-      <div style={{ position: 'relative' }}>{children}</div>
+      {children}
     </ReactModal>
   );
 }

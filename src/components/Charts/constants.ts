@@ -35,3 +35,7 @@ export const DEFAULT_DATA = [
     { x: 9, y: 260 },
     { x: 10, y: 280 },
 ];
+
+export type ChartProps = {
+
+}

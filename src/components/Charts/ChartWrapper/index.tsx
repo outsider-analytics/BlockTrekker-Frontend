@@ -11,7 +11,9 @@ type ChartWrapperProps = {
   height?: number;
   rows: any[];
   width?: number;
+  xAxisTitle?: string;
   xKey: string;
+  yAxisTitle?: string;
   yKey: string;
 };
 
@@ -21,7 +23,9 @@ export default function ChartWrapper({
   height,
   rows,
   width,
+  xAxisTitle,
   xKey,
+  yAxisTitle,
   yKey,
 }: ChartWrapperProps): JSX.Element {
   const customSelected = useMemo(() => {
@@ -35,7 +39,9 @@ export default function ChartWrapper({
         data={customSelected ? rows : DEFAULT_DATA}
         height={height ?? 300}
         width={width ?? 800}
+        xAxisTitle={xAxisTitle ?? ''}
         xKey={xKey || 'x'}
+        yAxisTitle={yAxisTitle ?? ''}
         yKey={yKey || 'y'}
       />
     );
@@ -46,7 +52,9 @@ export default function ChartWrapper({
         data={customSelected ? rows : DEFAULT_DATA}
         height={height ?? 300}
         width={width ?? 800}
+        xAxisTitle={xAxisTitle ?? ''}
         xKey={xKey || 'x'}
+        yAxisTitle={yAxisTitle ?? ''}
         yKey={yKey || 'y'}
       />
     );
@@ -58,7 +66,9 @@ export default function ChartWrapper({
         data={customSelected ? rows : DEFAULT_DATA}
         height={height ?? 300}
         width={width ?? 800}
+        xAxisTitle={xAxisTitle ?? ''}
         xKey={xKey || 'x'}
+        yAxisTitle={yAxisTitle ?? ''}
         yKey={yKey || 'y'}
       />
     );

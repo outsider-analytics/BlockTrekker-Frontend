@@ -15,7 +15,9 @@ type LineChartProps = {
   data: any[];
   height: number;
   width: number;
+  xAxisTitle: string;
   xKey: string;
+  yAxisTitle: string;
   yKey: string;
 };
 
@@ -25,7 +27,9 @@ export default function LineChart({
   data,
   height,
   width,
+  xAxisTitle,
   xKey,
+  yAxisTitle,
   yKey,
 }: LineChartProps): JSX.Element {
   return (
@@ -41,8 +45,8 @@ export default function LineChart({
           type={curveType}
         />
         <Tooltip />
-        <XAxis dataKey={xKey} />
-        <YAxis dataKey={yKey} />
+        <XAxis dataKey={xKey} name={xAxisTitle} />
+        <YAxis dataKey={yKey} name={yAxisTitle} />
       </RechartsLineChart>
     </ResponsiveContainer>
   );
