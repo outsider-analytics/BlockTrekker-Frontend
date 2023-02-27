@@ -1,0 +1,94 @@
+import { createUseStyles } from 'react-jss';
+
+const useStyles = createUseStyles({
+  header: {
+    borderRadius: '10px',
+    color: '#A1A2A1',
+    fontSize: '16px',
+    fontWeight: 400,
+    '& > th': {
+      border: '1px solid #424542',
+      borderStyle: 'solid none solid none',
+      padding: '12px 24px',
+      textAlign: 'left',
+    },
+    '& > th:first-child': {
+      borderRadius: '4px 0 0 4px',
+      borderLeftStyle: 'solid',
+    },
+    '& > th:last-child': {
+      borderRadius: '0 4px 4px 0',
+      borderRightStyle: 'solid',
+    },
+  },
+  row: {
+    backgroundColor: '#34383D',
+    borderBottom: '2px solid transparent',
+    color: '#FCFCFC',
+    fontSize: '16px',
+    height: '32px',
+    fontWeight: 400,
+    padding: '7px 24px',
+    '& > td:first-of-type': {
+      borderRadius: '4px 0px 0px 4px',
+    },
+    '& > td:last-of-type': {
+      borderRadius: '0px 4px 4px 0px',
+    },
+    '&:hover': {
+      background: '#424542',
+    },
+  },
+  table: {
+    borderCollapse: 'seperate',
+    borderSpacing: '0 5px',
+    minWidth: '100%',
+  },
+  tableBody: {
+    '&::before': {
+      content: '.',
+      display: 'block',
+      lineHeight: '10px',
+      textIndent: '-99999px',
+    },
+  },
+});
+
+type TableProps = {
+  columns: string[];
+  rows: any[];
+};
+
+export default function Table({ columns, rows }: TableProps): JSX.Element {
+  const styles = useStyles();
+  return (
+    <table className={styles.table}>
+      <thead>
+        <tr className={styles.header}>
+          {columns.map((col: string, index: number) => (
+            <th style={{ paddingLeft: index === 0 ? '24px' : '50px' }}>
+              {col}
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody className={styles.tableBody}>
+        {rows.map((row: any) => (
+          <tr className={styles.row}>
+            {Object.values(row).map((val: any, index) => (
+              <td
+                style={{
+                  padding: '20px 24px',
+                  paddingLeft: index === 0 ? '24px' : '50px',
+                  textAlign: 'left',
+                }}
+              >
+                {val}
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}

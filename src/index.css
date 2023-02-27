@@ -1,0 +1,35 @@
+body {
+  background-color: #262726;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.ReactModal__Overlay {
+  opacity: 0;
+  transform: translateY(100px);
+  transition: all 300ms ease-out;
+}
+
+.ReactModal__Overlay--after-open {
+  opacity: 1;
+  transform: translateY(0px);
+}
+
+.ReactModal__Overlay--before-close {
+  opacity: 0;
+  transform: translateY(100px);
+}
+
+.react-grid-item.react-grid-placeholder {
+  background-color: #5451FF;
+  border-radius: 4px;
+}
