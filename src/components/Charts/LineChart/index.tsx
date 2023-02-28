@@ -26,7 +26,7 @@ export default function LineChart({
 }: LineChartProps): JSX.Element {
   return (
     <ResponsiveContainer>
-      <RechartsLineChart data={data} margin={{ bottom: 0, left: 0, right: 0 }}>
+      <RechartsLineChart data={data} margin={{ bottom: 8, left: 0, right: 0 }}>
         <CartesianGrid strokeDasharray='3 3' />
         <Line
           activeDot={{ r: 1 }}
@@ -37,8 +37,22 @@ export default function LineChart({
           type={curveType}
         />
         <Tooltip />
-        <XAxis dataKey={xKey} name={xAxisTitle} scale={scale} />
-        <YAxis dataKey={yKey} name={yAxisTitle} />
+        <XAxis
+          dataKey={xKey}
+          label={{ dy: 15, value: xAxisTitle }}
+          name={xAxisTitle}
+          scale={scale}
+        />
+        <YAxis
+          dataKey={yKey}
+          label={{
+            angle: -90,
+            position: 'insideLeft',
+            style: { textAnchor: 'middle' },
+            value: yAxisTitle,
+          }}
+          name={yAxisTitle}
+        />
       </RechartsLineChart>
     </ResponsiveContainer>
   );

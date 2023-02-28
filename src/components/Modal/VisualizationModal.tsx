@@ -7,7 +7,7 @@ import {
 } from 'components/Charts/constants';
 
 import Modal from '.';
-import { SetStateAction, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { CurveType } from 'recharts/types/shape/Curve';
 import Dropdown from 'components/Dropdown';
 import { createUseStyles } from 'react-jss';
@@ -16,14 +16,14 @@ import ChartWrapper from 'components/Charts/ChartWrapper';
 import { HexColorPicker } from 'react-colorful';
 import { useOutsideAlerter } from 'hooks/useOutsideAlerter';
 import Input from 'components/Input';
-import RadioGroup from 'components/RadioGroup';
 import Button from 'components/Button';
 import { Droplet } from 'react-feather';
+// import { generateStackData } from 'components/Charts/utils';
 
 const useStyles = createUseStyles({
   chartContainer: {
     height: '350px',
-    width: '750px',
+    width: '100%',
   },
   color: ({ color }: { color: string }) => ({
     backgroundColor: color,
@@ -54,8 +54,6 @@ type VisualizationModalProps = {
   rows: any[];
 };
 
-const TABS = ['Chart', 'Axes'];
-
 export default function VisualizationModal({
   columns,
   onClose,
@@ -66,9 +64,9 @@ export default function VisualizationModal({
   const [color, setColor] = useState('#8884d8');
   const styles = useStyles({ color });
   const [chartType, setChartType] = useState<ChartType>(ChartTypes[0]);
-  const [scale, setScale] = useState<ChartScale>(ChartScales[0]);
+  const [scale] = useState<ChartScale>(ChartScales[0]);
   const [, setCurveType] = useState<CurveType>(CurveOptions[0]);
-  const [stackBy, setStackBy] = useState('');
+  // const [stackBy, setStackBy] = useState('');
   const [showPicker, setShowPicker] = useState(false);
   const [xAxisTitle, setXAxisTitle] = useState('');
   const [xKey, setXKey] = useState('');
@@ -76,15 +74,19 @@ export default function VisualizationModal({
   const [yKey, setYKey] = useState('');
   const colorRef = useRef(null);
 
+  const disabled = useMemo(() => {
+    return !xKey || !yKey;
+  }, [xKey, yKey]);
+
   const save = async () => {
-    const payload = { chartType, color, xKey, yKey };
+    const payload = { chartType, color, xAxisTitle, xKey, yKey };
     await onFinish(payload);
   };
 
-  const stackedData = useMemo(() => {
-    if (!stackBy) return [];
-    console.log('Data: ', rows);
-  }, [rows, stackBy]);
+  // const stackedData = useMemo(() => {
+  //   if (!stackBy) return [];
+  //   const stackedData = generateStackData(stackBy, rows);
+  // }, [rows, stackBy]);
 
   useEffect(() => {
     setChartType(ChartTypes[0]);
@@ -120,12 +122,12 @@ export default function VisualizationModal({
             yKey={yKey}
           />
         </div>
-        <RadioGroup
+        {/* <RadioGroup
           onChange={setScale as React.Dispatch<SetStateAction<string>>}
           options={ChartScales}
           selectedOption={scale}
           title='Scale'
-        />
+        /> */}
       </Flex>
       <Flex alignItems='flex-end' gap='16px' mt='32px'>
         <Dropdown
@@ -150,13 +152,13 @@ export default function VisualizationModal({
           selectedOption={yKey}
           title='Y-Axis Key'
         />
-        <Dropdown
+        {/* <Dropdown
           onSelect={setStackBy}
           options={columns}
           placeholder='Select stack option'
           selectedOption={stackBy}
           title='Stack By'
-        />
+        /> */}
         <Flex alignItems='center' gap='8px'>
           <Button
             onClick={() => setShowPicker(true)}
@@ -187,6 +189,7 @@ export default function VisualizationModal({
         />
       </Flex>
       <Button
+        disabled={disabled}
         onClick={() => save()}
         style={{
           bottom: '24px',

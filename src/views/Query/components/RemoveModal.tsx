@@ -1,6 +1,15 @@
+import Button from 'components/Button';
 import Flex from 'components/Flex';
 import Modal from 'components/Modal';
 import { createUseStyles } from 'react-jss';
+
+const useStyles = createUseStyles({
+  title: {
+    color: '#FCFCFC',
+    fontSize: '34px',
+    fontWeight: 500,
+  },
+});
 
 type RemoveModalProps = {
   onClose: () => void;
@@ -13,15 +22,29 @@ export default function RemoveModal({
   onRemove,
   open,
 }: RemoveModalProps): JSX.Element {
+  const styles = useStyles();
   return (
     <Modal
       onClose={onClose}
       open={open}
-      style={{ height: '300px', width: 'min(500px, 100%)' }}
+      style={{
+        borderRadius: '4px',
+        height: '200px',
+        padding: '24px',
+        width: 'min(350px, 100%)',
+      }}
     >
-      <Flex>
-        <button onClick={() => onClose()}>Close</button>
-        <button onClick={() => onRemove()}>Remove</button>
+      <div className={styles.title}>Remove?</div>
+      <Flex
+        justifyContent='space-between'
+        style={{
+          bottom: '24px',
+          position: 'absolute',
+          width: 'calc(100% - 48px)',
+        }}
+      >
+        <Button onClick={() => onClose()} text='Close' />
+        <Button onClick={() => onRemove()} text='Remove' />
       </Flex>
     </Modal>
   );

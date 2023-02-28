@@ -2,21 +2,23 @@ import { createUseStyles } from 'react-jss';
 import { CSSProperties, ReactNode } from 'react';
 
 const useStyles = createUseStyles({
-  button: {
+  button: ({ disabled }: { disabled?: boolean }) => ({
     backgroundColor: '#34383D',
     border: 'none',
     borderRadius: '4px',
     color: '#FCFCFC',
-    cursor: 'pointer',
+    cursor: disabled ? 'not-allowed' : 'pointer',
     fontSize: '14px',
     fontWeight: 800,
+    opacity: disabled ? 0.65 : 1,
     outline: 'transparent',
     padding: '12px 15px',
-  },
+  }),
 });
 
 type ButtonProps = {
   children?: ReactNode;
+  disabled?: boolean;
   onClick: () => void;
   style?: CSSProperties;
   text?: string;
@@ -24,13 +26,18 @@ type ButtonProps = {
 
 export default function Button({
   children,
+  disabled,
   onClick,
   style,
   text,
 }: ButtonProps): JSX.Element {
-  const styles = useStyles();
+  const styles = useStyles({ disabled });
   return (
-    <button className={styles.button} onClick={onClick} style={{ ...style }}>
+    <button
+      className={styles.button}
+      onClick={() => !disabled && onClick()}
+      style={{ ...style }}
+    >
       {text && <div>{text}</div>}
       <div>{children}</div>
     </button>

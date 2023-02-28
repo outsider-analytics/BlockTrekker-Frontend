@@ -14,9 +14,7 @@ type AreaChartProps = {} & Omit<AxisChartProps, 'curveType'>;
 export default function AreaChart({
   color,
   data,
-  height,
   scale,
-  width,
   xAxisTitle,
   xKey,
   yAxisTitle,

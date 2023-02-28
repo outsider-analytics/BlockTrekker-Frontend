@@ -14,9 +14,7 @@ type BarChartProps = {} & Omit<AxisChartProps, 'curveType'>;
 export default function BarChart({
   color,
   data,
-  height,
   scale,
-  width,
   xAxisTitle,
   xKey,
   yAxisTitle,
@@ -28,8 +26,18 @@ export default function BarChart({
         <CartesianGrid strokeDasharray='3 3' />
         <Bar dataKey={yKey} fill={color} />
         <Tooltip />
-        <XAxis dataKey={xKey} name={xAxisTitle} />
-        <YAxis dataKey={yKey} name={yAxisTitle} scale={scale} />
+        <XAxis dataKey={xKey} label={{ value: xAxisTitle }} name={xAxisTitle} />
+        <YAxis
+          dataKey={yKey}
+          label={{
+            angle: -90,
+            position: 'insideLeft',
+            style: { textAnchor: 'middle' },
+            value: yAxisTitle,
+          }}
+          name={yAxisTitle}
+          scale={scale}
+        />
       </RechartsBarChart>
     </ResponsiveContainer>
   );

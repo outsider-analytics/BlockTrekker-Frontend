@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { createUseStyles } from 'react-jss';
+import { sortArbitrayType } from 'utils';
 
 const useStyles = createUseStyles({
   header: {
@@ -54,6 +56,12 @@ const useStyles = createUseStyles({
   },
 });
 
+type SortedRows = {
+  col: string;
+  count: number;
+  rows: string[];
+};
+
 type TableProps = {
   columns: string[];
   rows: any[];
@@ -61,19 +69,50 @@ type TableProps = {
 
 export default function Table({ columns, rows }: TableProps): JSX.Element {
   const styles = useStyles();
+  const [sortedRows, setSortedRows] = useState<SortedRows>({
+    col: '',
+    count: 0,
+    rows: [],
+  });
+
+  const sortByColumn = (col: string) => {
+    setSortedRows((prev) => {
+      if (prev.col === col) {
+        if (!prev.count) {
+          const sortedRows = rows
+            .slice()
+            .sort((a, b) => sortArbitrayType(a[col], b[col]));
+          return { col, count: 1, rows: sortedRows };
+        } else {
+          return { col: '', count: 0, rows: [] };
+        }
+      } else {
+        const sortedRows = rows
+          .slice()
+          .sort((a, b) => sortArbitrayType(b[col], a[col]));
+        return { col, count: 0, rows: sortedRows };
+      }
+    });
+  };
+
   return (
     <table className={styles.table}>
       <thead>
         <tr className={styles.header}>
           {columns.map((col: string, index: number) => (
             <th style={{ paddingLeft: index === 0 ? '24px' : '50px' }}>
-              {col}
+              <div
+                onClick={() => sortByColumn(col)}
+                style={{ cursor: 'pointer' }}
+              >
+                {col}
+              </div>
             </th>
           ))}
         </tr>
       </thead>
       <tbody className={styles.tableBody}>
-        {rows.map((row: any) => (
+        {(sortedRows.col ? sortedRows.rows : rows).map((row: any) => (
           <tr className={styles.row}>
             {Object.values(row).map((val: any, index) => (
               <td

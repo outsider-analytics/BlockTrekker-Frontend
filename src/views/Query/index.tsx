@@ -1,5 +1,4 @@
 import Flex from 'components/Flex';
-import Table from 'components/Table';
 import { useEffect, useMemo } from 'react';
 import { useState } from 'react';
 import { createUseStyles } from 'react-jss';
@@ -18,7 +17,6 @@ import {
 import { saveVisualization } from 'api/visualizationApi';
 import QueryLoader from './components/QueryLoader';
 import DataSection from './components/DataSection';
-import RemoveModal from './components/RemoveModal';
 
 const useStyles = createUseStyles({
   back: {
@@ -118,7 +116,6 @@ export default function Query(): JSX.Element {
     const res = await downloadResults(id, type);
     const disposition = res.headers.get('content-disposition');
     const fileName = disposition!.substring(21).replace(/^"(.*)"$/, '$1');
-    console.log('Filename: ', fileName);
     const data = await res.blob();
     let elm = document.createElement('a');
     elm.href = URL.createObjectURL(data);
@@ -150,7 +147,7 @@ export default function Query(): JSX.Element {
     } else {
       return oldQuery === query ? 'Execute' : 'Save & Execute';
     }
-  }, [isExecuting, oldQuery, query]);
+  }, [id, isExecuting, oldQuery, query]);
 
   const save = async () => {
     setIsSaving(true);
