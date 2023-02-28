@@ -1,11 +1,13 @@
 import {
+  ChartScale,
+  ChartScales,
   ChartType,
   ChartTypes,
   CurveOptions,
 } from 'components/Charts/constants';
 
 import Modal from '.';
-import { useEffect, useRef, useState } from 'react';
+import { SetStateAction, useEffect, useMemo, useRef, useState } from 'react';
 import { CurveType } from 'recharts/types/shape/Curve';
 import Dropdown from 'components/Dropdown';
 import { createUseStyles } from 'react-jss';
@@ -14,23 +16,28 @@ import ChartWrapper from 'components/Charts/ChartWrapper';
 import { HexColorPicker } from 'react-colorful';
 import { useOutsideAlerter } from 'hooks/useOutsideAlerter';
 import Input from 'components/Input';
+import RadioGroup from 'components/RadioGroup';
+import Button from 'components/Button';
+import { Droplet } from 'react-feather';
 
 const useStyles = createUseStyles({
   chartContainer: {
     height: '350px',
     width: '750px',
   },
+  color: ({ color }: { color: string }) => ({
+    backgroundColor: color,
+    borderRadius: '4px',
+    height: '25px',
+    width: '25px',
+  }),
   colorPicker: {
+    left: 0,
     position: 'absolute',
-    top: '-100%',
+    bottom: 'calc(100% + 10px)',
   },
   pickerButton: {
     position: 'relative',
-  },
-  save: {
-    bottom: '24px',
-    right: '24px',
-    position: 'absolute',
   },
   title: {
     color: '#FCFCFC',
@@ -47,6 +54,8 @@ type VisualizationModalProps = {
   rows: any[];
 };
 
+const TABS = ['Chart', 'Axes'];
+
 export default function VisualizationModal({
   columns,
   onClose,
@@ -54,10 +63,12 @@ export default function VisualizationModal({
   open,
   rows,
 }: VisualizationModalProps): JSX.Element {
-  const styles = useStyles();
   const [color, setColor] = useState('#8884d8');
+  const styles = useStyles({ color });
   const [chartType, setChartType] = useState<ChartType>(ChartTypes[0]);
+  const [scale, setScale] = useState<ChartScale>(ChartScales[0]);
   const [, setCurveType] = useState<CurveType>(CurveOptions[0]);
+  const [stackBy, setStackBy] = useState('');
   const [showPicker, setShowPicker] = useState(false);
   const [xAxisTitle, setXAxisTitle] = useState('');
   const [xKey, setXKey] = useState('');
@@ -69,6 +80,11 @@ export default function VisualizationModal({
     const payload = { chartType, color, xKey, yKey };
     await onFinish(payload);
   };
+
+  const stackedData = useMemo(() => {
+    if (!stackBy) return [];
+    console.log('Data: ', rows);
+  }, [rows, stackBy]);
 
   useEffect(() => {
     setChartType(ChartTypes[0]);
@@ -91,18 +107,27 @@ export default function VisualizationModal({
       }}
     >
       <div className={styles.title}>Create Visualization</div>
-      <div className={styles.chartContainer}>
-        <ChartWrapper
-          color={color}
-          chartType={chartType}
-          rows={rows}
-          xAxisTitle={xAxisTitle}
-          yAxisTitle={yAxisTitle}
-          xKey={xKey}
-          yKey={yKey}
+      <Flex gap='24px'>
+        <div className={styles.chartContainer}>
+          <ChartWrapper
+            color={color}
+            chartType={chartType}
+            data={rows}
+            scale={scale}
+            xAxisTitle={xAxisTitle}
+            yAxisTitle={yAxisTitle}
+            xKey={xKey}
+            yKey={yKey}
+          />
+        </div>
+        <RadioGroup
+          onChange={setScale as React.Dispatch<SetStateAction<string>>}
+          options={ChartScales}
+          selectedOption={scale}
+          title='Scale'
         />
-      </div>
-      <Flex alignItems='center' gap='16px' mt='32px'>
+      </Flex>
+      <Flex alignItems='flex-end' gap='16px' mt='32px'>
         <Dropdown
           onSelect={
             setChartType as React.Dispatch<React.SetStateAction<string>>
@@ -113,30 +138,39 @@ export default function VisualizationModal({
         />
         <Dropdown
           onSelect={setXKey}
-          options={xKey ? columns : ['Select x-key', ...columns]}
+          options={columns}
+          placeholder='Select x-key'
           selectedOption={xKey}
           title='X-Axis Key'
         />
         <Dropdown
           onSelect={setYKey}
-          options={yKey ? columns : ['Select y-key', ...columns]}
+          options={columns}
+          placeholder='Select y-key'
           selectedOption={yKey}
           title='Y-Axis Key'
         />
-        <button
-          onClick={() => setShowPicker(true)}
-          ref={colorRef}
-          style={{ position: 'relative' }}
-        >
-          <div>Pick Color</div>
-          {showPicker && (
-            <HexColorPicker
-              className={styles.colorPicker}
-              color={color}
-              onChange={setColor}
-            />
-          )}
-        </button>
+        <Dropdown
+          onSelect={setStackBy}
+          options={columns}
+          placeholder='Select stack option'
+          selectedOption={stackBy}
+          title='Stack By'
+        />
+        <Flex alignItems='center' gap='8px'>
+          <Button
+            onClick={() => setShowPicker(true)}
+            style={{ padding: '8px 12px', position: 'relative' }}
+          >
+            <Droplet size={20} />
+            {showPicker && (
+              <div className={styles.colorPicker} ref={colorRef}>
+                <HexColorPicker color={color} onChange={setColor} />
+              </div>
+            )}
+          </Button>
+          <div className={styles.color} />
+        </Flex>
       </Flex>
       <Flex gap='16px' mt='8px'>
         <Input
@@ -152,9 +186,16 @@ export default function VisualizationModal({
           value={yAxisTitle}
         />
       </Flex>
-      <button className={styles.save} onClick={() => save()}>
-        Save
-      </button>
+      <Button
+        onClick={() => save()}
+        style={{
+          bottom: '24px',
+          right: '24px',
+          padding: '8px 10px',
+          position: 'absolute',
+        }}
+        text='Save'
+      />
     </Modal>
   );
 }

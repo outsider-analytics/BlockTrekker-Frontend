@@ -61,7 +61,7 @@ export default function Dashboard(): JSX.Element {
             <ChartWrapper
               chartType={item.viz.chartType}
               color={item.viz.color}
-              rows={item.results}
+              data={item.results}
               xKey={item.viz.xKey}
               yKey={item.viz.yKey}
             />

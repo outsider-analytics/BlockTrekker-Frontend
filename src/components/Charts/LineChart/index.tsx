@@ -8,24 +8,16 @@ import {
   YAxis,
 } from 'recharts';
 import { CurveType } from 'recharts/types/shape/Curve';
+import { AxisChartProps } from '../constants';
 
-type LineChartProps = {
-  color: string;
-  curveType: CurveType;
-  data: any[];
-  height: number;
-  width: number;
-  xAxisTitle: string;
-  xKey: string;
-  yAxisTitle: string;
-  yKey: string;
-};
+type LineChartProps = {} & AxisChartProps;
 
 export default function LineChart({
   color,
   curveType,
   data,
   height,
+  scale,
   width,
   xAxisTitle,
   xKey,
@@ -45,7 +37,7 @@ export default function LineChart({
           type={curveType}
         />
         <Tooltip />
-        <XAxis dataKey={xKey} name={xAxisTitle} />
+        <XAxis dataKey={xKey} name={xAxisTitle} scale={scale} />
         <YAxis dataKey={yKey} name={yAxisTitle} />
       </RechartsLineChart>
     </ResponsiveContainer>

@@ -115,7 +115,7 @@ export default function DataSection({
                   <ChartWrapper
                     chartType={vis.chartType}
                     color={vis.color}
-                    rows={results.rows}
+                    data={results.rows}
                     xKey={vis.xKey}
                     yKey={vis.yKey}
                   />

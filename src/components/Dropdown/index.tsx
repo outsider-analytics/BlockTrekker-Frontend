@@ -37,6 +37,7 @@ const useStyles = createUseStyles({
 type DropdownProps = {
   onSelect: React.Dispatch<SetStateAction<string>>;
   options: string[];
+  placeholder?: string;
   selectedOption: string;
   title: string;
 };
@@ -44,6 +45,7 @@ type DropdownProps = {
 export default function Dropdown({
   onSelect,
   options,
+  placeholder,
   selectedOption,
   title,
 }: DropdownProps): JSX.Element {
@@ -61,7 +63,7 @@ export default function Dropdown({
         ref={dropdownRef}
       >
         <Flex justifyContent='space-between' gap='16px'>
-          <div>{selectedOption || options[0]}</div>
+          <div>{selectedOption || placeholder}</div>
           <ChevronDown className={styles.caret} />
           {open && (
             <div className={styles.expandedMenu}>

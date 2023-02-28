@@ -1,5 +1,12 @@
 import { CurveType } from "recharts/types/shape/Curve";
 
+export enum ChartScale {
+    Linear = 'linear',
+    Log = 'log',
+}
+
+export const ChartScales: ChartScale[] = [ChartScale.Linear, ChartScale.Log];
+
 export enum ChartType {
     Area = 'area',
     Bar = 'bar',
@@ -36,6 +43,15 @@ export const DEFAULT_DATA = [
     { x: 10, y: 280 },
 ];
 
-export type ChartProps = {
-
+export type AxisChartProps = {
+    color: string;
+    curveType: CurveType;
+    data: any[];
+    height: number;
+    scale: ChartScale;
+    width: number;
+    xAxisTitle: string;
+    xKey: string;
+    yAxisTitle?: string;
+    yKey: string;
 }

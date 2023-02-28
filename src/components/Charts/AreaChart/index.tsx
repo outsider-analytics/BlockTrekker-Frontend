@@ -7,22 +7,15 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+import { AxisChartProps } from '../constants';
 
-type AreaChartProps = {
-  color: string;
-  data: any[];
-  height: number;
-  width: number;
-  xAxisTitle: string;
-  xKey: string;
-  yAxisTitle: string;
-  yKey: string;
-};
+type AreaChartProps = {} & Omit<AxisChartProps, 'curveType'>;
 
 export default function AreaChart({
   color,
   data,
   height,
+  scale,
   width,
   xAxisTitle,
   xKey,
@@ -53,6 +46,7 @@ export default function AreaChart({
             style: { textAnchor: 'middle' },
             value: yAxisTitle,
           }}
+          scale={scale}
         />
       </RechartsAreaChart>
     </ResponsiveContainer>
