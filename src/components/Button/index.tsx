@@ -12,7 +12,7 @@ const useStyles = createUseStyles({
     fontWeight: 800,
     opacity: disabled ? 0.65 : 1,
     outline: 'transparent',
-    padding: '12px 15px',
+    padding: '10px 12px',
   }),
 });
 

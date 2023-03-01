@@ -4,8 +4,11 @@ import Table from 'components/Table';
 import ChartWrapper from 'components/Charts/ChartWrapper';
 import Flex from 'components/Flex';
 import { Trash2 } from 'react-feather';
-import RemoveModal from './RemoveModal';
+import RemoveModal from '../../../components/Modal/RemoveModal';
 import { removeVisualization } from 'api/visualizationApi';
+import { AiOutlineUnorderedList } from 'react-icons/ai';
+import { ChartTypeToIcon } from 'components/Charts/constants';
+import { capitalize } from 'lodash';
 
 const useStyles = createUseStyles({
   delete: {
@@ -49,7 +52,7 @@ export default function DataSection({
 }: DataSectionProps): JSX.Element {
   const [selectedTab, setSelectedTab] = useState(0);
   const [showRemoveModal, setShowRemoveModal] = useState(false);
-  const [tabs, setTabs] = useState(['RESULTS']);
+  const [tabs, setTabs] = useState(['Results']);
   const styles = useStyles();
 
   const onRemove = async () => {
@@ -64,8 +67,8 @@ export default function DataSection({
   };
 
   useEffect(() => {
-    const visualizationNames = visualizations.map(
-      (_, index) => `VIS ${index + 1}`
+    const visualizationNames = visualizations.map(({ chartType }) =>
+      capitalize(chartType)
     );
     setTabs((prev) => [prev[0], ...visualizationNames]);
   }, [visualizations]);
@@ -89,7 +92,14 @@ export default function DataSection({
                     selectedTab === index ? '#424542' : 'initial',
                 }}
               >
-                {tab}
+                <Flex alignItems='center' gap='4px'>
+                  {tab}
+                  {index > 0 ? (
+                    ChartTypeToIcon[visualizations[index - 1].chartType]
+                  ) : (
+                    <AiOutlineUnorderedList />
+                  )}
+                </Flex>
               </div>
             ))}
           </div>

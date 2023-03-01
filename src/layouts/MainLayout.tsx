@@ -9,7 +9,15 @@ export default function MainLayout({ children }: MainLayoutProps) {
   return (
     <div>
       <Header />
-      <div style={{ minHeight: 'calc(100vh - 80px)' }}>{children}</div>
+      <div
+        style={{
+          minHeight: 'calc(100vh - 80px)',
+          padding: '0px 16px 40px 16px',
+          width: 'calc(100vw - 32px)',
+        }}
+      >
+        {children}
+      </div>
     </div>
   );
 }

@@ -7,6 +7,8 @@ import {
 } from '@web3modal/ethereum';
 import { Web3Modal } from '@web3modal/react';
 import { configureChains, createClient, mainnet, WagmiConfig } from 'wagmi';
+import { ThemeProvider } from 'react-jss';
+import { theme } from 'theme';
 
 const { REACT_APP_WALLET_CONNECT_ID: WALLET_CONNECT_ID } = process.env;
 
@@ -32,9 +34,11 @@ const ethereumClient = new EthereumClient(wagmiClient, [mainnet]);
 function App() {
   return (
     <>
-      <WagmiConfig client={wagmiClient}>
-        <RouterProvider router={router} />
-      </WagmiConfig>
+      <ThemeProvider theme={theme}>
+        <WagmiConfig client={wagmiClient}>
+          <RouterProvider router={router} />
+        </WagmiConfig>
+      </ThemeProvider>
       <Web3Modal
         projectId={WALLET_CONNECT_ID!}
         ethereumClient={ethereumClient}
