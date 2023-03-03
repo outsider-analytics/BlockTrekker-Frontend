@@ -17,6 +17,7 @@ import {
 import { saveVisualization } from 'api/visualizationApi';
 import QueryLoader from './components/QueryLoader';
 import DataSection from './components/DataSection';
+import { RootLocation } from 'locations';
 
 const useStyles = createUseStyles({
   back: {
@@ -63,6 +64,7 @@ const useStyles = createUseStyles({
     fontSize: '72px',
     textAlign: 'center',
   },
+  // eslint-disable-next-line
   ['@media(max-width: 600px)']: {
     queryContainer: {
       width: '100%',
@@ -191,7 +193,7 @@ export default function Query(): JSX.Element {
               <Flex justifyContent='space-between' mb='24px'>
                 <ArrowLeft
                   className={styles.back}
-                  onClick={() => navigate(-1)}
+                  onClick={() => navigate(RootLocation)}
                 />
                 {!!queryResults.columns.length && !id && (
                   <button className={styles.button} onClick={() => save()}>

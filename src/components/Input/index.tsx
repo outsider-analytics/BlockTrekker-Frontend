@@ -14,6 +14,7 @@ const useStyles = createUseStyles({
 });
 
 type InputProps = {
+  disabled?: boolean;
   onChange?: (
     e:
       | React.ChangeEvent<HTMLInputElement>
@@ -26,6 +27,7 @@ type InputProps = {
 };
 
 export default function Input({
+  disabled,
   onChange,
   placeholder,
   title,
@@ -37,6 +39,7 @@ export default function Input({
     <InputWrapper style={{ ...wrapperStyle }} title={title}>
       <input
         className={styles.input}
+        disabled={disabled}
         onChange={onChange}
         placeholder={placeholder}
         value={value}

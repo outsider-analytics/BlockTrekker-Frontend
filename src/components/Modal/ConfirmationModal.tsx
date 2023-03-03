@@ -1,6 +1,7 @@
 import Button from 'components/Button';
 import Flex from 'components/Flex';
 import Modal from 'components/Modal';
+import Typography from 'components/Typography';
 import { createUseStyles } from 'react-jss';
 
 const useStyles = createUseStyles({
@@ -12,15 +13,21 @@ const useStyles = createUseStyles({
 });
 
 type RemoveModalProps = {
+  actionText: string;
+  caption?: string;
   onClose: () => void;
-  onRemove: () => void;
+  onFinish: () => void;
   open: boolean;
+  title: string;
 };
 
-export default function RemoveModal({
+export default function ConfirmationModal({
+  actionText,
+  caption,
   onClose,
-  onRemove,
+  onFinish,
   open,
+  title,
 }: RemoveModalProps): JSX.Element {
   const styles = useStyles();
   return (
@@ -34,7 +41,15 @@ export default function RemoveModal({
         width: 'min(350px, 100%)',
       }}
     >
-      <div className={styles.title}>Remove?</div>
+      <div className={styles.title}>{title}</div>
+      {caption && (
+        <Typography
+          style={{ color: '#D0D0D0', marginTop: '4px' }}
+          variant='caption'
+        >
+          {caption}
+        </Typography>
+      )}
       <Flex
         justifyContent='space-between'
         style={{
@@ -44,7 +59,7 @@ export default function RemoveModal({
         }}
       >
         <Button onClick={() => onClose()} text='Close' />
-        <Button onClick={() => onRemove()} text='Remove' />
+        <Button onClick={() => onFinish()} text={actionText} />
       </Flex>
     </Modal>
   );

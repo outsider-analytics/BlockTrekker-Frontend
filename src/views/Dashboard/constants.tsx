@@ -1,5 +1,4 @@
-import { ChartScale, ChartType } from 'components/Charts/constants';
-import LineChart from 'components/Charts/LineChart';
+import { ChartType } from 'components/Charts/constants';
 
 export const COLUMNS = 12;
 
@@ -7,7 +6,7 @@ export const ROW_HEIGHT = 120;
 
 export const WIDTH = 1200;
 
-type DashboardWidgetTypes = 'visualization' | 'text';
+// type DashboardWidgetTypes = 'visualization' | 'text';
 
 export const DEFAULT_LAYOUT = [
   {

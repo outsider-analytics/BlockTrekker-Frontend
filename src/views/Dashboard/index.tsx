@@ -1,9 +1,8 @@
 import { createUseStyles } from 'react-jss';
 import GridLayout, { Layout, WidthProvider } from 'react-grid-layout';
 import { useEffect, useMemo, useState } from 'react';
-import { COLUMNS, DEFAULT_LAYOUT, ROW_HEIGHT, WIDTH } from './constants';
+import { COLUMNS, DEFAULT_LAYOUT, ROW_HEIGHT } from './constants';
 import { useParams } from 'react-router-dom';
-import ChartWrapper from 'components/Charts/ChartWrapper';
 import Button from 'components/Button';
 import MainLayout from 'layouts/MainLayout';
 import Flex from 'components/Flex';
@@ -13,12 +12,19 @@ import AddVisualizationModal from './components/AddVisualizationModal';
 import { getDashboard, saveDashboard } from 'api/dashboardApi';
 import CardContent from './components/CardContent';
 import { FadeLoader } from 'react-spinners';
-import RemoveModal from 'components/Modal/RemoveModal';
+import ConfirmationModal from 'components/Modal/ConfirmationModal';
 import { addVisualizationToDashboard } from 'api/dashboardApi';
+import { ArrowLeft } from 'react-feather';
+import { RootLocation } from 'locations';
+import { useNavigate } from 'react-router-dom';
 
 const ResponsiveGridLayout = WidthProvider(GridLayout);
 
 const useStyles = createUseStyles({
+  back: {
+    color: '#FCFCFC',
+    cursor: 'pointer',
+  },
   card: {
     backgroundColor: '#34383D',
     borderRadius: '4px',
@@ -54,6 +60,7 @@ type LayoutWidget = {
 
 export default function Dashboard(): JSX.Element {
   const { address } = useParams();
+  const navigate = useNavigate();
   const styles = useStyles();
   const [editedLayout, setEditedLayout] = useState<any[] | undefined>(
     undefined
@@ -61,7 +68,8 @@ export default function Dashboard(): JSX.Element {
   const [isEditing, setIsEditing] = useState(false);
   const [layout, setLayout] = useState<LayoutWidget[]>([]);
   const [loading, setLoading] = useState(true);
-  const [queryData, setQuerydata] = useState<any[]>([]);
+  const [neverSaved, setNeverSaved] = useState(false);
+  const [queryData, setQuerydata] = useState<{ [key: string]: any[] }>({});
   const [saving, setSaving] = useState(false);
   const [showRemove, setShowRemove] = useState(-1);
   const [showVisualizationModal, setShowVisualizationModal] = useState(false);
@@ -71,17 +79,36 @@ export default function Dashboard(): JSX.Element {
     const maxY = layout.reduce((max, { gridInstructions }) => {
       return Math.max(max, gridInstructions.y);
     }, 0);
-    const gridInstructions = {
-      i: `${layout.length + 1}`,
-      h: 3,
-      w: 6,
-      x: 0,
-      y: maxY + 1,
-    };
-    const res = await addVisualizationToDashboard(address, {
-      gridInstructions,
+    const widget = {
+      gridInstructions: {
+        i: `${layout.length + 1}`,
+        h: 3,
+        w: 6,
+        x: 0,
+        y: maxY + 1,
+      },
       item: { content: visualization, elementType: 'visualization' },
-    });
+    };
+    let res;
+    if (neverSaved) {
+      const dashboard = transformDashboardForSave([...layout, widget]);
+      // TODO: Clean this up and make more efficient
+      res = await addVisualizationToDashboard(address, {
+        dashboard,
+        widget,
+      });
+    } else {
+      res = await addVisualizationToDashboard(address, {
+        widget,
+      });
+    }
+    const { queryId, results } = await res.json();
+    setQuerydata((prev) => ({
+      [queryId]: results,
+      ...prev,
+    }));
+    setLayout((prev) => [...prev, widget]);
+    setNeverSaved(false);
     setShowVisualizationModal(false);
   };
 
@@ -95,6 +122,14 @@ export default function Dashboard(): JSX.Element {
       const { gridInstructions, ...rest } = item;
       return { gridInstructions, item: rest };
     });
+  };
+
+  const decrementIds = (index: number, widgets: any[]) => {
+    for (let i = index; i < widgets.length; i++) {
+      const prevId = widgets[i].gridInstructions.id;
+      widgets[i].gridInstructions.id = `${Number(prevId) - 1}`;
+    }
+    return widgets;
   };
 
   const grid = useMemo(() => {
@@ -132,10 +167,10 @@ export default function Dashboard(): JSX.Element {
       if (!prev) {
         const copy = layout.slice();
         copy.splice(showRemove, 1);
-        return copy;
+        return decrementIds(showRemove, copy);
       } else {
         prev.splice(showRemove, 1);
-        return prev;
+        return decrementIds(showRemove, prev);
       }
     });
     setShowRemove(-1);
@@ -144,26 +179,43 @@ export default function Dashboard(): JSX.Element {
   const save = async () => {
     setSaving(true);
     if (!address || !editedLayout) return;
-    const dashboard = editedLayout.slice().map((item) => {
+    const dashboard = transformDashboardForSave(editedLayout);
+    await saveDashboard(address, dashboard);
+    setSaving(false);
+    setLayout(editedLayout.slice());
+    setEditedLayout(undefined);
+    setIsEditing(false);
+  };
+
+  const transformDashboardForSave = (dashboard: any[]) => {
+    return dashboard.slice().map(({ gridInstructions, item }) => {
       if (item.elementType === 'visualization') {
         // If query id exists then visualization is not default
         if (item.content.id) {
           const { data, ...rest } = item.content;
           return {
-            content: rest,
-            ...item,
+            item: {
+              content: rest,
+              ...item,
+            },
+            gridInstructions,
           };
         }
         // Store all chart info for default visuzalization
-        return item;
+        return { gridInstructions, item };
       }
-      return item;
+      return { gridInstructions, item };
     });
-    await saveDashboard(address, { queries: [], dashboard });
-    setLayout(editedLayout.slice());
-    setEditedLayout(undefined);
-    setIsEditing(false);
   };
+
+  const visualizations = useMemo(() => {
+    return layout
+      .filter(
+        (widget) =>
+          widget.item.elementType === 'visualization' && widget.item.content.id
+      )
+      .map((widget) => widget.item.content.id);
+  }, [layout]);
 
   useEffect(() => {
     if (!address) return;
@@ -173,6 +225,7 @@ export default function Dashboard(): JSX.Element {
       if (!dashboard) {
         const layoutWidgets = dataToLayout(DEFAULT_LAYOUT);
         setLayout(layoutWidgets);
+        setNeverSaved(true);
       } else {
         setLayout(dashboard.dashboardWidgets);
       }
@@ -194,6 +247,10 @@ export default function Dashboard(): JSX.Element {
         </Flex>
       ) : (
         <>
+          <ArrowLeft
+            className={styles.back}
+            onClick={() => navigate(RootLocation)}
+          />
           <Flex alignItems='center' justifyContent='space-between' mb='12px'>
             <div className={styles.header}>Dashboard</div>
             <Flex gap='16px'>
@@ -270,15 +327,17 @@ export default function Dashboard(): JSX.Element {
             )}
           </ResponsiveGridLayout>
           <AddVisualizationModal
-            existingVisualiztions={[]}
+            existingVisualiztions={visualizations}
             onClose={() => setShowVisualizationModal(false)}
             onFinish={(viz) => addVisulization(viz)}
             open={showVisualizationModal}
           />
-          <RemoveModal
+          <ConfirmationModal
+            actionText='Remove'
             onClose={() => setShowRemove(-1)}
-            onRemove={() => removeItem()}
+            onFinish={() => removeItem()}
             open={showRemove >= 0}
+            title='Remove?'
           />
         </>
       )}

@@ -7,6 +7,8 @@ import { getAllQueries } from 'api/queryApi';
 import Flex from 'components/Flex';
 import { useAccount } from 'wagmi';
 import { Plus } from 'react-feather';
+import Button from 'components/Button';
+import APIKeyModal from './components/APIKeyModal';
 
 const useStyles = createUseStyles({
   button: {
@@ -44,6 +46,7 @@ const useStyles = createUseStyles({
 export default function Home(): JSX.Element {
   const { address } = useAccount();
   const [queries, setQueries] = useState<string[]>([]);
+  const [showAPIModal, setShowAPIModal] = useState(false);
   const navigate = useNavigate();
   const styles = useStyles();
 
@@ -69,6 +72,7 @@ export default function Home(): JSX.Element {
               <Plus size={16} />
             </Flex>
           </button>
+          <Button onClick={() => setShowAPIModal(true)} text='API Key' />
           <button
             className={styles.button}
             onClick={() => navigate(DashboardLocation(address ?? ''))}
@@ -90,6 +94,7 @@ export default function Home(): JSX.Element {
           </div>
         )}
       </div>
+      <APIKeyModal onClose={() => setShowAPIModal(false)} open={showAPIModal} />
     </MainLayout>
   );
 }

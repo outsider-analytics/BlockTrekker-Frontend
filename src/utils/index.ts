@@ -1,3 +1,13 @@
+import { toast } from "react-toastify";
+
+export const copyToClipboard = (text: string) => {
+    // Use the navigator clipboard API if available
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(text);
+        toast.success('Copied to clipboard', { position: 'top-center' });
+    }
+}
+
 export const sortArbitrayType = (a: any, b: any) => {
     // If a and b are of different types, compare their types
     if (typeof a !== typeof b) {

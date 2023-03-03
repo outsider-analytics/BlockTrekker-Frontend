@@ -4,7 +4,7 @@ import Table from 'components/Table';
 import ChartWrapper from 'components/Charts/ChartWrapper';
 import Flex from 'components/Flex';
 import { Trash2 } from 'react-feather';
-import RemoveModal from '../../../components/Modal/RemoveModal';
+import ConfirmationModal from 'components/Modal/ConfirmationModal';
 import { removeVisualization } from 'api/visualizationApi';
 import { AiOutlineUnorderedList } from 'react-icons/ai';
 import { ChartTypeToIcon } from 'components/Charts/constants';
@@ -134,10 +134,12 @@ export default function DataSection({
           )}
         </div>
       )}
-      <RemoveModal
+      <ConfirmationModal
+        actionText='Remove'
         onClose={() => setShowRemoveModal(false)}
-        onRemove={() => onRemove()}
+        onFinish={() => onRemove()}
         open={showRemoveModal}
+        title='Remove?'
       />
     </div>
   );

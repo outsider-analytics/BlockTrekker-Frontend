@@ -1,3 +1,5 @@
+import 'react-toastify/dist/ReactToastify.css';
+
 import { RouterProvider } from 'react-router-dom';
 import router from 'routes';
 import {
@@ -9,6 +11,7 @@ import { Web3Modal } from '@web3modal/react';
 import { configureChains, createClient, mainnet, WagmiConfig } from 'wagmi';
 import { ThemeProvider } from 'react-jss';
 import { theme } from 'theme';
+import { ToastContainer } from 'react-toastify';
 
 const { REACT_APP_WALLET_CONNECT_ID: WALLET_CONNECT_ID } = process.env;
 
@@ -39,6 +42,11 @@ function App() {
           <RouterProvider router={router} />
         </WagmiConfig>
       </ThemeProvider>
+      <ToastContainer
+        position='top-right'
+        style={{ zIndex: 10000000000 }}
+        theme='colored'
+      />
       <Web3Modal
         projectId={WALLET_CONNECT_ID!}
         ethereumClient={ethereumClient}

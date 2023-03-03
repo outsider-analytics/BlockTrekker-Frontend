@@ -12,10 +12,15 @@ import { capitalize } from 'lodash';
 const useStyles = createUseStyles({
   row: {
     color: '#FCFCFC',
-    cursor: 'pointer',
     padding: '6px 12px',
     '&:hover': {
       backgroundColor: '#34383D',
+    },
+    '&:first-of-type': {
+      borderRadius: '4px 4px 0px 0px',
+    },
+    '&:last-of-type': {
+      borderRadius: '0px 0px 4px 4px',
     },
   },
   selectionContainer: {
@@ -34,6 +39,7 @@ type AddVisualizationModalProps = {
 };
 
 export default function AddVisualizationModal({
+  existingVisualiztions,
   onClose,
   onFinish,
   open,
@@ -42,6 +48,7 @@ export default function AddVisualizationModal({
   const { address } = useAccount();
   const [selectedVisualization, setSelectedVisualization] = useState(-1);
   const [visualizations, setVisualizations] = useState<any[]>([]);
+
   useEffect(() => {
     if (!address) return;
     if (open) {
@@ -72,26 +79,36 @@ export default function AddVisualizationModal({
         Add Visualization
       </Typography>
       <div className={styles.selectionContainer}>
-        {visualizations.map((visualization, index) => (
-          <div
-            className={styles.row}
-            key={visualization.id}
-            onClick={() => setSelectedVisualization(index)}
-            style={{
-              backgroundColor: selectedVisualization === index ? '#34383D' : '',
-            }}
-          >
-            <Flex gap='16px'>
-              <Flex alignItems='center' gap='4px'>
-                <div style={{ width: '40px' }}>
-                  {capitalize(visualization.chartType)}
-                </div>
-                {ChartTypeToIcon[visualization.chartType]}
+        {visualizations.map((visualization, index) => {
+          const placed = existingVisualiztions.includes(visualization.id);
+          return (
+            <div
+              className={styles.row}
+              key={visualization.id}
+              onClick={() => setSelectedVisualization(index)}
+              style={{
+                backgroundColor:
+                  selectedVisualization === index || placed ? '#34383D' : '',
+                cursor: placed ? 'initial' : 'pointer',
+              }}
+            >
+              <Flex alignItems='center' justifyContent='space-between'>
+                <Flex gap='16px'>
+                  <Flex alignItems='center' gap='4px'>
+                    <div style={{ width: '40px' }}>
+                      {capitalize(visualization.chartType)}
+                    </div>
+                    {ChartTypeToIcon[visualization.chartType]}
+                  </Flex>
+                  <Typography variant='subtitle2'>
+                    {visualization.id}
+                  </Typography>
+                </Flex>
+                {placed && <div>Added</div>}
               </Flex>
-              <Typography variant='subtitle2'>{visualization.id}</Typography>
-            </Flex>
-          </div>
-        ))}
+            </div>
+          );
+        })}
       </div>
       <Flex
         justifyContent='space-between'

@@ -10,7 +10,7 @@ const customStyles = {
     bottom: 'auto',
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)',
-    border: 'none',
+    border: '1px solid #424542',
     zIndex: 100001,
     padding: 0,
   },
@@ -39,7 +39,7 @@ export default function Modal({
 }: IModal): JSX.Element {
   const modalStyles = {
     content: {
-      borderRadius: '0px',
+      borderRadius: '4px',
       height: '600px',
       width: '700px',
       ...customStyles.content,
