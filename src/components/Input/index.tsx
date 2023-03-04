@@ -1,49 +1,87 @@
 import InputWrapper from 'components/InputWrapper';
 import { createUseStyles } from 'react-jss';
 import { CSSProperties } from 'react';
+import Flex from 'components/Flex';
 
 const useStyles = createUseStyles({
-  input: {
+  container: {
     backgroundColor: '#34383D',
     border: '1px solid #717371',
     borderRadius: '4px',
+    boxSizing: 'border-box',
+    padding: '8px 12px',
+    width: '100%',
+  },
+  input: {
+    backgroundColor: 'transparent',
+    border: 'none',
     color: '#EDEDED',
     outline: 'transparent',
-    padding: '8px 12px',
+    resize: 'none',
+    width: '100%',
   },
 });
 
 type InputProps = {
+  currency?: boolean;
   disabled?: boolean;
   onChange?: (
     e:
       | React.ChangeEvent<HTMLInputElement>
       | React.ChangeEvent<HTMLTextAreaElement>
   ) => void;
+  optional?: boolean;
   placeholder?: string;
+  rows?: number;
+  style?: CSSProperties;
   title: string;
+  textarea?: boolean;
+  type?: string;
   value: string;
   wrapperStyle?: CSSProperties;
 };
 
 export default function Input({
+  currency,
   disabled,
   onChange,
+  optional,
   placeholder,
+  rows = 5,
+  style,
+  textarea,
   title,
+  type = 'text',
   value,
   wrapperStyle,
 }: InputProps): JSX.Element {
   const styles = useStyles();
   return (
-    <InputWrapper style={{ ...wrapperStyle }} title={title}>
-      <input
-        className={styles.input}
-        disabled={disabled}
-        onChange={onChange}
-        placeholder={placeholder}
-        value={value}
-      />
+    <InputWrapper optional={optional} style={{ ...wrapperStyle }} title={title}>
+      <div className={styles.container}>
+        <Flex alignItems='center' gap='2px'>
+          {currency && <div style={{ color: '#FCFCFC' }}>$</div>}
+          {textarea ? (
+            <textarea
+              className={styles.input}
+              onChange={onChange}
+              placeholder={placeholder}
+              rows={rows}
+              value={value}
+            />
+          ) : (
+            <input
+              className={styles.input}
+              disabled={disabled}
+              onChange={onChange}
+              placeholder={placeholder}
+              style={{ ...style }}
+              type={type}
+              value={value}
+            />
+          )}
+        </Flex>
+      </div>
     </InputWrapper>
   );
 }

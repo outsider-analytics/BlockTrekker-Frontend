@@ -1,5 +1,5 @@
 import MainLayout from 'layouts/MainLayout';
-import { DashboardLocation, QueryLocation } from 'locations';
+import { DashboardLocation, EndpointsLocation, QueryLocation } from 'locations';
 import { createUseStyles } from 'react-jss';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -10,25 +10,16 @@ import { FiPlus } from 'react-icons/fi';
 import Button from 'components/Button';
 import APIKeyModal from './components/APIKeyModal';
 import { BsFillKeyFill } from 'react-icons/bs';
+import { AiOutlineAreaChart, AiOutlineCloudServer } from 'react-icons/ai';
 import Typography from 'components/Typography';
 
 const useStyles = createUseStyles({
-  button: {
-    backgroundColor: '#34383D',
-    border: 'none',
-    borderRadius: '4px',
-    color: '#FCFCFC',
-    cursor: 'pointer',
-    fontSize: '14px',
-    fontWeight: 800,
-    outline: 'transparent',
-    padding: '12px 15px',
-  },
   container: {
     marginInline: 'auto',
     width: 'min(1100px, 100%)',
   },
   queries: {
+    color: '#FCFCFC',
     fontSize: '36px',
     marginBlock: '24px',
   },
@@ -47,7 +38,7 @@ const useStyles = createUseStyles({
 
 export default function Home(): JSX.Element {
   const { address } = useAccount();
-  const [queries, setQueries] = useState<string[]>([]);
+  const [queries, setQueries] = useState<any[]>([]);
   const [showAPIModal, setShowAPIModal] = useState(false);
   const navigate = useNavigate();
   const styles = useStyles();
@@ -57,7 +48,7 @@ export default function Home(): JSX.Element {
     (async () => {
       const res = await getAllQueries(address);
       const data = await res.json();
-      setQueries(data.queries.map((query: any) => query.queryId));
+      setQueries(data.queries);
     })();
   }, [address]);
 
@@ -65,37 +56,56 @@ export default function Home(): JSX.Element {
     <MainLayout>
       <div className={styles.container}>
         <Flex gap='24px' justifyContent='flex-end' mt='24px'>
-          <button
-            className={styles.button}
-            onClick={() => navigate(QueryLocation)}
-          >
+          <Button onClick={() => navigate(QueryLocation)}>
             <Flex alignItems='center' gap='8px'>
               <div>New Query</div>
               <FiPlus size={16} />
             </Flex>
-          </button>
+          </Button>
           <Button onClick={() => setShowAPIModal(true)}>
             <Flex alignItems='center' gap='8px'>
               <div>API Key</div>
               <BsFillKeyFill size={16} />
             </Flex>
           </Button>
-          <button
-            className={styles.button}
-            onClick={() => navigate(DashboardLocation(address ?? ''))}
-          >
+          <Button onClick={() => navigate(EndpointsLocation)}>
+            <Flex alignItems='center' gap='8px'>
+              <div>Custom Endpoints</div>
+              <AiOutlineCloudServer size={16} />
+            </Flex>
+          </Button>
+          <Button onClick={() => navigate(DashboardLocation(address ?? ''))}>
             Dashboard
-          </button>
+          </Button>
         </Flex>
         {!!queries.length ? (
-          <div style={{ color: 'white' }}>
+          <div>
             <div className={styles.queries}>Queries</div>
-            {queries.map((query) => (
+            {queries.map(({ name, queryId, visualizationCount }) => (
               <div
                 className={styles.row}
-                onClick={() => navigate(`${QueryLocation}/${query}`)}
+                onClick={() => navigate(`${QueryLocation}/${queryId}`)}
               >
-                {query}
+                <Flex alignItems='center' justifyContent='space-between'>
+                  <Typography style={{ color: '#FCFCFC' }} variant='subtitle1'>
+                    {name}
+                  </Typography>
+                  {!!visualizationCount && (
+                    <Flex
+                      alignItems='center'
+                      gap='16px'
+                      style={{ color: '#FCFCFC' }}
+                    >
+                      <Typography variant='subtitle1'>
+                        Visualizations
+                      </Typography>
+                      <AiOutlineAreaChart size={20} />
+                      <Typography variant='subtitle1'>
+                        {visualizationCount}
+                      </Typography>
+                    </Flex>
+                  )}
+                </Flex>
               </div>
             ))}
           </div>

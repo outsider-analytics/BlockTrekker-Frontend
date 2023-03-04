@@ -4,9 +4,11 @@ import {
   RootLocation,
   QueryLocation,
   DashboardLocationTemplate,
+  EndpointsLocation,
 } from 'locations';
 import { createBrowserRouter } from 'react-router-dom';
 import Dashboard from 'views/Dashboard';
+import Endpoints from 'views/Endpoints';
 import Home from 'views/Home';
 import Login from 'views/Login';
 import Query from 'views/Query';
@@ -29,6 +31,14 @@ const router = createBrowserRouter([
     element: (
       <AuthedRoute>
         <Dashboard />
+      </AuthedRoute>
+    ),
+  },
+  {
+    path: EndpointsLocation,
+    element: (
+      <AuthedRoute>
+        <Endpoints />
       </AuthedRoute>
     ),
   },

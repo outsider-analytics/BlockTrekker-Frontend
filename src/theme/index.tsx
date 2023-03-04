@@ -47,9 +47,9 @@ export const typography: TypographyVariantMap = {
   },
   subtitle2: {
     fontFamily: 'Heebo',
-    fontSize: '16px',
-    fontWeight: 400,
-    lineHeight: '18px',
+    fontSize: '14px',
+    fontWeight: 500,
+    lineHeight: '16px',
   },
 };
 

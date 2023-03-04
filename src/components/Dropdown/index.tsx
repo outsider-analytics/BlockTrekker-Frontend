@@ -1,4 +1,4 @@
-import { SetStateAction, useRef, useState } from 'react';
+import { CSSProperties, SetStateAction, useRef, useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import { FiChevronDown } from 'react-icons/fi';
 import Flex from 'components/Flex';
@@ -24,10 +24,11 @@ const useStyles = createUseStyles({
     border: '1px solid #717371',
     borderRadius: '4px',
     left: 0,
-    paddingBlock: '4px',
+    padding: '8px 4px',
     position: 'absolute',
     top: '120%',
     width: 'calc(100% - 2px)',
+    zIndex: 100,
   },
   option: {
     padding: '3px 4px',
@@ -35,19 +36,27 @@ const useStyles = createUseStyles({
 });
 
 type DropdownProps = {
-  onSelect: React.Dispatch<SetStateAction<string>>;
+  disabled?: boolean;
+  onSelect: React.Dispatch<SetStateAction<any>>;
   options: string[];
   placeholder?: string;
+  selectWithIndex?: boolean;
   selectedOption: string;
+  style?: CSSProperties;
   title: string;
+  wrapperStyle?: CSSProperties;
 };
 
 export default function Dropdown({
+  disabled,
   onSelect,
   options,
   placeholder,
+  selectWithIndex,
   selectedOption,
+  style,
   title,
+  wrapperStyle,
 }: DropdownProps): JSX.Element {
   const [open, setOpen] = useState(false);
   const styles = useStyles({ open });
@@ -56,19 +65,26 @@ export default function Dropdown({
   useOutsideAlerter(dropdownRef, () => setOpen(false));
 
   return (
-    <InputWrapper title={title}>
+    <InputWrapper style={{ ...wrapperStyle }} title={title}>
       <div
         className={styles.container}
-        onClick={() => setOpen(!open)}
+        onClick={() => !disabled && setOpen(!open)}
         ref={dropdownRef}
+        style={{ ...style }}
       >
-        <Flex justifyContent='space-between' gap='16px'>
+        <Flex alignItems='center' justifyContent='space-between' gap='16px'>
           <div>{selectedOption || placeholder}</div>
           <FiChevronDown className={styles.caret} />
           {open && (
             <div className={styles.expandedMenu}>
-              {options.map((option: string) => (
-                <div className={styles.option} onClick={() => onSelect(option)}>
+              {options.map((option: string, index: number) => (
+                <div
+                  className={styles.option}
+                  key={option}
+                  onClick={() =>
+                    selectWithIndex ? onSelect(index) : onSelect(option)
+                  }
+                >
                   {option}
                 </div>
               ))}

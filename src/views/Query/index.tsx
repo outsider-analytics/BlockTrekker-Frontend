@@ -18,23 +18,15 @@ import { saveVisualization } from 'api/visualizationApi';
 import QueryLoader from './components/QueryLoader';
 import DataSection from './components/DataSection';
 import { RootLocation } from 'locations';
+import QueryModal from './components/QueryModal';
+import Typography from 'components/Typography';
+import { AiFillEdit } from 'react-icons/ai';
+import Button from 'components/Button';
 
 const useStyles = createUseStyles({
   back: {
     color: '#FCFCFC',
     cursor: 'pointer',
-  },
-  button: {
-    backgroundColor: '#34383D',
-    border: 'none',
-    borderRadius: '4px',
-    color: '#FCFCFC',
-    cursor: 'pointer',
-    fontSize: '14px',
-    fontWeight: 800,
-    opacity: 1,
-    outline: 'transparent',
-    padding: '12px 15px',
   },
   completedIn: {
     fontSize: '16px',
@@ -79,18 +71,21 @@ export default function Query(): JSX.Element {
   const { id } = useParams();
   const navigate = useNavigate();
   const [, setCompleteIn] = useState(0);
+  const [description, setDescription] = useState('');
   const [elapsed, setElapsed] = useState(0);
   const [exporting, setExporting] = useState('');
   const [isExecuting, setIsExecuting] = useState(false);
   const [isLoading, setIsLoading] = useState(!!id);
   const [isSaving, setIsSaving] = useState(false);
+  const [name, setName] = useState('');
   const [oldQuery, setOldQuery] = useState('');
-  const [showVisualizationModal, setShowVisualizationModal] = useState(false);
   const [query, setQuery] = useState('');
   const [queryResults, setQueryResults] = useState({
     columns: [] as string[],
     rows: [],
   });
+  const [showQueryModal, setShowQueryModal] = useState(false);
+  const [showVisualizationModal, setShowVisualizationModal] = useState(false);
   const [visualizations, setVisualizations] = useState<any[]>([]);
   const styles = useStyles();
 
@@ -151,12 +146,27 @@ export default function Query(): JSX.Element {
     }
   }, [id, isExecuting, oldQuery, query]);
 
-  const save = async () => {
+  const save = async (queryDesc: string, queryName: string) => {
     setIsSaving(true);
-    const res = await saveQuery({ query, user: address });
+    const res = await saveQuery({
+      description: queryDesc,
+      name: queryName,
+      query,
+      user: address,
+    });
     const { queryId } = await res.json();
     navigate(queryId, { replace: true });
     setIsSaving(false);
+    setShowQueryModal(false);
+  };
+
+  const updateMetadata = async (queryDesc: string, queryName: string) => {
+    setIsSaving(true);
+    await saveQuery({ queryId: id, description: queryDesc, name: queryName });
+    setDescription(queryDesc);
+    setName(queryName);
+    setIsSaving(false);
+    setShowQueryModal(false);
   };
 
   useEffect(() => {
@@ -169,7 +179,6 @@ export default function Query(): JSX.Element {
   }, [elapsed, isExecuting]);
 
   useEffect(() => {
-    console.log('ID: ', id);
     if (!id) return;
     (async () => {
       const res = await getQuery(id);
@@ -177,6 +186,8 @@ export default function Query(): JSX.Element {
       setOldQuery(data.query.query);
       setQuery(data.query.query);
       const columns = Object.keys(data.query.results[0]);
+      setDescription(data.query.description);
+      setName(data.query.name);
       setQueryResults({ columns, rows: data.query.results });
       setVisualizations(data.query.visualizations ?? []);
       setIsLoading(false);
@@ -190,6 +201,26 @@ export default function Query(): JSX.Element {
           <QueryLoader />
         ) : (
           <>
+            {name && (
+              <Typography
+                style={{ color: '#FCFCFC', marginBottom: '8px' }}
+                variant='h6'
+              >
+                {name}
+              </Typography>
+            )}
+            {description && (
+              <Typography
+                style={{
+                  color: '#E7F1EF',
+                  marginBottom: '24px',
+                  maxWidth: '500px',
+                }}
+                variant='caption'
+              >
+                {description}
+              </Typography>
+            )}
             <div className={styles.queryContainer}>
               <Flex justifyContent='space-between' mb='24px'>
                 <FiArrowLeft
@@ -197,27 +228,29 @@ export default function Query(): JSX.Element {
                   onClick={() => navigate(RootLocation)}
                 />
                 {!!queryResults.columns.length && !id && (
-                  <button className={styles.button} onClick={() => save()}>
+                  <Button onClick={() => setShowQueryModal(true)}>
                     <Flex alignItems='center' gap='8px'>
                       <div>{isSaving ? 'Saving...' : 'Save'}</div>
                       <FiSave size={20} />
                     </Flex>
-                  </button>
+                  </Button>
                 )}
                 {!!queryResults.columns.length && id && (
                   <Flex alignItems='center' gap='24px'>
+                    <Button onClick={() => setShowQueryModal(true)}>
+                      <Flex alignItems='center' gap='8px'>
+                        <div>Edit</div>
+                        <AiFillEdit size={20} />
+                      </Flex>
+                    </Button>
                     {DOWNLOAD_OPTIONS.map((option) => (
-                      <button
-                        className={styles.button}
-                        key={option}
-                        onClick={() => download(option)}
-                      >
+                      <Button key={option} onClick={() => download(option)}>
                         <Flex alignItems='center' gap='8px'>
                           {exporting === option ? 'Exporting...' : 'Export'}{' '}
                           {option}
                           <FiDownload size={20} />
                         </Flex>
-                      </button>
+                      </Button>
                     ))}
                   </Flex>
                 )}
@@ -234,15 +267,12 @@ export default function Query(): JSX.Element {
                 mt='24px'
               >
                 {id && (
-                  <button
-                    className={styles.button}
+                  <Button
                     onClick={() => setShowVisualizationModal(true)}
-                  >
-                    New Visualization
-                  </button>
+                    text='New Visualization'
+                  />
                 )}
-                <button
-                  className={styles.button}
+                <Button
                   disabled={!query}
                   onClick={() => !isExecuting && execute()}
                   style={{
@@ -259,7 +289,7 @@ export default function Query(): JSX.Element {
                       </Flex>
                     )}
                   </Flex>
-                </button>
+                </Button>
               </Flex>
             </div>
             <DataSection
@@ -272,6 +302,16 @@ export default function Query(): JSX.Element {
           </>
         )}
       </div>
+      <QueryModal
+        description={description}
+        edit={!!id}
+        name={name}
+        onClose={() => setShowQueryModal(false)}
+        onFinish={(queryDesc, queryName) =>
+          id ? updateMetadata(queryDesc, queryName) : save(queryDesc, queryName)
+        }
+        open={showQueryModal}
+      />
       <VisualizationModal
         columns={queryResults.columns}
         onClose={() => setShowVisualizationModal(false)}

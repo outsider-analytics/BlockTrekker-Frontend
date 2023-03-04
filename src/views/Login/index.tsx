@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { createUseStyles } from 'react-jss';
 import { useAccount } from 'wagmi';
 import { RootLocation } from 'locations';
+import Button from 'components/Button';
 
 const useStyles = createUseStyles({
   container: {
@@ -13,17 +14,6 @@ const useStyles = createUseStyles({
     gap: '24px',
     justifyContent: 'center',
     minHeight: '100vh',
-  },
-  loginButton: {
-    backgroundColor: '#34383D',
-    border: 'none',
-    borderRadius: '4px',
-    color: '#FCFCFC',
-    cursor: 'pointer',
-    fontSize: '14px',
-    fontWeight: 800,
-    outline: 'transparent',
-    padding: '12px 15px',
   },
   text: {
     color: '#FCFCFC',
@@ -44,14 +34,12 @@ export default function Login(): JSX.Element {
     if (isConnected) {
       navigate(RootLocation);
     }
-  }, [isConnected]);
+  }, [isConnected, navigate]);
 
   return (
     <div className={styles.container}>
       <div className={styles.text}>Dune Screwed You. We Fixed-It.</div>
-      <button className={styles.loginButton} onClick={() => open()}>
-        Login
-      </button>
+      <Button onClick={() => open()} text='Login' />
     </div>
   );
 }

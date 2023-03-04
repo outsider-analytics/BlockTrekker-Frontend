@@ -7,7 +7,6 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { CurveType } from 'recharts/types/shape/Curve';
 import { AxisChartProps } from '../constants';
 
 type LineChartProps = {} & AxisChartProps;
