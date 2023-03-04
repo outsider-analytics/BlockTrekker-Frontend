@@ -31,6 +31,10 @@ export const formatNumber = (num: number | string, decimals = 2): string => {
     }
 };
 
+export const parseAlphabeticWithUnderscore = (str: string) => {
+    return str.replace(/[^A-Za-z_]/g, '');
+}
+
 export const sortArbitrayType = (a: any, b: any) => {
     // If a and b are of different types, compare their types
     if (typeof a !== typeof b) {

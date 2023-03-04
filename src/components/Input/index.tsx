@@ -25,6 +25,7 @@ const useStyles = createUseStyles({
 type InputProps = {
   currency?: boolean;
   disabled?: boolean;
+  note?: string;
   onChange?: (
     e:
       | React.ChangeEvent<HTMLInputElement>
@@ -44,6 +45,7 @@ type InputProps = {
 export default function Input({
   currency,
   disabled,
+  note,
   onChange,
   optional,
   placeholder,
@@ -57,7 +59,12 @@ export default function Input({
 }: InputProps): JSX.Element {
   const styles = useStyles();
   return (
-    <InputWrapper optional={optional} style={{ ...wrapperStyle }} title={title}>
+    <InputWrapper
+      note={note}
+      optional={optional}
+      style={{ ...wrapperStyle }}
+      title={title}
+    >
       <div className={styles.container}>
         <Flex alignItems='center' gap='2px'>
           {currency && <div style={{ color: '#FCFCFC' }}>$</div>}

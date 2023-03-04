@@ -14,12 +14,14 @@ const useStyles = createUseStyles({
 type InpurtWrapperProps = {
   children: ReactNode;
   optional?: boolean;
+  note?: string;
   style?: CSSProperties;
   title: string;
 };
 
 export default function InputWrapper({
   children,
+  note,
   optional,
   style,
   title,
@@ -32,6 +34,9 @@ export default function InputWrapper({
         {optional && <div className={styles.title}>Optional</div>}
       </Flex>
       {children}
+      <div className={styles.title} style={{ marginBlock: '4px 0px' }}>
+        {note}
+      </div>
     </div>
   );
 }

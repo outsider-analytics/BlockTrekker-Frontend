@@ -22,6 +22,7 @@ import QueryModal from './components/QueryModal';
 import Typography from 'components/Typography';
 import { AiFillEdit } from 'react-icons/ai';
 import Button from 'components/Button';
+import { truncateAddress } from 'utils';
 
 const useStyles = createUseStyles({
   back: {
@@ -124,7 +125,7 @@ export default function Query(): JSX.Element {
 
   const execute = async () => {
     setIsExecuting(true);
-    const payload = { id: '', query, user: address };
+    const payload = { id: '', name, query, user: address };
     if (id) {
       payload.id = id;
     }
@@ -149,6 +150,7 @@ export default function Query(): JSX.Element {
   const save = async (queryDesc: string, queryName: string) => {
     setIsSaving(true);
     const res = await saveQuery({
+      columns: queryResults.columns,
       description: queryDesc,
       name: queryName,
       query,
@@ -206,7 +208,7 @@ export default function Query(): JSX.Element {
                 style={{ color: '#FCFCFC', marginBottom: '8px' }}
                 variant='h6'
               >
-                {name}
+                {truncateAddress(address ?? '')}/{name}
               </Typography>
             )}
             {description && (

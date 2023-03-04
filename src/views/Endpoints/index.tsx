@@ -3,7 +3,7 @@ import { createUseStyles } from 'react-jss';
 import Flex from 'components/Flex';
 import Typography from 'components/Typography';
 import Button from 'components/Button';
-import { FiPlus, FiTrash2 } from 'react-icons/fi';
+import { FiArrowLeft, FiPlus, FiTrash2 } from 'react-icons/fi';
 import { useEffect, useMemo, useState } from 'react';
 import Dropdown from 'components/Dropdown';
 import { getTables } from 'api/queryApi';
@@ -15,8 +15,15 @@ import { BeatLoader } from 'react-spinners';
 import { deleteEndpoint, getEndpointsByUser, saveEndpoint } from 'api/apiApi';
 import { BlockTrekkerTheme } from 'theme';
 import ConfirmationModal from 'components/Modal/ConfirmationModal';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+import { RootLocation } from 'locations';
 
 const useStyles = createUseStyles((theme: BlockTrekkerTheme) => ({
+  back: {
+    color: '#FCFCFC',
+    cursor: 'pointer',
+  },
   container: {
     backgroundColor: '#424542',
     borderRadius: '8px',
@@ -32,6 +39,7 @@ const useStyles = createUseStyles((theme: BlockTrekkerTheme) => ({
     color: '#FCFCFC',
     padding: '8px',
     overflowX: 'auto',
+    whiteSpace: 'pre-wrap',
     width: '100%',
   },
   endpoints: {
@@ -67,6 +75,7 @@ const useStyles = createUseStyles((theme: BlockTrekkerTheme) => ({
 
 export default function Endpoints(): JSX.Element {
   const { address } = useAccount();
+  const navigate = useNavigate();
   const styles = useStyles();
   const [costPerHit, setCostPerHit] = useState('');
   const [creatingNew, setCreatingNew] = useState(false);
@@ -119,16 +128,45 @@ export default function Endpoints(): JSX.Element {
     selectedTable,
   ]);
 
+  const query = useMemo(() => {
+    if (!creatingNew && !endPoints.length) return;
+    const from = `FROM ${
+      creatingNew ? selectedTable || '<table_name>' : selectedEndpoint.table
+    }`;
+    const limit = 'LIMIT 1';
+    const select = `SELECT ${
+      creatingNew
+        ? selectedOutputColumn || '<output_column>'
+        : selectedEndpoint.outputColumn
+    }`;
+    const where = `WHERE ${
+      creatingNew
+        ? selectedInputColumn || '<input_column>'
+        : selectedEndpoint.inputColumn
+    } = <user_input>`;
+    return `${select}\n${from}\n${where}\n${limit}`;
+  }, [
+    creatingNew,
+    endPoints,
+    selectedEndpoint,
+    selectedInputColumn,
+    selectedOutputColumn,
+    selectedTable,
+  ]);
+
   const removeEndpoint = async () => {
     if (!address) return;
     const index = endPoints.findIndex(
       ({ name }) => name === selectedEndpoint.name
     );
     await deleteEndpoint(address, selectedEndpoint.name);
+    toast.success('Endpoint removed');
     setEndpoints((prev) => {
       prev.splice(index, 1);
       if (prev.length === 1 || index === 0) {
         setSelectedEndpoint(prev[0]);
+      } else if (!prev.length) {
+        selectedEndpoint({});
       } else {
         setSelectedEndpoint(prev[index]);
       }
@@ -154,7 +192,8 @@ export default function Endpoints(): JSX.Element {
       outputColumn: selectedOutputColumn,
       table: selectedTable,
     };
-    await saveEndpoint({ user: address, ...metadata });
+    await saveEndpoint({ user: address, ...metadata, query });
+    toast.success('Endpoint saved');
     setSelectedEndpoint(metadata);
     setEndpoints((prev) => [...prev, metadata]);
     setCreatingNew(false);
@@ -183,6 +222,10 @@ export default function Endpoints(): JSX.Element {
 
   return (
     <MainLayout>
+      <FiArrowLeft
+        className={styles.back}
+        onClick={() => navigate(RootLocation)}
+      />
       <Flex
         alignItems='center'
         justifyContent='center'
@@ -310,23 +353,7 @@ export default function Endpoints(): JSX.Element {
                           Query format
                         </Typography>
                       </Flex>
-                      <div className={styles.codeBlock}>
-                        <div>{`SELECT ${
-                          creatingNew
-                            ? selectedOutputColumn || '<output_column>'
-                            : selectedEndpoint.outputColumn
-                        }`}</div>
-                        <div>{`FROM ${
-                          creatingNew
-                            ? selectedTable || '<table_name>'
-                            : selectedEndpoint.table
-                        }`}</div>
-                        <div>{`WHERE ${
-                          creatingNew
-                            ? selectedInputColumn || '<input_column>'
-                            : selectedEndpoint.inputColumn
-                        } = <user_input>`}</div>
-                      </div>
+                      <div className={styles.codeBlock}>{query}</div>
                       <Flex
                         justifyContent='space-between'
                         mb='8px'
