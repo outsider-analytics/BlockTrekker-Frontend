@@ -3,7 +3,7 @@ import { createUseStyles } from 'react-jss';
 import Table from 'components/Table';
 import ChartWrapper from 'components/Charts/ChartWrapper';
 import Flex from 'components/Flex';
-import { Trash2 } from 'react-feather';
+import { FiTrash2 } from 'react-icons/fi';
 import ConfirmationModal from 'components/Modal/ConfirmationModal';
 import { removeVisualization } from 'api/visualizationApi';
 import { AiOutlineUnorderedList } from 'react-icons/ai';
@@ -86,6 +86,7 @@ export default function DataSection({
             {tabs.map((tab, index) => (
               <div
                 className={styles.tab}
+                key={index}
                 onClick={() => setSelectedTab(index)}
                 style={{
                   backgroundColor:
@@ -104,7 +105,7 @@ export default function DataSection({
             ))}
           </div>
           {selectedTab > 0 && (
-            <Trash2
+            <FiTrash2
               className={styles.delete}
               color='#FCFCFC'
               onClick={() => setShowRemoveModal(true)}
@@ -121,7 +122,7 @@ export default function DataSection({
           {visualizations.map(
             (vis, index) =>
               selectedTab === index + 1 && (
-                <div style={{ height: '300px', width: '100%' }}>
+                <div key={index} style={{ height: '300px', width: '100%' }}>
                   <ChartWrapper
                     chartType={vis.chartType}
                     color={vis.color}

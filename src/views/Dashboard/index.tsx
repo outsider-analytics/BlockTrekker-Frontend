@@ -7,14 +7,13 @@ import Button from 'components/Button';
 import MainLayout from 'layouts/MainLayout';
 import Flex from 'components/Flex';
 import { AiFillCloseCircle, AiFillEdit, AiFillSave } from 'react-icons/ai';
-import { Trash2 } from 'react-feather';
 import AddVisualizationModal from './components/AddVisualizationModal';
 import { getDashboard, saveDashboard } from 'api/dashboardApi';
 import CardContent from './components/CardContent';
 import { FadeLoader } from 'react-spinners';
 import ConfirmationModal from 'components/Modal/ConfirmationModal';
 import { addVisualizationToDashboard } from 'api/dashboardApi';
-import { ArrowLeft } from 'react-feather';
+import { FiArrowLeft, FiTrash2 } from 'react-icons/fi';
 import { RootLocation } from 'locations';
 import { useNavigate } from 'react-router-dom';
 
@@ -247,7 +246,7 @@ export default function Dashboard(): JSX.Element {
         </Flex>
       ) : (
         <>
-          <ArrowLeft
+          <FiArrowLeft
             className={styles.back}
             onClick={() => navigate(RootLocation)}
           />
@@ -313,7 +312,7 @@ export default function Dashboard(): JSX.Element {
                       }}
                     >
                       {isEditing && (
-                        <Trash2
+                        <FiTrash2
                           onClick={() => setShowRemove(index)}
                           size={16}
                           style={{ cursor: 'pointer' }}

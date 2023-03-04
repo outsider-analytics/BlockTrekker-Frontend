@@ -100,7 +100,10 @@ export default function Table({ columns, rows }: TableProps): JSX.Element {
       <thead>
         <tr className={styles.header}>
           {columns.map((col: string, index: number) => (
-            <th style={{ paddingLeft: index === 0 ? '24px' : '50px' }}>
+            <th
+              key={`${col}-${index}`}
+              style={{ paddingLeft: index === 0 ? '24px' : '50px' }}
+            >
               <div
                 onClick={() => sortByColumn(col)}
                 style={{ cursor: 'pointer' }}
@@ -112,13 +115,14 @@ export default function Table({ columns, rows }: TableProps): JSX.Element {
         </tr>
       </thead>
       <tbody className={styles.tableBody}>
-        {(sortedRows.col ? sortedRows.rows : rows).map((row: any) => (
-          <tr className={styles.row}>
-            {Object.values(row).map((val: any, index) => (
+        {(sortedRows.col ? sortedRows.rows : rows).map((row: any, rowIndex) => (
+          <tr className={styles.row} key={rowIndex}>
+            {Object.values(row).map((val: any, colIndex) => (
               <td
+                key={`${rowIndex}-${colIndex}`}
                 style={{
                   padding: '20px 24px',
-                  paddingLeft: index === 0 ? '24px' : '50px',
+                  paddingLeft: colIndex === 0 ? '24px' : '50px',
                   textAlign: 'left',
                 }}
               >

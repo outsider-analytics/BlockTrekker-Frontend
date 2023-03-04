@@ -8,7 +8,7 @@ import Button from 'components/Button';
 import { createUseStyles } from 'react-jss';
 import { BiRefresh } from 'react-icons/bi';
 import { toast } from 'react-toastify';
-import { Copy } from 'react-feather';
+import { FiCopy } from 'react-icons/fi';
 import { copyToClipboard } from 'utils';
 import ConfirmationModal from 'components/Modal/ConfirmationModal';
 
@@ -80,7 +80,7 @@ export default function APIKeyModal({
             <div className={styles.keyContainer}>
               <Typography variant='subtitle1'>{key}</Typography>
             </div>
-            <Copy
+            <FiCopy
               className={styles.copy}
               onClick={() => copyToClipboard(key)}
               size={20}
@@ -88,7 +88,7 @@ export default function APIKeyModal({
           </Flex>
         ) : (
           <Typography style={{ color: '#FCFCFC' }} variant='h6'>
-            'No key
+            No key
           </Typography>
         )}
         <Flex

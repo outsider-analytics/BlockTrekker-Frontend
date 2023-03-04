@@ -3,7 +3,7 @@ import { useEffect, useMemo } from 'react';
 import { useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import { ClockLoader } from 'react-spinners';
-import { ArrowLeft, Download, Save } from 'react-feather';
+import { FiArrowLeft, FiDownload, FiSave } from 'react-icons/fi';
 import MainLayout from 'layouts/MainLayout';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAccount } from 'wagmi';
@@ -155,7 +155,7 @@ export default function Query(): JSX.Element {
     setIsSaving(true);
     const res = await saveQuery({ query, user: address });
     const { queryId } = await res.json();
-    navigate(queryId);
+    navigate(queryId, { replace: true });
     setIsSaving(false);
   };
 
@@ -169,6 +169,7 @@ export default function Query(): JSX.Element {
   }, [elapsed, isExecuting]);
 
   useEffect(() => {
+    console.log('ID: ', id);
     if (!id) return;
     (async () => {
       const res = await getQuery(id);
@@ -191,7 +192,7 @@ export default function Query(): JSX.Element {
           <>
             <div className={styles.queryContainer}>
               <Flex justifyContent='space-between' mb='24px'>
-                <ArrowLeft
+                <FiArrowLeft
                   className={styles.back}
                   onClick={() => navigate(RootLocation)}
                 />
@@ -199,7 +200,7 @@ export default function Query(): JSX.Element {
                   <button className={styles.button} onClick={() => save()}>
                     <Flex alignItems='center' gap='8px'>
                       <div>{isSaving ? 'Saving...' : 'Save'}</div>
-                      <Save size={20} />
+                      <FiSave size={20} />
                     </Flex>
                   </button>
                 )}
@@ -208,12 +209,13 @@ export default function Query(): JSX.Element {
                     {DOWNLOAD_OPTIONS.map((option) => (
                       <button
                         className={styles.button}
+                        key={option}
                         onClick={() => download(option)}
                       >
                         <Flex alignItems='center' gap='8px'>
                           {exporting === option ? 'Exporting...' : 'Export'}{' '}
                           {option}
-                          <Download size={20} />
+                          <FiDownload size={20} />
                         </Flex>
                       </button>
                     ))}

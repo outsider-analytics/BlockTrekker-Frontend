@@ -6,9 +6,11 @@ import { useEffect, useState } from 'react';
 import { getAllQueries } from 'api/queryApi';
 import Flex from 'components/Flex';
 import { useAccount } from 'wagmi';
-import { Plus } from 'react-feather';
+import { FiPlus } from 'react-icons/fi';
 import Button from 'components/Button';
 import APIKeyModal from './components/APIKeyModal';
+import { BsFillKeyFill } from 'react-icons/bs';
+import Typography from 'components/Typography';
 
 const useStyles = createUseStyles({
   button: {
@@ -69,10 +71,15 @@ export default function Home(): JSX.Element {
           >
             <Flex alignItems='center' gap='8px'>
               <div>New Query</div>
-              <Plus size={16} />
+              <FiPlus size={16} />
             </Flex>
           </button>
-          <Button onClick={() => setShowAPIModal(true)} text='API Key' />
+          <Button onClick={() => setShowAPIModal(true)}>
+            <Flex alignItems='center' gap='8px'>
+              <div>API Key</div>
+              <BsFillKeyFill size={16} />
+            </Flex>
+          </Button>
           <button
             className={styles.button}
             onClick={() => navigate(DashboardLocation(address ?? ''))}
@@ -80,7 +87,7 @@ export default function Home(): JSX.Element {
             Dashboard
           </button>
         </Flex>
-        {!!queries.length && (
+        {!!queries.length ? (
           <div style={{ color: 'white' }}>
             <div className={styles.queries}>Queries</div>
             {queries.map((query) => (
@@ -92,6 +99,16 @@ export default function Home(): JSX.Element {
               </div>
             ))}
           </div>
+        ) : (
+          <Flex
+            alignItems='center'
+            justifyContent='center'
+            style={{ height: '50vh' }}
+          >
+            <Typography style={{ color: '#FCFCFC' }} variant='h4'>
+              No queries
+            </Typography>
+          </Flex>
         )}
       </div>
       <APIKeyModal onClose={() => setShowAPIModal(false)} open={showAPIModal} />

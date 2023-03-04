@@ -1,6 +1,6 @@
 import { SetStateAction, useRef, useState } from 'react';
 import { createUseStyles } from 'react-jss';
-import { ChevronDown } from 'react-feather';
+import { FiChevronDown } from 'react-icons/fi';
 import Flex from 'components/Flex';
 import { useOutsideAlerter } from 'hooks/useOutsideAlerter';
 import InputWrapper from 'components/InputWrapper';
@@ -64,7 +64,7 @@ export default function Dropdown({
       >
         <Flex justifyContent='space-between' gap='16px'>
           <div>{selectedOption || placeholder}</div>
-          <ChevronDown className={styles.caret} />
+          <FiChevronDown className={styles.caret} />
           {open && (
             <div className={styles.expandedMenu}>
               {options.map((option: string) => (

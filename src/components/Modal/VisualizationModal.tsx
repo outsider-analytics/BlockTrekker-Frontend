@@ -17,7 +17,7 @@ import { HexColorPicker } from 'react-colorful';
 import { useOutsideAlerter } from 'hooks/useOutsideAlerter';
 import Input from 'components/Input';
 import Button from 'components/Button';
-import { Droplet } from 'react-feather';
+import { FiDroplet } from 'react-icons/fi';
 // import { generateStackData } from 'components/Charts/utils';
 
 const useStyles = createUseStyles({
@@ -164,7 +164,7 @@ export default function VisualizationModal({
             onClick={() => setShowPicker(true)}
             style={{ padding: '8px 12px', position: 'relative' }}
           >
-            <Droplet size={20} />
+            <FiDroplet size={20} />
             {showPicker && (
               <div className={styles.colorPicker} ref={colorRef}>
                 <HexColorPicker color={color} onChange={setColor} />
