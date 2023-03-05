@@ -92,7 +92,7 @@ export default function Endpoints(): JSX.Element {
   const availableInputColumns = useMemo(() => {
     const table = tables.find((table) => table.name === selectedTable);
     if (!table) return [];
-    return table.columns.filter(
+    return table.columnNames.filter(
       (column: string) =>
         column !== selectedOutputColumn && column !== selectedInputColumn
     );
@@ -101,7 +101,7 @@ export default function Endpoints(): JSX.Element {
   const availableOutputColumns = useMemo(() => {
     const table = tables.find((table) => table.name === selectedTable);
     if (!table) return [];
-    return table.columns.filter(
+    return table.columnNames.filter(
       (column: string) => column !== selectedOutputColumn
     );
   }, [selectedOutputColumn, selectedTable, tables]);
@@ -185,6 +185,9 @@ export default function Endpoints(): JSX.Element {
   };
 
   const save = async () => {
+    const { columnNames, columnTypes, queryId } = tables.find(
+      (table) => selectedTable === table.name
+    );
     const metadata = {
       cost: costPerHit,
       inputColumn: selectedInputColumn,
@@ -192,7 +195,14 @@ export default function Endpoints(): JSX.Element {
       outputColumn: selectedOutputColumn,
       table: selectedTable,
     };
-    await saveEndpoint({ user: address, ...metadata, query });
+    await saveEndpoint({
+      user: address,
+      ...metadata,
+      columnNames,
+      columnTypes,
+      query,
+      queryId,
+    });
     toast.success('Endpoint saved');
     setSelectedEndpoint(metadata);
     setEndpoints((prev) => [...prev, metadata]);
@@ -260,9 +270,10 @@ export default function Endpoints(): JSX.Element {
                           </Flex>
                         </Button>
                         <div style={{ marginTop: '8px' }}>
-                          {endPoints.map((endpoint) => (
+                          {endPoints.map((endpoint, index) => (
                             <div
                               className={styles.endpointTab}
+                              key={`${endpoint.name}-${index}`}
                               onClick={() => setSelectedEndpoint(endpoint)}
                               style={{
                                 backgroundColor:

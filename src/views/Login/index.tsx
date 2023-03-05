@@ -38,7 +38,7 @@ export default function Login(): JSX.Element {
 
   return (
     <div className={styles.container}>
-      <div className={styles.text}>Dune Screwed You. We Fixed-It.</div>
+      <div className={styles.text}>BlockTrekker</div>
       <Button onClick={() => open()} text='Login' />
     </div>
   );

@@ -117,7 +117,11 @@ export default function DataSection({
       {!!results.columns.length && !isExecuting && (
         <div className={styles.tableContainer}>
           {selectedTab === 0 && (
-            <Table columns={results.columns} rows={results.rows} />
+            <Table
+              columns={results.columns}
+              pageSize={10}
+              rows={results.rows}
+            />
           )}
           {visualizations.map(
             (vis, index) =>

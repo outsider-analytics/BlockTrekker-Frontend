@@ -1,5 +1,10 @@
 import MainLayout from 'layouts/MainLayout';
-import { DashboardLocation, EndpointsLocation, QueryLocation } from 'locations';
+import {
+  DashboardLocation,
+  EndpointsLocation,
+  MarketLocation,
+  QueryLocation,
+} from 'locations';
 import { createUseStyles } from 'react-jss';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -10,7 +15,11 @@ import { FiPlus } from 'react-icons/fi';
 import Button from 'components/Button';
 import APIKeyModal from './components/APIKeyModal';
 import { BsFillKeyFill } from 'react-icons/bs';
-import { AiOutlineAreaChart, AiOutlineCloudServer } from 'react-icons/ai';
+import {
+  AiFillAppstore,
+  AiOutlineAreaChart,
+  AiOutlineCloudServer,
+} from 'react-icons/ai';
 import Typography from 'components/Typography';
 
 const useStyles = createUseStyles({
@@ -66,6 +75,12 @@ export default function Home(): JSX.Element {
             <Flex alignItems='center' gap='8px'>
               <div>API Key</div>
               <BsFillKeyFill size={16} />
+            </Flex>
+          </Button>
+          <Button onClick={() => navigate(MarketLocation)}>
+            <Flex alignItems='center' gap='8px'>
+              <div>Browse Market</div>
+              <AiFillAppstore size={16} />
             </Flex>
           </Button>
           <Button onClick={() => navigate(EndpointsLocation)}>

@@ -6,6 +6,9 @@ export const deleteEndpoint = (user: string, name: string): Promise<Response> =>
 export const generateApiKey = (user: string): Promise<Response> =>
     serverRequest(`api/key`, RequestTypes.Post, { user });
 
+export const getAllEndpoints = (user: string): Promise<Response> =>
+    serverRequest(`api/get-all-endpoints?user=${user}`)
+
 export const getApiKey = (user: string): Promise<Response> =>
     serverRequest(`api/key?user=${user}`);
 

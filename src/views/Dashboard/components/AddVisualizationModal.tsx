@@ -17,10 +17,12 @@ const useStyles = createUseStyles({
       backgroundColor: '#34383D',
     },
     '&:first-of-type': {
-      borderRadius: '4px 4px 0px 0px',
+      borderTopLeftRadius: '4px',
+      borderTopRightRadius: '4px',
     },
     '&:last-of-type': {
-      borderRadius: '0px 0px 4px 4px',
+      borderBottomLeftRadius: '4px',
+      borderBottomRightRadius: '4px',
     },
   },
   selectionContainer: {
@@ -93,7 +95,7 @@ export default function AddVisualizationModal({
               }}
             >
               <Flex alignItems='center' justifyContent='space-between'>
-                <Flex gap='16px'>
+                <Flex alignItems='center' gap='16px'>
                   <Flex alignItems='center' gap='4px'>
                     <div style={{ width: '40px' }}>
                       {capitalize(visualization.chartType)}

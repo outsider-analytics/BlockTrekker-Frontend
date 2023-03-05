@@ -187,10 +187,12 @@ export default function Query(): JSX.Element {
       const data = await res.json();
       setOldQuery(data.query.query);
       setQuery(data.query.query);
-      const columns = Object.keys(data.query.results[0]);
       setDescription(data.query.description);
       setName(data.query.name);
-      setQueryResults({ columns, rows: data.query.results });
+      setQueryResults({
+        columns: data.query.columns,
+        rows: data.query.results,
+      });
       setVisualizations(data.query.visualizations ?? []);
       setIsLoading(false);
     })();

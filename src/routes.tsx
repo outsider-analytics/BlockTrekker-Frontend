@@ -5,12 +5,14 @@ import {
   QueryLocation,
   DashboardLocationTemplate,
   EndpointsLocation,
+  MarketLocation,
 } from 'locations';
 import { createBrowserRouter } from 'react-router-dom';
 import Dashboard from 'views/Dashboard';
 import Endpoints from 'views/Endpoints';
 import Home from 'views/Home';
 import Login from 'views/Login';
+import Market from 'views/Market';
 import Query from 'views/Query';
 
 const router = createBrowserRouter([
@@ -39,6 +41,14 @@ const router = createBrowserRouter([
     element: (
       <AuthedRoute>
         <Endpoints />
+      </AuthedRoute>
+    ),
+  },
+  {
+    path: MarketLocation,
+    element: (
+      <AuthedRoute>
+        <Market />
       </AuthedRoute>
     ),
   },

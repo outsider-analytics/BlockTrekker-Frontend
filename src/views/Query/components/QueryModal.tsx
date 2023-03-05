@@ -4,7 +4,6 @@ import Typography from 'components/Typography';
 import { useEffect, useMemo, useState } from 'react';
 import Flex from 'components/Flex';
 import Button from 'components/Button';
-import { parseAlphabeticWithUnderscore } from 'utils';
 
 type QueryModalProps = {
   description: string;
@@ -47,11 +46,7 @@ export default function QueryModal({
         {edit ? 'Edit' : 'Save'} Query
       </Typography>
       <Input
-        note='Note: Only alphabetical characters and underscores allowed'
-        onChange={(e) => {
-          const regexed = parseAlphabeticWithUnderscore(e.target.value);
-          setEditedName(regexed);
-        }}
+        onChange={(e) => setEditedName(e.target.value)}
         title='Name'
         value={editedName}
       />

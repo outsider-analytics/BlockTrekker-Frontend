@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import { sortArbitrayType } from 'utils';
+import Flex from 'components/Flex';
+import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
 
 const useStyles = createUseStyles({
   header: {
@@ -23,14 +25,23 @@ const useStyles = createUseStyles({
       borderRightStyle: 'solid',
     },
   },
+  paginateButton: {
+    alignItems: 'center',
+    backgroundColor: '#34383D',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    display: 'flex',
+    justifyContent: 'center',
+    padding: '6px',
+  },
   row: {
     backgroundColor: '#34383D',
     borderBottom: '2px solid transparent',
     color: '#FCFCFC',
     fontSize: '16px',
-    height: '32px',
+    height: '24px',
     fontWeight: 400,
-    padding: '7px 24px',
+    padding: '4px 24px',
     '& > td:first-of-type': {
       borderRadius: '4px 0px 0px 4px',
     },
@@ -64,11 +75,17 @@ type SortedRows = {
 
 type TableProps = {
   columns: string[];
+  pageSize?: number;
   rows: any[];
 };
 
-export default function Table({ columns, rows }: TableProps): JSX.Element {
+export default function Table({
+  columns,
+  pageSize = 25,
+  rows,
+}: TableProps): JSX.Element {
   const styles = useStyles();
+  const [currentPage, setCurrentPage] = useState(0);
   const [sortedRows, setSortedRows] = useState<SortedRows>({
     col: '',
     count: 0,
@@ -95,43 +112,90 @@ export default function Table({ columns, rows }: TableProps): JSX.Element {
     });
   };
 
+  const switchPage = (direction: number) => {
+    setCurrentPage((prev) => {
+      if (!prev && direction < 0) {
+        return prev;
+      } else if ((prev + direction) * pageSize >= rows.length) {
+        return prev;
+      } else {
+        return prev + direction;
+      }
+    });
+  };
+
   return (
-    <table className={styles.table}>
-      <thead>
-        <tr className={styles.header}>
-          {columns.map((col: string, index: number) => (
-            <th
-              key={`${col}-${index}`}
-              style={{ paddingLeft: index === 0 ? '24px' : '50px' }}
-            >
-              <div
-                onClick={() => sortByColumn(col)}
-                style={{ cursor: 'pointer' }}
+    <div>
+      <table className={styles.table}>
+        <thead>
+          <tr className={styles.header}>
+            {columns.map((col: string, index: number) => (
+              <th
+                key={`${col}-${index}`}
+                style={{ paddingLeft: index === 0 ? '24px' : '50px' }}
               >
-                {col}
-              </div>
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody className={styles.tableBody}>
-        {(sortedRows.col ? sortedRows.rows : rows).map((row: any, rowIndex) => (
-          <tr className={styles.row} key={rowIndex}>
-            {Object.values(row).map((val: any, colIndex) => (
-              <td
-                key={`${rowIndex}-${colIndex}`}
-                style={{
-                  padding: '20px 24px',
-                  paddingLeft: colIndex === 0 ? '24px' : '50px',
-                  textAlign: 'left',
-                }}
-              >
-                {val}
-              </td>
+                <div
+                  onClick={() => sortByColumn(col)}
+                  style={{ cursor: 'pointer' }}
+                >
+                  {col}
+                </div>
+              </th>
             ))}
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody className={styles.tableBody}>
+          {(sortedRows.col ? sortedRows.rows : rows)
+            .slice(pageSize * currentPage, currentPage * pageSize + pageSize)
+            .map((row: any, rowIndex) => (
+              <tr className={styles.row} key={rowIndex}>
+                {Object.values(row).map((val: any, colIndex) => (
+                  <td
+                    key={`${rowIndex}-${colIndex}`}
+                    style={{
+                      padding: '20px 24px',
+                      paddingLeft: colIndex === 0 ? '24px' : '50px',
+                      textAlign: 'left',
+                    }}
+                  >
+                    {val}
+                  </td>
+                ))}
+              </tr>
+            ))}
+        </tbody>
+      </table>
+      {rows.length > pageSize && (
+        <Flex
+          justifyContent='space-between'
+          mt='24px'
+          style={{ color: '#FCFCFC' }}
+        >
+          <div className={styles.paginateButton} onClick={() => switchPage(-1)}>
+            <FiArrowLeft />
+          </div>
+          <Flex gap='6px'>
+            <div
+              style={{ cursor: 'pointer' }}
+              onClick={() => setCurrentPage(Math.ceil(0))}
+            >
+              {currentPage + 1}
+            </div>
+            <div>of</div>
+            <div
+              onClick={() =>
+                setCurrentPage(Math.ceil(rows.length / pageSize) - 1)
+              }
+              style={{ cursor: 'pointer' }}
+            >
+              {Math.ceil(rows.length / pageSize)}
+            </div>
+          </Flex>
+          <div className={styles.paginateButton} onClick={() => switchPage(1)}>
+            <FiArrowRight />
+          </div>
+        </Flex>
+      )}
+    </div>
   );
 }
