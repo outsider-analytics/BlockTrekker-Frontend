@@ -132,11 +132,13 @@ export default function Endpoints(): JSX.Element {
   ]);
 
   const exampleRequest = useMemo(() => {
+    console.log('Selected endpoint: ', selectedEndpoint);
     if (!selectedEndpoint.name || !selectedEndpoint.user) return '';
     return `curl -X POST -H "Content-Type: application/json" -H "blocktrekker-api-key: <api_key>" -d '{"input": "<user_input>"}' ${API_URL}/api/custom/${selectedEndpoint.user}/${selectedEndpoint.name}`;
   }, [API_URL, selectedEndpoint]);
 
   const fullEndpoint = useMemo(() => {
+    console.log('Selected endpoint: ', selectedEndpoint);
     if (!selectedEndpoint.name || !selectedEndpoint.user) return '';
     return `${API_URL}/api/custom/${selectedEndpoint.user}/${selectedEndpoint.name}`;
   }, [API_URL, selectedEndpoint]);
@@ -207,9 +209,9 @@ export default function Endpoints(): JSX.Element {
       name,
       outputColumn: selectedOutputColumn,
       table: selectedTable,
+      user: address,
     };
     await saveEndpoint({
-      user: address,
       ...metadata,
       columnNames,
       columnTypes,

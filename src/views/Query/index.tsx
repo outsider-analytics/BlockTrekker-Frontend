@@ -473,7 +473,10 @@ export default function Query(): JSX.Element {
         actionText='Execute'
         caption={`Your query will be ${dryRunText}. Are you sure you'd like to execute?`}
         onClose={() => setShowConfirmation(false)}
-        onFinish={() => execute()}
+        onFinish={() => {
+          execute();
+          setShowConfirmation(false);
+        }}
         open={showConfirmation}
         title='Wait!!'
       />
