@@ -3,7 +3,7 @@ import { createUseStyles } from 'react-jss';
 import Flex from 'components/Flex';
 import Typography from 'components/Typography';
 import Button from 'components/Button';
-import { FiArrowLeft, FiPlus, FiTrash2 } from 'react-icons/fi';
+import { FiArrowLeft, FiCopy, FiPlus, FiTrash2 } from 'react-icons/fi';
 import { useEffect, useMemo, useState } from 'react';
 import Dropdown from 'components/Dropdown';
 import { getTables } from 'api/queryApi';
@@ -18,12 +18,9 @@ import ConfirmationModal from 'components/Modal/ConfirmationModal';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { RootLocation } from 'locations';
+import { copyToClipboard } from 'utils';
 
 const useStyles = createUseStyles((theme: BlockTrekkerTheme) => ({
-  back: {
-    color: '#FCFCFC',
-    cursor: 'pointer',
-  },
   container: {
     backgroundColor: '#424542',
     borderRadius: '8px',
@@ -65,20 +62,24 @@ const useStyles = createUseStyles((theme: BlockTrekkerTheme) => ({
       borderBottomRightRadius: '8px',
     },
   },
+  icon: {
+    color: '#FCFCFC',
+    cursor: 'pointer',
+  },
   queryOverview: {
     width: '50%',
   },
-  values: {
-    width: '40%',
-  },
+  values: ({ creatingNew }: { creatingNew: boolean }) => ({
+    width: creatingNew ? '50%' : '40%',
+  }),
 }));
 
 export default function Endpoints(): JSX.Element {
   const { address } = useAccount();
   const navigate = useNavigate();
-  const styles = useStyles();
   const [costPerHit, setCostPerHit] = useState('');
   const [creatingNew, setCreatingNew] = useState(false);
+  const styles = useStyles({ creatingNew });
   const [endPoints, setEndpoints] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [name, setName] = useState('');
@@ -88,6 +89,8 @@ export default function Endpoints(): JSX.Element {
   const [selectedTable, setSelectedTable] = useState('');
   const [showRemovalModal, setShowRemovalModal] = useState(false);
   const [tables, setTables] = useState<any[]>([]);
+
+  const { REACT_APP_API_URL: API_URL } = process.env;
 
   const availableInputColumns = useMemo(() => {
     const table = tables.find((table) => table.name === selectedTable);
@@ -127,6 +130,16 @@ export default function Endpoints(): JSX.Element {
     selectedOutputColumn,
     selectedTable,
   ]);
+
+  const exampleRequest = useMemo(() => {
+    if (!selectedEndpoint.name || !selectedEndpoint.user) return '';
+    return `curl -X POST -H "Content-Type: application/json" -H "blocktrekker-api-key: <api_key>" -d '{"input": "<user_input>"}' ${API_URL}/api/custom/${selectedEndpoint.user}/${selectedEndpoint.name}`;
+  }, [API_URL, selectedEndpoint]);
+
+  const fullEndpoint = useMemo(() => {
+    if (!selectedEndpoint.name || !selectedEndpoint.user) return '';
+    return `${API_URL}/api/custom/${selectedEndpoint.user}/${selectedEndpoint.name}`;
+  }, [API_URL, selectedEndpoint]);
 
   const query = useMemo(() => {
     if (!creatingNew && !endPoints.length) return;
@@ -233,7 +246,7 @@ export default function Endpoints(): JSX.Element {
   return (
     <MainLayout>
       <FiArrowLeft
-        className={styles.back}
+        className={styles.icon}
         onClick={() => navigate(RootLocation)}
       />
       <Flex
@@ -378,20 +391,76 @@ export default function Endpoints(): JSX.Element {
                           Cost: $
                           {creatingNew
                             ? costPerHit
-                              ? formatNumber(costPerHit)
+                              ? formatNumber(costPerHit, 4)
                               : '<cost>'
                             : selectedEndpoint.cost}
                           /call
                         </Typography>
                       </Flex>
-                      <div className={styles.codeBlock}>
-                        <div>
-                          /
-                          {creatingNew
-                            ? name || '<endpoint_name>'
-                            : selectedEndpoint.name}
+                      {!creatingNew ? (
+                        <div className={styles.codeBlock}>
+                          <Flex
+                            alignItems='center'
+                            justifyContent='space-between'
+                          >
+                            <div
+                              style={{
+                                overflow: 'auto',
+                                whiteSpace: 'nowrap',
+                                width: '92%',
+                              }}
+                            >
+                              {fullEndpoint}
+                            </div>
+                            <FiCopy
+                              className={styles.icon}
+                              onClick={() => copyToClipboard(fullEndpoint)}
+                            />
+                          </Flex>
                         </div>
-                      </div>
+                      ) : (
+                        <div className={styles.codeBlock}>
+                          <div>
+                            /
+                            {creatingNew
+                              ? name || '<endpoint_name>'
+                              : selectedEndpoint.name}
+                          </div>
+                        </div>
+                      )}
+                      {!creatingNew && (
+                        <>
+                          <Typography
+                            style={{
+                              color: '#FCFCFC',
+                              marginBlock: '24px 4px',
+                            }}
+                            variant='subtitle2'
+                          >
+                            Example Request
+                          </Typography>
+                          <div className={styles.codeBlock}>
+                            <Flex
+                              alignItems='center'
+                              justifyContent='space-between'
+                            >
+                              <div
+                                style={{
+                                  overflow: 'auto',
+                                  whiteSpace: 'nowrap',
+                                  width: '92%',
+                                }}
+                              >
+                                {exampleRequest}
+                              </div>
+                              <FiCopy
+                                className={styles.icon}
+                                onClick={() => copyToClipboard(exampleRequest)}
+                              />
+                            </Flex>
+                          </div>
+                        </>
+                      )}
                     </div>
                   </Flex>
                   {creatingNew && (

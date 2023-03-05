@@ -76,7 +76,7 @@ export default function Market(): JSX.Element {
   const styles = useStyles();
   const navigate = useNavigate();
 
-  const exampleRequest = `curl -X POST -H "Content-Type: application/json" -H "blocktrekker-api-key: <api_key>" -d '{"input": "<user_input>"}' http://localhost:8080/api/custom/${selectedEndpoint.user}/${selectedEndpoint.name}`;
+  const exampleRequest = `curl -X POST -H "Content-Type: application/json" -H "blocktrekker-api-key: <api_key>" -d '{"input": "<user_input>"}' ${API_URL}/api/custom/${selectedEndpoint.user}/${selectedEndpoint.name}`;
 
   const fullEndpoint = `${API_URL}/api/custom/${selectedEndpoint.user}/${selectedEndpoint.name}`;
 
@@ -235,7 +235,7 @@ export default function Market(): JSX.Element {
                           Endpoint name
                         </Typography>
                         <Typography variant='subtitle2'>
-                          Cost: ${formatNumber(selectedEndpoint.cost)}/call
+                          Cost: ${formatNumber(selectedEndpoint.cost, 4)}/call
                         </Typography>
                       </Flex>
                       <div className={styles.codeBlock}>
