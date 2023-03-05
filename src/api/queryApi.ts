@@ -9,8 +9,14 @@ export const executeQuery = async (payload: any): Promise<Response> =>
 export const getAllQueries = async (user: string): Promise<Response> =>
     serverRequest(`query/all?user=${user}`);
 
+export const getPublicDatasets = async (): Promise<Response> =>
+    serverRequest(`query/datasets`);
+
 export const getQuery = async (id: string): Promise<Response> =>
     serverRequest(`query?id=${id}`);
+
+export const getTableColumns = async (dataset: string, table: string): Promise<Response> =>
+    serverRequest(`query/columns?table=${table}&dataset=${dataset}`);
 
 export const getTables = async (user: string): Promise<Response> =>
     serverRequest(`query/tables?user=${user}`);

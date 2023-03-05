@@ -93,8 +93,6 @@ export default function Market(): JSX.Element {
     })();
   }, [address]);
 
-  console.log('Selected endpoint: ', selectedEndpoint);
-
   return (
     <MainLayout>
       <FiArrowLeft

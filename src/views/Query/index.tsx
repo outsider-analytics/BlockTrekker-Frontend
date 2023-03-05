@@ -11,6 +11,7 @@ import VisualizationModal from 'components/Modal/VisualizationModal';
 import {
   downloadResults,
   executeQuery,
+  getPublicDatasets,
   getQuery,
   saveQuery,
 } from 'api/queryApi';
@@ -23,12 +24,11 @@ import Typography from 'components/Typography';
 import { AiFillEdit } from 'react-icons/ai';
 import Button from 'components/Button';
 import { truncateAddress } from 'utils';
+import { BlockTrekkerTheme } from 'theme';
+import { BiClipboard, BiTable } from 'react-icons/bi';
+import BQTableColumns from './components/BQTableColumns';
 
-const useStyles = createUseStyles({
-  back: {
-    color: '#FCFCFC',
-    cursor: 'pointer',
-  },
+const useStyles = createUseStyles((theme: BlockTrekkerTheme) => ({
   completedIn: {
     fontSize: '16px',
     fontWeight: 500,
@@ -36,9 +36,13 @@ const useStyles = createUseStyles({
   container: {
     padding: '32px',
   },
+  icon: {
+    color: '#FCFCFC',
+    cursor: 'pointer',
+  },
   queryContainer: {
     textAlign: 'right',
-    width: '80%',
+    width: '75%',
   },
   queryInput: {
     backgroundColor: '#34383D',
@@ -52,6 +56,42 @@ const useStyles = createUseStyles({
     resize: 'none',
     width: '100%',
   },
+  tables: {
+    width: '35%',
+    '& > div': {
+      backgroundColor: '#34383D',
+      border: '1px solid #717371',
+      borderRadius: '10px',
+      height: '100%',
+      padding: '8px',
+      position: 'relative',
+    },
+  },
+  tableList: {
+    bottom: '8px',
+    position: 'absolute',
+    overflowY: 'auto',
+    top: '48px',
+    width: 'calc(100% - 16px)',
+  },
+  tableRowLeft: {
+    ...theme.typography.subtitle2,
+    alignItems: 'center',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    display: 'flex',
+    gap: '4px',
+    padding: '2px',
+    width: '85%',
+    '& > div:last-child': {
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
+    },
+    '&:hover': {
+      backgroundColor: '#424542',
+    },
+  },
   title: {
     color: '#FCFCFC',
     fontSize: '72px',
@@ -63,7 +103,7 @@ const useStyles = createUseStyles({
       width: '100%',
     },
   },
-});
+}));
 
 const DOWNLOAD_OPTIONS = ['CSV', 'JSON'];
 
@@ -76,7 +116,7 @@ export default function Query(): JSX.Element {
   const [elapsed, setElapsed] = useState(0);
   const [exporting, setExporting] = useState('');
   const [isExecuting, setIsExecuting] = useState(false);
-  const [isLoading, setIsLoading] = useState(!!id);
+  const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [name, setName] = useState('');
   const [oldQuery, setOldQuery] = useState('');
@@ -85,8 +125,14 @@ export default function Query(): JSX.Element {
     columns: [] as string[],
     rows: [],
   });
+  const [selectedTable, setSelectedTable] = useState<{
+    dataset: string;
+    name: string;
+  }>({ dataset: '', name: '' });
   const [showQueryModal, setShowQueryModal] = useState(false);
   const [showVisualizationModal, setShowVisualizationModal] = useState(false);
+  const [tables, setTables] = useState<any[]>([]);
+  const [tableColumns, setTableColumns] = useState<any>({});
   const [visualizations, setVisualizations] = useState<any[]>([]);
   const styles = useStyles();
 
@@ -147,6 +193,30 @@ export default function Query(): JSX.Element {
     }
   }, [id, isExecuting, oldQuery, query]);
 
+  const handleTableSelect = (table: string) => {
+    const found = tables.find((tbl) =>
+      (Object.values(tbl) as string[])[0].includes(table)
+    );
+    if (found) {
+      const dataset = Object.keys(found)[0];
+      setSelectedTable({ dataset, name: table });
+    }
+  };
+
+  const loadExistingQuery = async (id: string) => {
+    const res = await getQuery(id);
+    const data = await res.json();
+    setOldQuery(data.query.query);
+    setQuery(data.query.query);
+    setDescription(data.query.description);
+    setName(data.query.name);
+    setQueryResults({
+      columns: data.query.columns,
+      rows: data.query.results,
+    });
+    setVisualizations(data.query.visualizations ?? []);
+  };
+
   const save = async (queryDesc: string, queryName: string) => {
     setIsSaving(true);
     const res = await saveQuery({
@@ -161,6 +231,13 @@ export default function Query(): JSX.Element {
     setIsSaving(false);
     setShowQueryModal(false);
   };
+
+  const tableNames = useMemo(() => {
+    return tables.reduce((acc, obj) => {
+      const values = Object.values(obj)[0] as string[];
+      return [...acc, ...values];
+    }, []);
+  }, [tables]);
 
   const updateMetadata = async (queryDesc: string, queryName: string) => {
     setIsSaving(true);
@@ -181,19 +258,13 @@ export default function Query(): JSX.Element {
   }, [elapsed, isExecuting]);
 
   useEffect(() => {
-    if (!id) return;
     (async () => {
-      const res = await getQuery(id);
+      const res = await getPublicDatasets();
       const data = await res.json();
-      setOldQuery(data.query.query);
-      setQuery(data.query.query);
-      setDescription(data.query.description);
-      setName(data.query.name);
-      setQueryResults({
-        columns: data.query.columns,
-        rows: data.query.results,
-      });
-      setVisualizations(data.query.visualizations ?? []);
+      setTables(data);
+      if (id) {
+        await loadExistingQuery(id);
+      }
       setIsLoading(false);
     })();
   }, [id]);
@@ -225,77 +296,124 @@ export default function Query(): JSX.Element {
                 {description}
               </Typography>
             )}
-            <div className={styles.queryContainer}>
-              <Flex justifyContent='space-between' mb='24px'>
-                <FiArrowLeft
-                  className={styles.back}
-                  onClick={() => navigate(RootLocation)}
-                />
-                {!!queryResults.columns.length && !id && (
-                  <Button onClick={() => setShowQueryModal(true)}>
-                    <Flex alignItems='center' gap='8px'>
-                      <div>{isSaving ? 'Saving...' : 'Save'}</div>
-                      <FiSave size={20} />
-                    </Flex>
-                  </Button>
-                )}
-                {!!queryResults.columns.length && id && (
-                  <Flex alignItems='center' gap='24px'>
+            <Flex gap='24px'>
+              <div className={styles.tables}>
+                <div>
+                  <Typography style={{ color: '#FCFCFC' }} variant='h5'>
+                    Tables
+                  </Typography>
+                  {selectedTable.name ? (
+                    <BQTableColumns
+                      clearTableSelection={() =>
+                        setSelectedTable({ dataset: '', name: '' })
+                      }
+                      columns={tableColumns[selectedTable.name] ?? []}
+                      setQuery={setQuery}
+                      setTableColumns={setTableColumns}
+                      table={selectedTable}
+                    />
+                  ) : (
+                    <div
+                      className={styles.tableList}
+                      style={{ color: '#FCFCFC' }}
+                    >
+                      {tableNames.map((table: string) => (
+                        <div key={table}>
+                          <Flex
+                            alignItems='center'
+                            justifyContent='space-between'
+                          >
+                            <div
+                              className={styles.tableRowLeft}
+                              onClick={() => handleTableSelect(table)}
+                            >
+                              <BiTable style={{ flexShrink: 0 }} />
+                              <div>{table}</div>
+                            </div>
+                            <BiClipboard
+                              className={styles.icon}
+                              onClick={() => setQuery((prev) => prev + table)}
+                              size={18}
+                            />
+                          </Flex>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className={styles.queryContainer}>
+                <Flex justifyContent='space-between' mb='24px'>
+                  <FiArrowLeft
+                    className={styles.icon}
+                    onClick={() => navigate(RootLocation)}
+                  />
+                  {!!queryResults.columns.length && !id && (
                     <Button onClick={() => setShowQueryModal(true)}>
                       <Flex alignItems='center' gap='8px'>
-                        <div>Edit</div>
-                        <AiFillEdit size={20} />
+                        <div>{isSaving ? 'Saving...' : 'Save'}</div>
+                        <FiSave size={20} />
                       </Flex>
                     </Button>
-                    {DOWNLOAD_OPTIONS.map((option) => (
-                      <Button key={option} onClick={() => download(option)}>
+                  )}
+                  {!!queryResults.columns.length && id && (
+                    <Flex alignItems='center' gap='24px'>
+                      <Button onClick={() => setShowQueryModal(true)}>
                         <Flex alignItems='center' gap='8px'>
-                          {exporting === option ? 'Exporting...' : 'Export'}{' '}
-                          {option}
-                          <FiDownload size={20} />
+                          <div>Edit</div>
+                          <AiFillEdit size={20} />
                         </Flex>
                       </Button>
-                    ))}
-                  </Flex>
-                )}
-              </Flex>
-              <textarea
-                className={styles.queryInput}
-                onChange={(e) => setQuery(e.target.value)}
-                value={query}
-              />
-              <Flex
-                alignItems='center'
-                justifyContent='flex-end'
-                gap='24px'
-                mt='24px'
-              >
-                {id && (
-                  <Button
-                    onClick={() => setShowVisualizationModal(true)}
-                    text='New Visualization'
-                  />
-                )}
-                <Button
-                  disabled={!query}
-                  onClick={() => !isExecuting && execute()}
-                  style={{
-                    cursor: !query ? 'not-allowed' : 'pointer',
-                    opacity: !query ? 0.5 : 1,
-                  }}
+                      {DOWNLOAD_OPTIONS.map((option) => (
+                        <Button key={option} onClick={() => download(option)}>
+                          <Flex alignItems='center' gap='8px'>
+                            {exporting === option ? 'Exporting...' : 'Export'}{' '}
+                            {option}
+                            <FiDownload size={20} />
+                          </Flex>
+                        </Button>
+                      ))}
+                    </Flex>
+                  )}
+                </Flex>
+                <textarea
+                  className={styles.queryInput}
+                  onChange={(e) => setQuery(e.target.value)}
+                  value={query}
+                />
+                <Flex
+                  alignItems='center'
+                  justifyContent='flex-end'
+                  gap='24px'
+                  mt='24px'
                 >
-                  <Flex alignItems='center' gap='12px'>
-                    <div>{executeText}</div>
-                    {isExecuting && (
-                      <Flex alignItems='center' gap='12px'>
-                        <div>{displayTimer(elapsed)}</div>
-                        <ClockLoader color='#FCFCFC' size={20} />
-                      </Flex>
-                    )}
-                  </Flex>
-                </Button>
-              </Flex>
-            </div>
+                  {id && (
+                    <Button
+                      onClick={() => setShowVisualizationModal(true)}
+                      text='New Visualization'
+                    />
+                  )}
+                  <Button
+                    disabled={!query}
+                    onClick={() => !isExecuting && execute()}
+                    style={{
+                      cursor: !query ? 'not-allowed' : 'pointer',
+                      opacity: !query ? 0.5 : 1,
+                    }}
+                  >
+                    <Flex alignItems='center' gap='12px'>
+                      <div>{executeText}</div>
+                      {isExecuting && (
+                        <Flex alignItems='center' gap='12px'>
+                          <div>{displayTimer(elapsed)}</div>
+                          <ClockLoader color='#FCFCFC' size={20} />
+                        </Flex>
+                      )}
+                    </Flex>
+                  </Button>
+                </Flex>
+              </div>
+            </Flex>
             <DataSection
               isExecuting={isExecuting}
               queryId={id ?? ''}
