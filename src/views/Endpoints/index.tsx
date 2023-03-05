@@ -69,7 +69,7 @@ const useStyles = createUseStyles((theme: BlockTrekkerTheme) => ({
     width: '50%',
   },
   values: {
-    width: '50%',
+    width: '40%',
   },
 }));
 

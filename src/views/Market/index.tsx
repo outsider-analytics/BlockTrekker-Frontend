@@ -15,6 +15,8 @@ import Input from 'components/Input';
 import { copyToClipboard, formatNumber, truncateAddress } from 'utils';
 import { FiCopy } from 'react-icons/fi';
 
+const { REACT_APP_API_URL: API_URL } = process.env;
+
 const useStyles = createUseStyles((theme: BlockTrekkerTheme) => ({
   codeBlock: {
     backgroundColor: '#262726',
@@ -23,7 +25,6 @@ const useStyles = createUseStyles((theme: BlockTrekkerTheme) => ({
     color: '#FCFCFC',
     padding: '8px',
     position: 'relative',
-    overflowX: 'auto',
     whiteSpace: 'pre-wrap',
     width: '100%',
   },
@@ -63,7 +64,7 @@ const useStyles = createUseStyles((theme: BlockTrekkerTheme) => ({
     cursor: 'pointer',
   },
   values: {
-    width: '50%',
+    width: '40%',
   },
 }));
 
@@ -74,6 +75,10 @@ export default function Market(): JSX.Element {
   const [selectedEndpoint, setSelectedEndpoint] = useState<any>({});
   const styles = useStyles();
   const navigate = useNavigate();
+
+  const exampleRequest = `curl -X POST -H "Content-Type: application/json" -H "blocktrekker-api-key: <api_key>" -d '{"input": "<user_input>"}' http://localhost:8080/api/custom/${selectedEndpoint.user}/${selectedEndpoint.name}`;
+
+  const fullEndpoint = `${API_URL}/api/custom/${selectedEndpoint.user}/${selectedEndpoint.name}`;
 
   useEffect(() => {
     if (!address) return;
@@ -238,12 +243,44 @@ export default function Market(): JSX.Element {
                           alignItems='center'
                           justifyContent='space-between'
                         >
-                          <div>/{selectedEndpoint.name}</div>
+                          <div
+                            style={{
+                              overflow: 'auto',
+                              whiteSpace: 'nowrap',
+                              width: '92%',
+                            }}
+                          >
+                            {fullEndpoint}
+                          </div>
                           <FiCopy
                             className={styles.icon}
-                            onClick={() =>
-                              copyToClipboard(`/${selectedEndpoint.name}`)
-                            }
+                            onClick={() => copyToClipboard(fullEndpoint)}
+                          />
+                        </Flex>
+                      </div>
+                      <Typography
+                        style={{ color: '#FCFCFC', marginBlock: '24px 4px' }}
+                        variant='subtitle2'
+                      >
+                        Example Request
+                      </Typography>
+                      <div className={styles.codeBlock}>
+                        <Flex
+                          alignItems='center'
+                          justifyContent='space-between'
+                        >
+                          <div
+                            style={{
+                              overflow: 'auto',
+                              whiteSpace: 'nowrap',
+                              width: '92%',
+                            }}
+                          >
+                            {exampleRequest}
+                          </div>
+                          <FiCopy
+                            className={styles.icon}
+                            onClick={() => copyToClipboard(exampleRequest)}
                           />
                         </Flex>
                       </div>

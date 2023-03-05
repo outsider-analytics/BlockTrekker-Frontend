@@ -1,7 +1,7 @@
 import { RequestTypes, serverRequest } from "./serverRequest";
 
-export const downloadResults = async (id: string, type: string): Promise<Response> =>
-    serverRequest(`query/download/${id}/?type=${type}`)
+export const downloadResults = async (id: string, type: string, user: string): Promise<Response> =>
+    serverRequest(`query/download/${id}/?type=${type}&user=${user}`)
 
 export const executeQuery = async (payload: any): Promise<Response> =>
     serverRequest('query/execute', RequestTypes.Post, payload);

@@ -79,7 +79,7 @@ export default function Home(): JSX.Element {
           </Button>
           <Button onClick={() => navigate(MarketLocation)}>
             <Flex alignItems='center' gap='8px'>
-              <div>Browse Market</div>
+              <div>Browse API Market</div>
               <AiFillAppstore size={16} />
             </Flex>
           </Button>
