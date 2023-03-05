@@ -23,10 +23,12 @@ import QueryModal from './components/QueryModal';
 import Typography from 'components/Typography';
 import { AiFillEdit } from 'react-icons/ai';
 import Button from 'components/Button';
-import { truncateAddress } from 'utils';
+import { formatNumber, truncateAddress } from 'utils';
 import { BlockTrekkerTheme } from 'theme';
 import { BiClipboard, BiTable } from 'react-icons/bi';
 import BQTableColumns from './components/BQTableColumns';
+import { executeWithDryRun } from 'api/queryApi';
+import ConfirmationModal from 'components/Modal/ConfirmationModal';
 
 const useStyles = createUseStyles((theme: BlockTrekkerTheme) => ({
   completedIn: {
@@ -35,6 +37,13 @@ const useStyles = createUseStyles((theme: BlockTrekkerTheme) => ({
   },
   container: {
     padding: '32px',
+  },
+  dryRun: {
+    backgroundColor: '#BF3B2F',
+    borderRadius: '4px',
+    color: '#FFFFFF',
+    fontWeight: 900,
+    padding: '8px',
   },
   icon: {
     color: '#FCFCFC',
@@ -112,6 +121,7 @@ export default function Query(): JSX.Element {
   const { id } = useParams();
   const navigate = useNavigate();
   const [, setCompleteIn] = useState(0);
+  const [cost, setCost] = useState(-1);
   const [description, setDescription] = useState('');
   const [elapsed, setElapsed] = useState(0);
   const [exporting, setExporting] = useState('');
@@ -129,6 +139,7 @@ export default function Query(): JSX.Element {
     dataset: string;
     name: string;
   }>({ dataset: '', name: '' });
+  const [showConfirmation, setShowConfirmation] = useState(false);
   const [showQueryModal, setShowQueryModal] = useState(false);
   const [showVisualizationModal, setShowVisualizationModal] = useState(false);
   const [tables, setTables] = useState<any[]>([]);
@@ -169,6 +180,17 @@ export default function Query(): JSX.Element {
     setExporting('');
   };
 
+  const dryRun = async () => {
+    setIsExecuting(true);
+    const payload = { query };
+    const res = await executeWithDryRun(payload);
+    const { cost } = await res.json();
+    setIsExecuting(false);
+    setCost(cost);
+  };
+
+  const dryRunText = cost > 0 ? ` $${formatNumber(cost, 4)}` : ' subcent';
+
   const execute = async () => {
     setIsExecuting(true);
     const payload = { id: '', name, query, user: address };
@@ -185,13 +207,18 @@ export default function Query(): JSX.Element {
   };
 
   const executeText = useMemo(() => {
-    if (isExecuting) return 'Executing...';
+    if (cost < 0) {
+      if (isExecuting) {
+        return 'Executing Dry Run...';
+      }
+      return 'Execute with Dry Run';
+    } else if (isExecuting) return 'Executing...';
     else if (!id) {
       return 'Execute';
     } else {
       return oldQuery === query ? 'Execute' : 'Save & Execute';
     }
-  }, [id, isExecuting, oldQuery, query]);
+  }, [cost, id, isExecuting, oldQuery, query]);
 
   const handleTableSelect = (table: string) => {
     const found = tables.find((tbl) =>
@@ -393,9 +420,27 @@ export default function Query(): JSX.Element {
                       text='New Visualization'
                     />
                   )}
+                  {cost >= 0 && (
+                    <>
+                      <div className={styles.dryRun}>
+                        Your query is estimated to be {dryRunText}
+                      </div>
+                      {!isExecuting && (
+                        <Button
+                          disabled={!query}
+                          onClick={() => dryRun()}
+                          text='Re-execute Dry Run'
+                        />
+                      )}
+                    </>
+                  )}
                   <Button
                     disabled={!query}
-                    onClick={() => !isExecuting && execute()}
+                    onClick={() =>
+                      !isExecuting && cost >= 0
+                        ? setShowConfirmation(true)
+                        : dryRun()
+                    }
                     style={{
                       cursor: !query ? 'not-allowed' : 'pointer',
                       opacity: !query ? 0.5 : 1,
@@ -424,6 +469,14 @@ export default function Query(): JSX.Element {
           </>
         )}
       </div>
+      <ConfirmationModal
+        actionText='Execute'
+        caption={`Your query will be ${dryRunText}. Are you sure you'd like to execute?`}
+        onClose={() => setShowConfirmation(false)}
+        onFinish={() => execute()}
+        open={showConfirmation}
+        title='Wait!!'
+      />
       <QueryModal
         description={description}
         edit={!!id}

@@ -6,11 +6,31 @@ import { SetStateAction, useEffect, useState } from 'react';
 import { BiClipboard } from 'react-icons/bi';
 import { FadeLoader } from 'react-spinners';
 import { getTableColumns } from 'api/queryApi';
+import { FiColumns } from 'react-icons/fi';
 
 const useStyles = createUseStyles({
   icon: {
     color: '#FCFCFC',
     cursor: 'pointer',
+  },
+  column: {
+    alignItems: 'center',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    display: 'flex',
+    gap: '4px',
+    padding: '2px',
+    '&:hover': {
+      backgroundColor: '#424542',
+    },
+  },
+  columnList: {
+    bottom: '8px',
+    marginLeft: '22px',
+    position: 'absolute',
+    overflowY: 'auto',
+    top: '80px',
+    width: 'calc(100% - 38px)',
   },
 });
 
@@ -37,11 +57,10 @@ export default function BQTableColumns({
     (async () => {
       const res = await getTableColumns(table.dataset, table.name);
       const data = await res.json();
-      console.log('Data: ', data);
       setTableColumns((prev: any) => ({ ...prev, [table.name]: data }));
     })();
     setLoading(false);
-  }, [table]);
+  }, [setTableColumns, table]);
 
   return (
     <div style={{ height: '100%' }}>
@@ -55,11 +74,13 @@ export default function BQTableColumns({
         </Flex>
         <BiClipboard
           className={styles.icon}
-          onClick={() => setQuery((prev) => prev + table)}
+          onClick={() =>
+            setQuery((prev) => prev + `${table.dataset}.${table.name}`)
+          }
           size={18}
         />
       </Flex>
-      {loading && (
+      {loading ? (
         <Flex
           alignItems='center'
           justifyContent='center'
@@ -67,6 +88,25 @@ export default function BQTableColumns({
         >
           <FadeLoader color='#5451FF' />
         </Flex>
+      ) : (
+        <div className={styles.columnList}>
+          {columns.map(({ name, type }) => (
+            <Flex
+              alignItems='center'
+              justifyContent='space-between'
+              style={{ color: '#FCFCFC' }}
+            >
+              <div
+                className={styles.column}
+                onClick={() => setQuery((prev) => prev + name)}
+              >
+                <FiColumns />
+                <div>{name}</div>
+              </div>
+              <div>{type}</div>
+            </Flex>
+          ))}
+        </div>
       )}
     </div>
   );

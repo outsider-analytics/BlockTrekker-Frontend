@@ -6,6 +6,9 @@ export const downloadResults = async (id: string, type: string, user: string): P
 export const executeQuery = async (payload: any): Promise<Response> =>
     serverRequest('query/execute', RequestTypes.Post, payload);
 
+export const executeWithDryRun = async (payload: any): Promise<Response> =>
+    serverRequest(`query/dry-run`, RequestTypes.Post, payload)
+
 export const getAllQueries = async (user: string): Promise<Response> =>
     serverRequest(`query/all?user=${user}`);
 

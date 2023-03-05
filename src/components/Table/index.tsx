@@ -158,7 +158,7 @@ export default function Table({
                       textAlign: 'left',
                     }}
                   >
-                    {val}
+                    {typeof val === 'object' ? val?.value ?? '' : val}
                   </td>
                 ))}
               </tr>
