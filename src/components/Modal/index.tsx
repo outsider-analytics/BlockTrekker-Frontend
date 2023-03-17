@@ -24,19 +24,22 @@ const customStyles = {
 
 ReactModal.setAppElement('#root');
 
-type IModal = {
-  open: boolean;
+export type DefaultModalProps = {
   onClose: () => void;
+  open: boolean;
+};
+
+type ModalProps = {
   children: ReactNode;
   style?: CSSProperties;
-};
+} & DefaultModalProps;
 
 export default function Modal({
   open,
   onClose,
   children,
   style,
-}: IModal): JSX.Element {
+}: ModalProps): JSX.Element {
   const modalStyles = {
     content: {
       borderRadius: '4px',

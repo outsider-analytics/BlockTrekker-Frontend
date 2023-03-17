@@ -10,7 +10,10 @@ export const WIDTH = 1200;
 
 export const DEFAULT_LAYOUT = [
   {
-    content: 'This is your dashboard! Do whatever you like with it!',
+    content: {
+      format: 'plaintext',
+      text: 'This is your dashboard! Do whatever you like with it!',
+    },
     elementType: 'text',
     gridInstructions: { i: '1', w: 12, h: 1, x: 0, y: 0 },
   },

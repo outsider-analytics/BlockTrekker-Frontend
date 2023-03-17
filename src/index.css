@@ -63,3 +63,8 @@ input[type=number] {
 textarea {
   font-family: inherit;
 }
+
+a {
+  color: #5451FF;
+  text-decoration: none;
+}

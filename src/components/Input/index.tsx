@@ -16,6 +16,7 @@ const useStyles = createUseStyles({
     backgroundColor: 'transparent',
     border: 'none',
     color: '#EDEDED',
+    height: '100%',
     outline: 'transparent',
     resize: 'none',
     width: '100%',
@@ -65,7 +66,7 @@ export default function Input({
       style={{ ...wrapperStyle }}
       title={title}
     >
-      <div className={styles.container}>
+      <div className={styles.container} style={{ ...style }}>
         <Flex alignItems='center' gap='2px'>
           {currency && <div style={{ color: '#FCFCFC' }}>$</div>}
           {textarea ? (
@@ -82,7 +83,6 @@ export default function Input({
               disabled={disabled}
               onChange={onChange}
               placeholder={placeholder}
-              style={{ ...style }}
               type={type}
               value={value}
             />

@@ -7,12 +7,13 @@ import Button from 'components/Button';
 import MainLayout from 'layouts/MainLayout';
 import Flex from 'components/Flex';
 import { AiFillCloseCircle, AiFillEdit, AiFillSave } from 'react-icons/ai';
-import AddVisualizationModal from './components/AddVisualizationModal';
+import DashboardVisualizationModal from './components/DashboardVisualizationModal';
+import DashboardTextModal from './components/DashboardTextModal';
 import { getDashboard, saveDashboard } from 'api/dashboardApi';
 import CardContent from './components/CardContent';
 import { FadeLoader } from 'react-spinners';
 import ConfirmationModal from 'components/Modal/ConfirmationModal';
-import { addVisualizationToDashboard } from 'api/dashboardApi';
+import { addWidgetToDashboard } from 'api/dashboardApi';
 import { FiArrowLeft, FiTrash2 } from 'react-icons/fi';
 import { RootLocation } from 'locations';
 import { useNavigate } from 'react-router-dom';
@@ -30,8 +31,10 @@ const useStyles = createUseStyles({
     boxSizing: 'border-box',
     color: '#FCFCFC',
     fontSize: '24px',
+    overflow: 'hidden',
     padding: '16px 40px 16px 16px',
     position: 'relative',
+    wordWrap: 'break-word',
   },
   gridLayout: {
     padding: '0px',
@@ -72,32 +75,21 @@ export default function Dashboard(): JSX.Element {
   const [saving, setSaving] = useState(false);
   const [showRemove, setShowRemove] = useState(-1);
   const [showVisualizationModal, setShowVisualizationModal] = useState(false);
+  const [showTextModal, setShowTextModal] = useState(false);
 
   const addVisulization = async (visualization: any) => {
     if (!address) return;
-    const maxY = layout.reduce((max, { gridInstructions }) => {
-      return Math.max(max, gridInstructions.y);
-    }, 0);
-    const widget = {
-      gridInstructions: {
-        i: `${layout.length + 1}`,
-        h: 3,
-        w: 6,
-        x: 0,
-        y: maxY + 1,
-      },
-      item: { content: visualization, elementType: 'visualization' },
-    };
+    const widget = generateNewWidget(visualization, 'visualization');
     let res;
     if (neverSaved) {
       const dashboard = transformDashboardForSave([...layout, widget]);
       // TODO: Clean this up and make more efficient
-      res = await addVisualizationToDashboard(address, {
+      res = await addWidgetToDashboard(address, {
         dashboard,
         widget,
       });
     } else {
-      res = await addVisualizationToDashboard(address, {
+      res = await addWidgetToDashboard(address, {
         widget,
       });
     }
@@ -109,6 +101,27 @@ export default function Dashboard(): JSX.Element {
     setLayout((prev) => [...prev, widget]);
     setNeverSaved(false);
     setShowVisualizationModal(false);
+  };
+
+  const addText = async (format: string, text: string) => {
+    if (!address) return;
+    const content = { format, text };
+    const widget = generateNewWidget(content, 'text');
+    if (neverSaved) {
+      const dashboard = transformDashboardForSave([...layout, widget]);
+      // TODO: Clean this up and make more efficient
+      await addWidgetToDashboard(address, {
+        dashboard,
+        widget,
+      });
+    } else {
+      await addWidgetToDashboard(address, {
+        widget,
+      });
+    }
+    setLayout((prev) => [...prev, widget]);
+    setNeverSaved(false);
+    setShowTextModal(false);
   };
 
   const cancelEdit = () => {
@@ -129,6 +142,28 @@ export default function Dashboard(): JSX.Element {
       widgets[i].gridInstructions.id = `${Number(prevId) - 1}`;
     }
     return widgets;
+  };
+
+  const generateNewWidget = (content: any, elementType: string) => {
+    const maxes = layout.reduce(
+      (max, { gridInstructions }) => {
+        const maxI = Math.max(max[0], Number(gridInstructions.i));
+        const maxY = Math.max(max[1], gridInstructions.y);
+        return [maxI, maxY];
+      },
+      [0, 0]
+    );
+    const widget = {
+      gridInstructions: {
+        i: `${maxes[0] + 1}`,
+        h: elementType === 'text' && content.format === 'plaintext' ? 1 : 3,
+        w: 6,
+        x: 0,
+        y: maxes[1] + 1,
+      },
+      item: { content, elementType },
+    };
+    return widget;
   };
 
   const grid = useMemo(() => {
@@ -261,10 +296,16 @@ export default function Dashboard(): JSX.Element {
                   </Flex>
                 </Button>
               ) : (
-                <Button
-                  onClick={() => setShowVisualizationModal(true)}
-                  text='Add visualization'
-                />
+                <>
+                  <Button
+                    onClick={() => setShowTextModal(true)}
+                    text='Add text'
+                  />
+                  <Button
+                    onClick={() => setShowVisualizationModal(true)}
+                    text='Add visualization'
+                  />
+                </>
               )}
               <Button
                 disabled={saving || (isEditing && !editedLayout)}
@@ -325,11 +366,16 @@ export default function Dashboard(): JSX.Element {
               }
             )}
           </ResponsiveGridLayout>
-          <AddVisualizationModal
+          <DashboardVisualizationModal
             existingVisualiztions={visualizations}
             onClose={() => setShowVisualizationModal(false)}
             onFinish={(viz) => addVisulization(viz)}
             open={showVisualizationModal}
+          />
+          <DashboardTextModal
+            onClose={() => setShowTextModal(false)}
+            onFinish={addText}
+            open={showTextModal}
           />
           <ConfirmationModal
             actionText='Remove'

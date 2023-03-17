@@ -1,7 +1,7 @@
 import { RequestTypes, serverRequest } from "./serverRequest";
 
-export const addVisualizationToDashboard = (user: string, visualization: any): Promise<Response> =>
-    serverRequest(`dashboard/visualization/${user}`, RequestTypes.Post, visualization);
+export const addWidgetToDashboard = (user: string, payload: any): Promise<Response> =>
+    serverRequest(`dashboard/widget/${user}`, RequestTypes.Post, payload);
 
 export const getDashboard = (user: string): Promise<Response> =>
     serverRequest(`dashboard/${user}`);

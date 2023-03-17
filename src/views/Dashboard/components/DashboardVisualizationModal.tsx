@@ -33,19 +33,19 @@ const useStyles = createUseStyles({
   },
 });
 
-type AddVisualizationModalProps = {
+type DashboardVisualizationModalProps = {
   existingVisualiztions: any[];
   onClose: () => void;
   onFinish: (visualization: any) => void;
   open: boolean;
 };
 
-export default function AddVisualizationModal({
+export default function DashboardVisualizationModal({
   existingVisualiztions,
   onClose,
   onFinish,
   open,
-}: AddVisualizationModalProps): JSX.Element {
+}: DashboardVisualizationModalProps): JSX.Element {
   const styles = useStyles();
   const { address } = useAccount();
   const [selectedVisualization, setSelectedVisualization] = useState(-1);
@@ -80,38 +80,50 @@ export default function AddVisualizationModal({
       <Typography style={{ color: '#FCFCFC' }} variant='h4'>
         Add Visualization
       </Typography>
-      <div className={styles.selectionContainer}>
-        {visualizations.map((visualization, index) => {
-          const placed = existingVisualiztions.includes(visualization.id);
-          return (
-            <div
-              className={styles.row}
-              key={visualization.id}
-              onClick={() => setSelectedVisualization(index)}
-              style={{
-                backgroundColor:
-                  selectedVisualization === index || placed ? '#34383D' : '',
-                cursor: placed ? 'initial' : 'pointer',
-              }}
-            >
-              <Flex alignItems='center' justifyContent='space-between'>
-                <Flex alignItems='center' gap='16px'>
-                  <Flex alignItems='center' gap='4px'>
-                    <div style={{ width: '40px' }}>
-                      {capitalize(visualization.chartType)}
-                    </div>
-                    {ChartTypeToIcon[visualization.chartType]}
+      {!!visualizations.length ? (
+        <div className={styles.selectionContainer}>
+          {visualizations.map((visualization, index) => {
+            const placed = existingVisualiztions.includes(visualization.id);
+            return (
+              <div
+                className={styles.row}
+                key={visualization.id}
+                onClick={() => setSelectedVisualization(index)}
+                style={{
+                  backgroundColor:
+                    selectedVisualization === index || placed ? '#34383D' : '',
+                  cursor: placed ? 'initial' : 'pointer',
+                }}
+              >
+                <Flex alignItems='center' justifyContent='space-between'>
+                  <Flex alignItems='center' gap='16px'>
+                    <Flex alignItems='center' gap='4px'>
+                      <div style={{ width: '40px' }}>
+                        {capitalize(visualization.chartType)}
+                      </div>
+                      {ChartTypeToIcon[visualization.chartType]}
+                    </Flex>
+                    <Typography variant='subtitle2'>
+                      {visualization.id}
+                    </Typography>
                   </Flex>
-                  <Typography variant='subtitle2'>
-                    {visualization.id}
-                  </Typography>
+                  {placed && <div>Added</div>}
                 </Flex>
-                {placed && <div>Added</div>}
-              </Flex>
-            </div>
-          );
-        })}
-      </div>
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <Flex
+          alignItems='center'
+          justifyContent='center'
+          style={{ height: '50vh' }}
+        >
+          <Typography style={{ color: '#FCFCFC' }} variant='h4'>
+            No queries
+          </Typography>
+        </Flex>
+      )}
       <Flex
         justifyContent='space-between'
         style={{
