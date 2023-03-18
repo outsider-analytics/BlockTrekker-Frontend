@@ -68,8 +68,12 @@ const useStyles = createUseStyles((theme: BlockTrekkerTheme) => ({
 
 export default function Market(): JSX.Element {
   const { address } = useAccount();
+  // TODO: Change from any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [endpoints, setEndpoints] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  // TODO: Change from any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [selectedEndpoint, setSelectedEndpoint] = useState<any>({});
   const styles = useStyles();
   const navigate = useNavigate();

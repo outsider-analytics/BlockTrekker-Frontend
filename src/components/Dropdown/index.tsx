@@ -37,6 +37,8 @@ const useStyles = createUseStyles({
 
 type DropdownProps = {
   disabled?: boolean;
+  // TODO: Change from any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onSelect: React.Dispatch<SetStateAction<any>>;
   options: string[];
   placeholder?: string;

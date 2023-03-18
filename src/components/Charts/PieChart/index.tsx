@@ -1,4 +1,4 @@
-import { PieChart as RechartsPieChart } from 'recharts';
+// import { PieChart as RechartsPieChart } from 'recharts';
 
 type PieChartProps = {
   xKey: string;

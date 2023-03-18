@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify';
 
-export const copyToClipboard = (text: string) => {
+export const copyToClipboard = (text: string): void => {
   // Use the navigator clipboard API if available
   if (navigator.clipboard) {
     navigator.clipboard.writeText(text);
@@ -31,7 +31,9 @@ export const formatNumber = (num: number | string, decimals = 2): string => {
   }
 };
 
-export const sortArbitrayType = (a: any, b: any) => {
+// TODO: Change from any
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
+export const sortArbitrayType = (a: any, b: any): number => {
   // If a and b are of different types, compare their types
   if (typeof a !== typeof b) {
     return typeof a < typeof b ? -1 : 1;

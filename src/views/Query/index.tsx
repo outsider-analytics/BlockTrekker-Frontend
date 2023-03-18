@@ -142,17 +142,27 @@ export default function Query(): JSX.Element {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showQueryModal, setShowQueryModal] = useState(false);
   const [showVisualizationModal, setShowVisualizationModal] = useState(false);
+  // TODO: Change from any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [tables, setTables] = useState<any[]>([]);
+  // TODO: Change from any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [tableColumns, setTableColumns] = useState<any>({});
+  // TODO: Change from any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [visualizations, setVisualizations] = useState<any[]>([]);
   const styles = useStyles();
 
+  // TODO: Change from any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const addVisualization = async (payload: any) => {
     if (!id) return;
     await saveVisualization(id, {
       id: `${id}-${visualizations.length}`,
       ...payload,
     });
+    // TODO: Change from any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     setVisualizations((prev: any) => [...prev, payload]);
     setShowVisualizationModal(false);
   };
@@ -170,7 +180,7 @@ export default function Query(): JSX.Element {
     setExporting(type);
     const res = await downloadResults(id, type, address);
     const disposition = res.headers.get('content-disposition');
-    const fileName = disposition!.substring(21).replace(/^"(.*)"$/, '$1');
+    const fileName = disposition?.substring(21).replace(/^"(.*)"$/, '$1') ?? '';
     const data = await res.blob();
     const elm = document.createElement('a');
     elm.href = URL.createObjectURL(data);
@@ -275,8 +285,8 @@ export default function Query(): JSX.Element {
     setShowQueryModal(false);
   };
 
-  useEffect(() => {
-    if (!isExecuting) return;
+  useEffect((): (() => void) | undefined => {
+    if (!isExecuting) return undefined;
     const interval = setInterval(() => {
       setElapsed((seconds) => seconds + 1);
     }, 1000);

@@ -48,6 +48,8 @@ const useStyles = createUseStyles({
 
 export default function Home(): JSX.Element {
   const { address } = useAccount();
+  // TODO: Change from any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [queries, setQueries] = useState<any[]>([]);
   const [showAPIModal, setShowAPIModal] = useState(false);
   const navigate = useNavigate();
@@ -100,6 +102,7 @@ export default function Home(): JSX.Element {
             {queries.map(({ name, queryId, visualizationCount }) => (
               <div
                 className={styles.row}
+                key={queryId}
                 onClick={() => navigate(`${QueryLocation}/${queryId}`)}
               >
                 <Flex alignItems="center" justifyContent="space-between">

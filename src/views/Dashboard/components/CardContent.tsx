@@ -14,6 +14,8 @@ const useStyles = createUseStyles({
 });
 
 type CardContentProps = {
+  // TODO: Change from any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   content: any;
 };
 

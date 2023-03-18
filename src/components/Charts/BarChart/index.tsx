@@ -10,7 +10,7 @@ import {
 
 import { AxisChartProps } from '../constants';
 
-type BarChartProps = {} & Omit<AxisChartProps, 'curveType'>;
+type BarChartProps = Omit<AxisChartProps, 'curveType'>;
 
 export default function BarChart({
   color,

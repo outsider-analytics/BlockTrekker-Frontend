@@ -64,6 +64,8 @@ export const DEFAULT_DATA = [
 export type AxisChartProps = {
   color: string;
   curveType: CurveType;
+  // TODO: Change from any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any[];
   height?: number;
   scale: ChartScale;

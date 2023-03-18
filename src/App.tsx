@@ -17,13 +17,13 @@ const { REACT_APP_WALLET_CONNECT_ID: WALLET_CONNECT_ID } = process.env;
 
 const { provider } = configureChains(
   [mainnet],
-  [walletConnectProvider({ projectId: WALLET_CONNECT_ID! })]
+  [walletConnectProvider({ projectId: WALLET_CONNECT_ID ?? '' })]
 );
 
 const wagmiClient = createClient({
   autoConnect: true,
   connectors: modalConnectors({
-    projectId: WALLET_CONNECT_ID!,
+    projectId: WALLET_CONNECT_ID ?? '',
     version: '2',
     appName: 'web3Modal',
     chains: [mainnet],
@@ -34,7 +34,7 @@ const wagmiClient = createClient({
 // Web3Modal Ethereum Client
 const ethereumClient = new EthereumClient(wagmiClient, [mainnet]);
 
-function App() {
+function App(): JSX.Element {
   return (
     <>
       <ThemeProvider theme={theme}>
@@ -48,7 +48,7 @@ function App() {
         theme="colored"
       />
       <Web3Modal
-        projectId={WALLET_CONNECT_ID!}
+        projectId={WALLET_CONNECT_ID ?? ''}
         ethereumClient={ethereumClient}
       />
     </>

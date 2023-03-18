@@ -34,9 +34,13 @@ const useStyles = createUseStyles({
 });
 
 type BQTableColumnsProps = {
+  // TODO: Change from any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   columns: any[];
   clearTableSelection: () => void;
   setQuery: React.Dispatch<SetStateAction<string>>;
+  // TODO: Change from any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setTableColumns: React.Dispatch<SetStateAction<any>>;
   table: { dataset: string; name: string };
 };
@@ -56,6 +60,8 @@ export default function BQTableColumns({
     (async () => {
       const res = await getTableColumns(table.dataset, table.name);
       const data = await res.json();
+      // TODO: Change from any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       setTableColumns((prev: any) => ({ ...prev, [table.name]: data }));
     })();
     setLoading(false);
@@ -92,6 +98,7 @@ export default function BQTableColumns({
           {columns.map(({ name, type }) => (
             <Flex
               alignItems="center"
+              key={name}
               justifyContent="space-between"
               style={{ color: '#FCFCFC' }}
             >

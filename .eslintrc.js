@@ -10,7 +10,7 @@ const envRule = process.env.NODE_ENV === 'production' ? 'error' : 'warn';
 module.exports = {
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    ecmaVersion: 2017,
+    ecmaVersion: 2020,
     sourceType: 'module',
     ecmaFeatures: {
       jsx: true,

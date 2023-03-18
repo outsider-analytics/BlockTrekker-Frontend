@@ -20,7 +20,7 @@ function RadioGroup({
   options,
   selectedOption,
   title,
-}: RadioGroupProps) {
+}: RadioGroupProps): JSX.Element {
   const styles = useStyles();
   return (
     <InputWrapper title={title}>

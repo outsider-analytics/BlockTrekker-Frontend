@@ -1,4 +1,5 @@
-export const DashboardLocation = (address: string) => `/dashboard/${address}`;
+export const DashboardLocation = (address: string): string =>
+  `/dashboard/${address}`;
 export const DashboardLocationTemplate = '/dashboard/:address';
 export const EndpointsLocation = '/endpoints';
 export const LoginLocation = '/login';

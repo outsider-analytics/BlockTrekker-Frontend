@@ -38,8 +38,14 @@ const useStyles = createUseStyles({
 type DataSectionProps = {
   isExecuting: boolean;
   queryId: string;
+  // TODO: Change from any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   results: any;
+  // TODO: Change from any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setVisualizations: React.Dispatch<SetStateAction<any[]>>;
+  // TODO: Change from any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   visualizations: any[];
 };
 

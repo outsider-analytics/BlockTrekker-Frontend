@@ -10,7 +10,9 @@
 //     });
 // }
 
-export const uniqueValues = (key: string, rows: any[]) => {
+// TODO: Change from any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const uniqueValues = (key: string, rows: any[]): any[] => {
   const set = new Set();
   rows.forEach((row) => {
     if (row[key] !== null) set.add(row[key]);

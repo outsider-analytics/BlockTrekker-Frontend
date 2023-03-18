@@ -18,5 +18,7 @@ export const getApiKey = (user: string): Promise<Response> =>
 export const getEndpointsByUser = (user: string): Promise<Response> =>
   serverRequest(`api/get-endpoints?user=${user}`);
 
+// TODO: Change from any
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
 export const saveEndpoint = (payload: any): Promise<Response> =>
   serverRequest(`api/create-endpoint`, RequestTypes.Post, payload);

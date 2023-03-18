@@ -10,7 +10,7 @@ import {
 
 import { AxisChartProps } from '../constants';
 
-type LineChartProps = {} & AxisChartProps;
+type LineChartProps = AxisChartProps;
 
 export default function LineChart({
   color,

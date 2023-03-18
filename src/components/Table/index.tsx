@@ -76,6 +76,8 @@ type SortedRows = {
 type TableProps = {
   columns: string[];
   pageSize?: number;
+  // TODO: Change from any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   rows: any[];
 };
 
@@ -147,8 +149,12 @@ export default function Table({
         <tbody className={styles.tableBody}>
           {(sortedRows.col ? sortedRows.rows : rows)
             .slice(pageSize * currentPage, currentPage * pageSize + pageSize)
+            // TODO: Change from any
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             .map((row: any, rowIndex) => (
               <tr className={styles.row} key={rowIndex}>
+                {/* TODO: Change from any */}
+                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                 {Object.values(row).map((val: any, colIndex) => (
                   <td
                     key={`${rowIndex}-${colIndex}`}

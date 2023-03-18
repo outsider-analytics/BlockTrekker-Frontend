@@ -40,7 +40,7 @@ export default function Header(): JSX.Element {
         style={{ height: '100%' }}
       >
         <button className={styles.logoutButton} onClick={() => disconnect()}>
-          {truncateAddress(address!)}
+          {truncateAddress(address ?? '')}
         </button>
       </Flex>
     </div>

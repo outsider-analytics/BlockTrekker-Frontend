@@ -5,7 +5,8 @@ export const getVisualizationNames = async (user: string): Promise<Response> =>
 
 export const saveVisualization = async (
   queryId: string,
-  payload: any
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
+  payload: any // TODO: Change from any
 ): Promise<Response> =>
   serverRequest(`visualization/save/${queryId}`, RequestTypes.Post, payload);
 

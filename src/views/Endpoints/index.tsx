@@ -79,14 +79,20 @@ export default function Endpoints(): JSX.Element {
   const [costPerHit, setCostPerHit] = useState('');
   const [creatingNew, setCreatingNew] = useState(false);
   const styles = useStyles({ creatingNew });
+  // TODO: Change from any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [endPoints, setEndpoints] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [name, setName] = useState('');
+  // TODO: Change from any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [selectedEndpoint, setSelectedEndpoint] = useState<any>({});
   const [selectedInputColumn, setSelectedInputColumn] = useState('');
   const [selectedOutputColumn, setSelectedOutputColumn] = useState('');
   const [selectedTable, setSelectedTable] = useState('');
   const [showRemovalModal, setShowRemovalModal] = useState(false);
+  // TODO: Change from any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [tables, setTables] = useState<any[]>([]);
 
   const { REACT_APP_API_URL: API_URL } = process.env;
@@ -131,19 +137,17 @@ export default function Endpoints(): JSX.Element {
   ]);
 
   const exampleRequest = useMemo(() => {
-    console.log('Selected endpoint: ', selectedEndpoint);
     if (!selectedEndpoint.name || !selectedEndpoint.user) return '';
     return `curl -X POST -H "Content-Type: application/json" -H "blocktrekker-api-key: <api_key>" -d '{"input": "<user_input>"}' ${API_URL}/api/custom/${selectedEndpoint.user}/${selectedEndpoint.name}`;
   }, [API_URL, selectedEndpoint]);
 
   const fullEndpoint = useMemo(() => {
-    console.log('Selected endpoint: ', selectedEndpoint);
     if (!selectedEndpoint.name || !selectedEndpoint.user) return '';
     return `${API_URL}/api/custom/${selectedEndpoint.user}/${selectedEndpoint.name}`;
   }, [API_URL, selectedEndpoint]);
 
-  const query = useMemo(() => {
-    if (!creatingNew && !endPoints.length) return;
+  const query = useMemo((): string | undefined => {
+    if (!creatingNew && !endPoints.length) return undefined;
     const from = `FROM ${
       creatingNew ? selectedTable || '<table_name>' : selectedEndpoint.table
     }`;

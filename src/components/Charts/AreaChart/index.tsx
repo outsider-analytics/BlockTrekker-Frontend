@@ -10,7 +10,7 @@ import {
 
 import { AxisChartProps } from '../constants';
 
-type AreaChartProps = {} & Omit<AxisChartProps, 'curveType'>;
+type AreaChartProps = Omit<AxisChartProps, 'curveType'>;
 
 export default function AreaChart({
   color,

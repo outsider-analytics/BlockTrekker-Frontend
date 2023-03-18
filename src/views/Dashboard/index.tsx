@@ -60,6 +60,8 @@ export type GridInstructions = {
 
 type LayoutWidget = {
   gridInstructions: GridInstructions;
+  // TODO: Change from any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   item: any;
 };
 
@@ -67,6 +69,8 @@ export default function Dashboard(): JSX.Element {
   const { address } = useParams();
   const navigate = useNavigate();
   const styles = useStyles();
+  // TODO: Change from any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [editedLayout, setEditedLayout] = useState<any[] | undefined>(
     undefined
   );
@@ -74,12 +78,16 @@ export default function Dashboard(): JSX.Element {
   const [layout, setLayout] = useState<LayoutWidget[]>([]);
   const [loading, setLoading] = useState(true);
   const [neverSaved, setNeverSaved] = useState(false);
+  // TODO: Change from any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [queryData, setQuerydata] = useState<{ [key: string]: any[] }>({});
   const [saving, setSaving] = useState(false);
   const [showRemove, setShowRemove] = useState(-1);
   const [showVisualizationModal, setShowVisualizationModal] = useState(false);
   const [showTextModal, setShowTextModal] = useState(false);
 
+  // TODO: Change from any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const addVisulization = async (visualization: any) => {
     if (!address) return;
     const widget = generateNewWidget(visualization, 'visualization');
@@ -132,13 +140,19 @@ export default function Dashboard(): JSX.Element {
     setIsEditing(false);
   };
 
+  // TODO: Change from any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const dataToLayout = (data: any) => {
+    // TODO: Change from any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return data.map((item: any) => {
       const { gridInstructions, ...rest } = item;
       return { gridInstructions, item: rest };
     });
   };
 
+  // TODO: Change from any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const decrementIds = (index: number, widgets: any[]) => {
     for (let i = index; i < widgets.length; i++) {
       const prevId = widgets[i].gridInstructions.id;
@@ -147,6 +161,8 @@ export default function Dashboard(): JSX.Element {
     return widgets;
   };
 
+  // TODO: Change from any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const generateNewWidget = (content: any, elementType: string) => {
     const maxes = layout.reduce(
       (max, { gridInstructions }) => {
@@ -224,6 +240,8 @@ export default function Dashboard(): JSX.Element {
     setIsEditing(false);
   };
 
+  // TODO: Change from any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const transformDashboardForSave = (dashboard: any[]) => {
     return dashboard.slice().map(({ gridInstructions, item }) => {
       if (item.elementType === 'visualization') {

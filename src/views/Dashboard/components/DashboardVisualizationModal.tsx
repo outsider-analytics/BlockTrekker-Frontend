@@ -34,8 +34,12 @@ const useStyles = createUseStyles({
 });
 
 type DashboardVisualizationModalProps = {
+  // TODO: Change from any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   existingVisualiztions: any[];
   onClose: () => void;
+  // TODO: Change from any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onFinish: (visualization: any) => void;
   open: boolean;
 };
@@ -49,6 +53,8 @@ export default function DashboardVisualizationModal({
   const styles = useStyles();
   const { address } = useAccount();
   const [selectedVisualization, setSelectedVisualization] = useState(-1);
+  // TODO: Change from any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [visualizations, setVisualizations] = useState<any[]>([]);
 
   useEffect(() => {
@@ -58,6 +64,8 @@ export default function DashboardVisualizationModal({
         const res = await getVisualizationNames(address);
         const data = await res.json();
         setVisualizations(
+          // TODO: Change from any
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           data.results.map((query: any) => query.visualizations).flat()
         );
       })();
