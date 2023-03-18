@@ -1,22 +1,25 @@
-import { createUseStyles } from 'react-jss';
-import GridLayout, { Layout, WidthProvider } from 'react-grid-layout';
-import { useEffect, useMemo, useState } from 'react';
-import { COLUMNS, DEFAULT_LAYOUT, ROW_HEIGHT } from './constants';
-import { useParams } from 'react-router-dom';
+import {
+  addWidgetToDashboard,
+  getDashboard,
+  saveDashboard,
+} from 'api/dashboardApi';
 import Button from 'components/Button';
-import MainLayout from 'layouts/MainLayout';
 import Flex from 'components/Flex';
-import { AiFillCloseCircle, AiFillEdit, AiFillSave } from 'react-icons/ai';
-import DashboardVisualizationModal from './components/DashboardVisualizationModal';
-import DashboardTextModal from './components/DashboardTextModal';
-import { getDashboard, saveDashboard } from 'api/dashboardApi';
-import CardContent from './components/CardContent';
-import { FadeLoader } from 'react-spinners';
 import ConfirmationModal from 'components/Modal/ConfirmationModal';
-import { addWidgetToDashboard } from 'api/dashboardApi';
-import { FiArrowLeft, FiTrash2 } from 'react-icons/fi';
+import MainLayout from 'layouts/MainLayout';
 import { RootLocation } from 'locations';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useMemo, useState } from 'react';
+import GridLayout, { Layout, WidthProvider } from 'react-grid-layout';
+import { AiFillCloseCircle, AiFillEdit, AiFillSave } from 'react-icons/ai';
+import { FiArrowLeft, FiTrash2 } from 'react-icons/fi';
+import { createUseStyles } from 'react-jss';
+import { useNavigate, useParams } from 'react-router-dom';
+import { FadeLoader } from 'react-spinners';
+
+import CardContent from './components/CardContent';
+import DashboardTextModal from './components/DashboardTextModal';
+import DashboardVisualizationModal from './components/DashboardVisualizationModal';
+import { COLUMNS, DEFAULT_LAYOUT, ROW_HEIGHT } from './constants';
 
 const ResponsiveGridLayout = WidthProvider(GridLayout);
 
@@ -272,12 +275,12 @@ export default function Dashboard(): JSX.Element {
     <MainLayout>
       {loading ? (
         <Flex
-          alignItems='center'
-          direction='column'
-          justifyContent='center'
+          alignItems="center"
+          direction="column"
+          justifyContent="center"
           style={{ minHeight: 'calc(100vh - 120px)' }}
         >
-          <FadeLoader color='#5451FF' />
+          <FadeLoader color="#5451FF" />
         </Flex>
       ) : (
         <>
@@ -285,12 +288,12 @@ export default function Dashboard(): JSX.Element {
             className={styles.back}
             onClick={() => navigate(RootLocation)}
           />
-          <Flex alignItems='center' justifyContent='space-between' mb='12px'>
+          <Flex alignItems="center" justifyContent="space-between" mb="12px">
             <div className={styles.header}>Dashboard</div>
-            <Flex gap='16px'>
+            <Flex gap="16px">
               {isEditing ? (
                 <Button disabled={saving} onClick={() => cancelEdit()}>
-                  <Flex alignItems='center' gap='8px'>
+                  <Flex alignItems="center" gap="8px">
                     <div>Cancel</div>
                     <AiFillCloseCircle />
                   </Flex>
@@ -299,11 +302,11 @@ export default function Dashboard(): JSX.Element {
                 <>
                   <Button
                     onClick={() => setShowTextModal(true)}
-                    text='Add text'
+                    text="Add text"
                   />
                   <Button
                     onClick={() => setShowVisualizationModal(true)}
-                    text='Add visualization'
+                    text="Add visualization"
                   />
                 </>
               )}
@@ -311,7 +314,7 @@ export default function Dashboard(): JSX.Element {
                 disabled={saving || (isEditing && !editedLayout)}
                 onClick={() => (isEditing ? save() : setIsEditing(true))}
               >
-                <Flex alignItems='center' gap='8px'>
+                <Flex alignItems="center" gap="8px">
                   {isEditing ? (
                     <>
                       <div>{saving ? 'Saving...' : 'Save'}</div>
@@ -378,11 +381,11 @@ export default function Dashboard(): JSX.Element {
             open={showTextModal}
           />
           <ConfirmationModal
-            actionText='Remove'
+            actionText="Remove"
             onClose={() => setShowRemove(-1)}
             onFinish={() => removeItem()}
             open={showRemove >= 0}
-            title='Remove?'
+            title="Remove?"
           />
         </>
       )}

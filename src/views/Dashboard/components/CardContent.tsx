@@ -2,8 +2,8 @@ import ChartWrapper from 'components/Charts/ChartWrapper';
 import Typography from 'components/Typography';
 import { createUseStyles } from 'react-jss';
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
-import { ALLOWED_MARKDOWN_ELEMENTS } from 'utils/constants';
 import remarkGfm from 'remark-gfm';
+import { ALLOWED_MARKDOWN_ELEMENTS } from 'utils/constants';
 
 const useStyles = createUseStyles({
   chart: {
@@ -32,11 +32,11 @@ export default function CardContent({
         </ReactMarkdown>
       );
     }
-    return <Typography variant='h4'>{content.content.text}</Typography>;
+    return <Typography variant="h4">{content.content.text}</Typography>;
   } else {
     return (
       <>
-        <Typography variant='h5'>Chart Name</Typography>
+        <Typography variant="h5">Chart Name</Typography>
         <div className={styles.chart}>
           <ChartWrapper
             chartType={content.content.chartType}

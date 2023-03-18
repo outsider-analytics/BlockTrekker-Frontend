@@ -1,7 +1,7 @@
 import Flex from 'components/Flex';
 import { createUseStyles } from 'react-jss';
-import { useAccount, useDisconnect } from 'wagmi';
 import { truncateAddress } from 'utils';
+import { useAccount, useDisconnect } from 'wagmi';
 
 const useStyles = createUseStyles({
   colorBanner: {
@@ -33,10 +33,10 @@ export default function Header(): JSX.Element {
     <div className={styles.container}>
       <div className={styles.colorBanner} />
       <Flex
-        alignItems='center'
-        justifyContent='flex-end'
-        ml='40px'
-        mr='40px'
+        alignItems="center"
+        justifyContent="flex-end"
+        ml="40px"
+        mr="40px"
         style={{ height: '100%' }}
       >
         <button className={styles.logoutButton} onClick={() => disconnect()}>

@@ -9,7 +9,7 @@ type AuthedRouteProps = {
 export const AuthedRoute = ({ children }: AuthedRouteProps): JSX.Element => {
   const { isConnected } = useAccount();
   if (!isConnected) {
-    return <Navigate to='/login' />;
+    return <Navigate to="/login" />;
   }
   return <>{children}</>;
 };

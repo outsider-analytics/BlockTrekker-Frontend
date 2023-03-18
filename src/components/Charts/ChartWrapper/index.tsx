@@ -1,9 +1,9 @@
-import { useMemo } from 'react';
-import { ChartScale, ChartType } from '../constants';
 import AreaChart from 'components/Charts/AreaChart';
 import BarChart from 'components/Charts/BarChart';
 import LineChart from 'components/Charts/LineChart';
-import { DEFAULT_DATA } from '../constants';
+import { useMemo } from 'react';
+
+import { ChartScale, ChartType, DEFAULT_DATA } from '../constants';
 
 type ChartWrapperProps = {
   chartType: string;
@@ -66,7 +66,7 @@ export default function ChartWrapper({
     return (
       <LineChart
         color={color}
-        curveType='basis'
+        curveType="basis"
         data={customSelected ? data : DEFAULT_DATA}
         height={height ?? 300}
         scale={scale}

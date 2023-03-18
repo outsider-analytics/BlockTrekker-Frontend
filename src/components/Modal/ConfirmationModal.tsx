@@ -45,20 +45,20 @@ export default function ConfirmationModal({
       {caption && (
         <Typography
           style={{ color: '#D0D0D0', marginTop: '4px' }}
-          variant='caption'
+          variant="caption"
         >
           {caption}
         </Typography>
       )}
       <Flex
-        justifyContent='space-between'
+        justifyContent="space-between"
         style={{
           bottom: '24px',
           position: 'absolute',
           width: 'calc(100% - 48px)',
         }}
       >
-        <Button onClick={() => onClose()} text='Close' />
+        <Button onClick={() => onClose()} text="Close" />
         <Button onClick={() => onFinish()} text={actionText} />
       </Flex>
     </Modal>

@@ -1,8 +1,8 @@
+import Flex from 'components/Flex';
 import { useState } from 'react';
+import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
 import { createUseStyles } from 'react-jss';
 import { sortArbitrayType } from 'utils';
-import Flex from 'components/Flex';
-import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
 
 const useStyles = createUseStyles({
   header: {
@@ -167,14 +167,14 @@ export default function Table({
       </table>
       {rows.length > pageSize && (
         <Flex
-          justifyContent='space-between'
-          mt='24px'
+          justifyContent="space-between"
+          mt="24px"
           style={{ color: '#FCFCFC' }}
         >
           <div className={styles.paginateButton} onClick={() => switchPage(-1)}>
             <FiArrowLeft />
           </div>
-          <Flex gap='6px'>
+          <Flex gap="6px">
             <div
               style={{ cursor: 'pointer' }}
               onClick={() => setCurrentPage(Math.ceil(0))}

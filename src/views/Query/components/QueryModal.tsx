@@ -1,9 +1,9 @@
+import Button from 'components/Button';
+import Flex from 'components/Flex';
 import Input from 'components/Input';
 import Modal from 'components/Modal';
 import Typography from 'components/Typography';
 import { useEffect, useMemo, useState } from 'react';
-import Flex from 'components/Flex';
-import Button from 'components/Button';
 
 type QueryModalProps = {
   description: string;
@@ -42,12 +42,12 @@ export default function QueryModal({
       open={open}
       style={{ height: '350px', padding: '24px', width: 'min(500px, 100%)' }}
     >
-      <Typography style={{ color: '#FCFCFC' }} variant='h4'>
+      <Typography style={{ color: '#FCFCFC' }} variant="h4">
         {edit ? 'Edit' : 'Save'} Query
       </Typography>
       <Input
         onChange={(e) => setEditedName(e.target.value)}
-        title='Name'
+        title="Name"
         value={editedName}
       />
       <Input
@@ -55,23 +55,23 @@ export default function QueryModal({
         optional
         rows={6}
         textarea
-        title='Description'
+        title="Description"
         value={editedDescription}
         wrapperStyle={{ marginTop: '24px' }}
       />
       <Flex
-        justifyContent='space-between'
+        justifyContent="space-between"
         style={{
           bottom: '24px',
           position: 'absolute',
           width: 'calc(100% - 48px)',
         }}
       >
-        <Button onClick={() => onClose()} text='Close' />
+        <Button onClick={() => onClose()} text="Close" />
         <Button
           disabled={disabled}
           onClick={() => onFinish(editedDescription, editedName)}
-          text='Save'
+          text="Save"
         />
       </Flex>
     </Modal>

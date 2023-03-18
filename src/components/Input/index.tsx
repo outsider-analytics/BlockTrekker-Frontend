@@ -1,7 +1,7 @@
-import InputWrapper from 'components/InputWrapper';
-import { createUseStyles } from 'react-jss';
-import { CSSProperties } from 'react';
 import Flex from 'components/Flex';
+import InputWrapper from 'components/InputWrapper';
+import { CSSProperties } from 'react';
+import { createUseStyles } from 'react-jss';
 
 const useStyles = createUseStyles({
   container: {
@@ -67,7 +67,7 @@ export default function Input({
       title={title}
     >
       <div className={styles.container} style={{ ...style }}>
-        <Flex alignItems='center' gap='2px'>
+        <Flex alignItems="center" gap="2px">
           {currency && <div style={{ color: '#FCFCFC' }}>$</div>}
           {textarea ? (
             <textarea

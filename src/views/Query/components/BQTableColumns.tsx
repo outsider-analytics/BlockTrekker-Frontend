@@ -1,12 +1,11 @@
-import { createUseStyles } from 'react-jss';
+import { getTableColumns } from 'api/queryApi';
 import Flex from 'components/Flex';
 import Typography from 'components/Typography';
-import { FiArrowLeft } from 'react-icons/fi';
 import { SetStateAction, useEffect, useState } from 'react';
 import { BiClipboard } from 'react-icons/bi';
+import { FiArrowLeft, FiColumns } from 'react-icons/fi';
+import { createUseStyles } from 'react-jss';
 import { FadeLoader } from 'react-spinners';
-import { getTableColumns } from 'api/queryApi';
-import { FiColumns } from 'react-icons/fi';
 
 const useStyles = createUseStyles({
   icon: {
@@ -64,13 +63,13 @@ export default function BQTableColumns({
 
   return (
     <div style={{ height: '100%' }}>
-      <Flex justifyContent='space-between' mt='12px'>
-        <Flex alignItems='center' gap='8px' style={{ color: '#FCFCFC' }}>
+      <Flex justifyContent="space-between" mt="12px">
+        <Flex alignItems="center" gap="8px" style={{ color: '#FCFCFC' }}>
           <FiArrowLeft
             className={styles.icon}
             onClick={() => clearTableSelection()}
           />
-          <Typography variant='subtitle2'>{table.name}</Typography>
+          <Typography variant="subtitle2">{table.name}</Typography>
         </Flex>
         <BiClipboard
           className={styles.icon}
@@ -82,18 +81,18 @@ export default function BQTableColumns({
       </Flex>
       {loading ? (
         <Flex
-          alignItems='center'
-          justifyContent='center'
+          alignItems="center"
+          justifyContent="center"
           style={{ height: '80%' }}
         >
-          <FadeLoader color='#5451FF' />
+          <FadeLoader color="#5451FF" />
         </Flex>
       ) : (
         <div className={styles.columnList}>
           {columns.map(({ name, type }) => (
             <Flex
-              alignItems='center'
-              justifyContent='space-between'
+              alignItems="center"
+              justifyContent="space-between"
               style={{ color: '#FCFCFC' }}
             >
               <div

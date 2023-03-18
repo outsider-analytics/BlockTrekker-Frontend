@@ -1,14 +1,14 @@
-import { SetStateAction, useEffect, useState } from 'react';
-import { createUseStyles } from 'react-jss';
-import Table from 'components/Table';
-import ChartWrapper from 'components/Charts/ChartWrapper';
-import Flex from 'components/Flex';
-import { FiTrash2 } from 'react-icons/fi';
-import ConfirmationModal from 'components/Modal/ConfirmationModal';
 import { removeVisualization } from 'api/visualizationApi';
-import { AiOutlineUnorderedList } from 'react-icons/ai';
+import ChartWrapper from 'components/Charts/ChartWrapper';
 import { ChartTypeToIcon } from 'components/Charts/constants';
+import Flex from 'components/Flex';
+import ConfirmationModal from 'components/Modal/ConfirmationModal';
+import Table from 'components/Table';
 import { capitalize } from 'lodash';
+import { SetStateAction, useEffect, useState } from 'react';
+import { AiOutlineUnorderedList } from 'react-icons/ai';
+import { FiTrash2 } from 'react-icons/fi';
+import { createUseStyles } from 'react-jss';
 
 const useStyles = createUseStyles({
   delete: {
@@ -77,10 +77,10 @@ export default function DataSection({
     <div>
       {!!results.columns.length && (
         <Flex
-          alignItems='center'
-          justifyContent='space-between'
-          mb='24px'
-          mt='24px'
+          alignItems="center"
+          justifyContent="space-between"
+          mb="24px"
+          mt="24px"
         >
           <div className={styles.tabContainer}>
             {tabs.map((tab, index) => (
@@ -93,7 +93,7 @@ export default function DataSection({
                     selectedTab === index ? '#424542' : 'initial',
                 }}
               >
-                <Flex alignItems='center' gap='4px'>
+                <Flex alignItems="center" gap="4px">
                   {tab}
                   {index > 0 ? (
                     ChartTypeToIcon[visualizations[index - 1].chartType]
@@ -107,7 +107,7 @@ export default function DataSection({
           {selectedTab > 0 && (
             <FiTrash2
               className={styles.delete}
-              color='#FCFCFC'
+              color="#FCFCFC"
               onClick={() => setShowRemoveModal(true)}
               size={20}
             />
@@ -140,11 +140,11 @@ export default function DataSection({
         </div>
       )}
       <ConfirmationModal
-        actionText='Remove'
+        actionText="Remove"
         onClose={() => setShowRemoveModal(false)}
         onFinish={() => onRemove()}
         open={showRemoveModal}
-        title='Remove?'
+        title="Remove?"
       />
     </div>
   );

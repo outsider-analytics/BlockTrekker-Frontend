@@ -1,16 +1,16 @@
-import Modal from 'components/Modal';
-import { useEffect, useState } from 'react';
-import Typography from 'components/Typography';
 import { generateApiKey, getApiKey } from 'api/apiApi';
-import { useAccount } from 'wagmi';
-import Flex from 'components/Flex';
 import Button from 'components/Button';
-import { createUseStyles } from 'react-jss';
-import { BiRefresh } from 'react-icons/bi';
-import { toast } from 'react-toastify';
-import { FiCopy } from 'react-icons/fi';
-import { copyToClipboard } from 'utils';
+import Flex from 'components/Flex';
+import Modal from 'components/Modal';
 import ConfirmationModal from 'components/Modal/ConfirmationModal';
+import Typography from 'components/Typography';
+import { useEffect, useState } from 'react';
+import { BiRefresh } from 'react-icons/bi';
+import { FiCopy } from 'react-icons/fi';
+import { createUseStyles } from 'react-jss';
+import { toast } from 'react-toastify';
+import { copyToClipboard } from 'utils';
+import { useAccount } from 'wagmi';
 
 const useStyles = createUseStyles({
   copy: {
@@ -65,20 +65,20 @@ export default function APIKeyModal({
       open={open}
       style={{ height: '250px', padding: '16px', width: '500px' }}
     >
-      <Typography variant='h5' style={{ color: '#FCFCFC' }}>
+      <Typography variant="h5" style={{ color: '#FCFCFC' }}>
         Api Key
       </Typography>
       <Flex
-        alignItems='center'
-        direction='column'
-        gap='24px'
-        justifyContent='center'
+        alignItems="center"
+        direction="column"
+        gap="24px"
+        justifyContent="center"
         style={{ height: '200px' }}
       >
         {key ? (
-          <Flex alignItems='center' gap='24px'>
+          <Flex alignItems="center" gap="24px">
             <div className={styles.keyContainer}>
-              <Typography variant='subtitle1'>{key}</Typography>
+              <Typography variant="subtitle1">{key}</Typography>
             </div>
             <FiCopy
               className={styles.copy}
@@ -87,23 +87,23 @@ export default function APIKeyModal({
             />
           </Flex>
         ) : (
-          <Typography style={{ color: '#FCFCFC' }} variant='h6'>
+          <Typography style={{ color: '#FCFCFC' }} variant="h6">
             No key
           </Typography>
         )}
         <Flex
-          justifyContent='space-between'
+          justifyContent="space-between"
           style={{
             bottom: '16px',
             position: 'absolute',
             width: 'calc(100% - 32px)',
           }}
         >
-          <Button onClick={() => onClose()} text='Close' />
+          <Button onClick={() => onClose()} text="Close" />
           <Button
             onClick={() => (key ? setShowConfirmation(true) : generateKey())}
           >
-            <Flex alignItems='center' gap='8px'>
+            <Flex alignItems="center" gap="8px">
               {key ? 'Regenerate key' : 'Generate key'}
               {key && <BiRefresh size={18} />}
             </Flex>
@@ -111,15 +111,15 @@ export default function APIKeyModal({
         </Flex>
       </Flex>
       <ConfirmationModal
-        actionText='Regenerate'
-        caption='This action is irreversible. Once a new key is generated the old one will not be able to access the api.'
+        actionText="Regenerate"
+        caption="This action is irreversible. Once a new key is generated the old one will not be able to access the api."
         onClose={() => setShowConfirmation(false)}
         onFinish={() => {
           generateKey();
           setShowConfirmation(false);
         }}
         open={showConfirmation}
-        title='Regenerate API Key?'
+        title="Regenerate API Key?"
       />
     </Modal>
   );

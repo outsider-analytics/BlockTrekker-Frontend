@@ -1,34 +1,34 @@
-import Flex from 'components/Flex';
-import { useEffect, useMemo } from 'react';
-import { useState } from 'react';
-import { createUseStyles } from 'react-jss';
-import { ClockLoader } from 'react-spinners';
-import { FiArrowLeft, FiDownload, FiSave } from 'react-icons/fi';
-import MainLayout from 'layouts/MainLayout';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useAccount } from 'wagmi';
-import VisualizationModal from 'components/Modal/VisualizationModal';
 import {
   downloadResults,
   executeQuery,
+  executeWithDryRun,
   getPublicDatasets,
   getQuery,
   saveQuery,
 } from 'api/queryApi';
 import { saveVisualization } from 'api/visualizationApi';
-import QueryLoader from './components/QueryLoader';
-import DataSection from './components/DataSection';
-import { RootLocation } from 'locations';
-import QueryModal from './components/QueryModal';
-import Typography from 'components/Typography';
-import { AiFillEdit } from 'react-icons/ai';
 import Button from 'components/Button';
-import { formatNumber, truncateAddress } from 'utils';
-import { BlockTrekkerTheme } from 'theme';
-import { BiClipboard, BiTable } from 'react-icons/bi';
-import BQTableColumns from './components/BQTableColumns';
-import { executeWithDryRun } from 'api/queryApi';
+import Flex from 'components/Flex';
 import ConfirmationModal from 'components/Modal/ConfirmationModal';
+import VisualizationModal from 'components/Modal/VisualizationModal';
+import Typography from 'components/Typography';
+import MainLayout from 'layouts/MainLayout';
+import { RootLocation } from 'locations';
+import { useEffect, useMemo, useState } from 'react';
+import { AiFillEdit } from 'react-icons/ai';
+import { BiClipboard, BiTable } from 'react-icons/bi';
+import { FiArrowLeft, FiDownload, FiSave } from 'react-icons/fi';
+import { createUseStyles } from 'react-jss';
+import { useNavigate, useParams } from 'react-router-dom';
+import { ClockLoader } from 'react-spinners';
+import { BlockTrekkerTheme } from 'theme';
+import { formatNumber, truncateAddress } from 'utils';
+import { useAccount } from 'wagmi';
+
+import BQTableColumns from './components/BQTableColumns';
+import DataSection from './components/DataSection';
+import QueryLoader from './components/QueryLoader';
+import QueryModal from './components/QueryModal';
 
 const useStyles = createUseStyles((theme: BlockTrekkerTheme) => ({
   completedIn: {
@@ -158,8 +158,8 @@ export default function Query(): JSX.Element {
   };
 
   const displayTimer = (timer: number) => {
-    let minutes = Math.floor(timer / 60);
-    let seconds = timer % 60;
+    const minutes = Math.floor(timer / 60);
+    const seconds = timer % 60;
 
     const formattedSec = seconds < 10 ? `0${seconds}` : seconds.toString();
     return `${minutes}:${formattedSec}`;
@@ -172,7 +172,7 @@ export default function Query(): JSX.Element {
     const disposition = res.headers.get('content-disposition');
     const fileName = disposition!.substring(21).replace(/^"(.*)"$/, '$1');
     const data = await res.blob();
-    let elm = document.createElement('a');
+    const elm = document.createElement('a');
     elm.href = URL.createObjectURL(data);
     elm.setAttribute('download', fileName);
     elm.click();
@@ -306,7 +306,7 @@ export default function Query(): JSX.Element {
             {name && (
               <Typography
                 style={{ color: '#FCFCFC', marginBottom: '8px' }}
-                variant='h6'
+                variant="h6"
               >
                 {truncateAddress(address ?? '')}/{name}
               </Typography>
@@ -318,15 +318,15 @@ export default function Query(): JSX.Element {
                   marginBottom: '24px',
                   maxWidth: '500px',
                 }}
-                variant='caption'
+                variant="caption"
               >
                 {description}
               </Typography>
             )}
-            <Flex gap='24px'>
+            <Flex gap="24px">
               <div className={styles.tables}>
                 <div>
-                  <Typography style={{ color: '#FCFCFC' }} variant='h5'>
+                  <Typography style={{ color: '#FCFCFC' }} variant="h5">
                     Tables
                   </Typography>
                   {selectedTable.name ? (
@@ -347,8 +347,8 @@ export default function Query(): JSX.Element {
                       {tableNames.map((table: string) => (
                         <div key={table}>
                           <Flex
-                            alignItems='center'
-                            justifyContent='space-between'
+                            alignItems="center"
+                            justifyContent="space-between"
                           >
                             <div
                               className={styles.tableRowLeft}
@@ -370,30 +370,30 @@ export default function Query(): JSX.Element {
                 </div>
               </div>
               <div className={styles.queryContainer}>
-                <Flex justifyContent='space-between' mb='24px'>
+                <Flex justifyContent="space-between" mb="24px">
                   <FiArrowLeft
                     className={styles.icon}
                     onClick={() => navigate(RootLocation)}
                   />
                   {!!queryResults.columns.length && !id && (
                     <Button onClick={() => setShowQueryModal(true)}>
-                      <Flex alignItems='center' gap='8px'>
+                      <Flex alignItems="center" gap="8px">
                         <div>{isSaving ? 'Saving...' : 'Save'}</div>
                         <FiSave size={20} />
                       </Flex>
                     </Button>
                   )}
                   {!!queryResults.columns.length && id && (
-                    <Flex alignItems='center' gap='24px'>
+                    <Flex alignItems="center" gap="24px">
                       <Button onClick={() => setShowQueryModal(true)}>
-                        <Flex alignItems='center' gap='8px'>
+                        <Flex alignItems="center" gap="8px">
                           <div>Edit</div>
                           <AiFillEdit size={20} />
                         </Flex>
                       </Button>
                       {DOWNLOAD_OPTIONS.map((option) => (
                         <Button key={option} onClick={() => download(option)}>
-                          <Flex alignItems='center' gap='8px'>
+                          <Flex alignItems="center" gap="8px">
                             {exporting === option ? 'Exporting...' : 'Export'}{' '}
                             {option}
                             <FiDownload size={20} />
@@ -409,15 +409,15 @@ export default function Query(): JSX.Element {
                   value={query}
                 />
                 <Flex
-                  alignItems='center'
-                  justifyContent='flex-end'
-                  gap='24px'
-                  mt='24px'
+                  alignItems="center"
+                  justifyContent="flex-end"
+                  gap="24px"
+                  mt="24px"
                 >
                   {id && (
                     <Button
                       onClick={() => setShowVisualizationModal(true)}
-                      text='New Visualization'
+                      text="New Visualization"
                     />
                   )}
                   {cost >= 0 && (
@@ -429,7 +429,7 @@ export default function Query(): JSX.Element {
                         <Button
                           disabled={!query}
                           onClick={() => dryRun()}
-                          text='Re-execute Dry Run'
+                          text="Re-execute Dry Run"
                         />
                       )}
                     </>
@@ -446,12 +446,12 @@ export default function Query(): JSX.Element {
                       opacity: !query ? 0.5 : 1,
                     }}
                   >
-                    <Flex alignItems='center' gap='12px'>
+                    <Flex alignItems="center" gap="12px">
                       <div>{executeText}</div>
                       {isExecuting && (
-                        <Flex alignItems='center' gap='12px'>
+                        <Flex alignItems="center" gap="12px">
                           <div>{displayTimer(elapsed)}</div>
-                          <ClockLoader color='#FCFCFC' size={20} />
+                          <ClockLoader color="#FCFCFC" size={20} />
                         </Flex>
                       )}
                     </Flex>
@@ -470,7 +470,7 @@ export default function Query(): JSX.Element {
         )}
       </div>
       <ConfirmationModal
-        actionText='Execute'
+        actionText="Execute"
         caption={`Your query will be ${dryRunText}. Are you sure you'd like to execute?`}
         onClose={() => setShowConfirmation(false)}
         onFinish={() => {
@@ -478,7 +478,7 @@ export default function Query(): JSX.Element {
           setShowConfirmation(false);
         }}
         open={showConfirmation}
-        title='Wait!!'
+        title="Wait!!"
       />
       <QueryModal
         description={description}

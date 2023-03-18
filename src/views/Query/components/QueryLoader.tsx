@@ -20,7 +20,7 @@ export default function QueryLoader(): JSX.Element {
   const styles = useStyles();
   return (
     <div className={styles.container}>
-      <PuffLoader color='#5451FF' size={120} />
+      <PuffLoader color="#5451FF" size={120} />
       <div className={styles.text}>Loading</div>
     </div>
   );

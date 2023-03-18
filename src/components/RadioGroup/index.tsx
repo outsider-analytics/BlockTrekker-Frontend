@@ -28,7 +28,7 @@ function RadioGroup({
         {options.map((option: string) => (
           <label className={styles.label} key={option}>
             <input
-              type='radio'
+              type="radio"
               name={option}
               value={option}
               checked={option === selectedOption}

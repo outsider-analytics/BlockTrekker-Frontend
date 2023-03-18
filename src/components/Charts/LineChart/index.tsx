@@ -7,6 +7,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+
 import { AxisChartProps } from '../constants';
 
 type LineChartProps = {} & AxisChartProps;
@@ -24,7 +25,7 @@ export default function LineChart({
   return (
     <ResponsiveContainer>
       <RechartsLineChart data={data} margin={{ bottom: 8, left: 0, right: 0 }}>
-        <CartesianGrid strokeDasharray='3 3' />
+        <CartesianGrid strokeDasharray="3 3" />
         <Line
           activeDot={{ r: 1 }}
           isAnimationActive={false}

@@ -1,24 +1,23 @@
-import MainLayout from 'layouts/MainLayout';
-import { createUseStyles } from 'react-jss';
-import Flex from 'components/Flex';
-import Typography from 'components/Typography';
-import Button from 'components/Button';
-import { FiArrowLeft, FiCopy, FiPlus, FiTrash2 } from 'react-icons/fi';
-import { useEffect, useMemo, useState } from 'react';
-import Dropdown from 'components/Dropdown';
-import { getTables } from 'api/queryApi';
-import { useAccount } from 'wagmi';
-import Input from 'components/Input';
-import { AiFillCloseCircle, AiFillSave } from 'react-icons/ai';
-import { formatNumber } from 'utils';
-import { BeatLoader } from 'react-spinners';
 import { deleteEndpoint, getEndpointsByUser, saveEndpoint } from 'api/apiApi';
-import { BlockTrekkerTheme } from 'theme';
+import { getTables } from 'api/queryApi';
+import Button from 'components/Button';
+import Dropdown from 'components/Dropdown';
+import Flex from 'components/Flex';
+import Input from 'components/Input';
 import ConfirmationModal from 'components/Modal/ConfirmationModal';
-import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+import Typography from 'components/Typography';
+import MainLayout from 'layouts/MainLayout';
 import { RootLocation } from 'locations';
-import { copyToClipboard } from 'utils';
+import { useEffect, useMemo, useState } from 'react';
+import { AiFillCloseCircle, AiFillSave } from 'react-icons/ai';
+import { FiArrowLeft, FiCopy, FiPlus, FiTrash2 } from 'react-icons/fi';
+import { createUseStyles } from 'react-jss';
+import { useNavigate } from 'react-router-dom';
+import { BeatLoader } from 'react-spinners';
+import { toast } from 'react-toastify';
+import { BlockTrekkerTheme } from 'theme';
+import { copyToClipboard, formatNumber } from 'utils';
+import { useAccount } from 'wagmi';
 
 const useStyles = createUseStyles((theme: BlockTrekkerTheme) => ({
   container: {
@@ -252,34 +251,34 @@ export default function Endpoints(): JSX.Element {
         onClick={() => navigate(RootLocation)}
       />
       <Flex
-        alignItems='center'
-        justifyContent='center'
+        alignItems="center"
+        justifyContent="center"
         style={{ minHeight: 'calc(100vh - 80px)' }}
       >
         <div className={styles.container}>
           {loading ? (
             <Flex
-              alignItems='center'
-              justifyContent='center'
+              alignItems="center"
+              justifyContent="center"
               style={{ height: '100%' }}
             >
-              <BeatLoader color='#5451FF' size={30} />
+              <BeatLoader color="#5451FF" size={30} />
             </Flex>
           ) : (
             <>
               <Typography
                 style={{ color: '#FCFCFC', marginBottom: '16px' }}
-                variant='h6'
+                variant="h6"
               >
                 Custom Endpoints
               </Typography>
               {endPoints.length || creatingNew ? (
                 <>
-                  <Flex gap='32px'>
+                  <Flex gap="32px">
                     {!creatingNew && (
                       <div className={styles.endpoints}>
                         <Button onClick={() => renderNew()}>
-                          <Flex alignItems='center' gap='8px'>
+                          <Flex alignItems="center" gap="8px">
                             <div>New</div>
                             <FiPlus size={16} />
                           </Flex>
@@ -308,23 +307,23 @@ export default function Endpoints(): JSX.Element {
                         disabled={!creatingNew}
                         onSelect={setSelectedTable}
                         options={availableTableNames}
-                        placeholder='Select table'
+                        placeholder="Select table"
                         selectedOption={
                           creatingNew ? selectedTable : selectedEndpoint.table
                         }
-                        title='Table'
+                        title="Table"
                       />
                       <Dropdown
                         disabled={!creatingNew || !selectedTable}
                         onSelect={setSelectedOutputColumn}
                         options={availableOutputColumns}
-                        placeholder='Select output column'
+                        placeholder="Select output column"
                         selectedOption={
                           creatingNew
                             ? selectedOutputColumn
                             : selectedEndpoint.outputColumn
                         }
-                        title='Output Column'
+                        title="Output Column"
                         wrapperStyle={{ marginTop: '24px' }}
                       />
                       <Dropdown
@@ -335,61 +334,61 @@ export default function Endpoints(): JSX.Element {
                         }
                         onSelect={setSelectedInputColumn}
                         options={availableInputColumns}
-                        placeholder='Select input column'
+                        placeholder="Select input column"
                         selectedOption={
                           creatingNew
                             ? selectedInputColumn
                             : selectedEndpoint.inputColumn
                         }
-                        title='Input Column'
+                        title="Input Column"
                         wrapperStyle={{ marginTop: '24px' }}
                       />
                       <Input
                         currency
                         disabled={!creatingNew}
                         onChange={(e) => setCostPerHit(e.target.value)}
-                        placeholder='Cost per call (USD)'
+                        placeholder="Cost per call (USD)"
                         value={creatingNew ? costPerHit : selectedEndpoint.cost}
-                        title='Cost'
+                        title="Cost"
                         type={'number'}
                         wrapperStyle={{ marginTop: '24px' }}
                       />
                       <Input
                         disabled={!creatingNew}
                         onChange={(e) => setName(e.target.value)}
-                        placeholder='Endpoint name'
+                        placeholder="Endpoint name"
                         value={creatingNew ? name : selectedEndpoint.name}
-                        title='Name'
+                        title="Name"
                         wrapperStyle={{ marginTop: '24px' }}
                       />
                     </div>
                     <div className={styles.values}>
-                      <Flex justifyContent='flex-end'>
+                      <Flex justifyContent="flex-end">
                         {!creatingNew && (
                           <Button onClick={() => setShowRemovalModal(true)}>
-                            <Flex alignItems='center' gap='8px'>
+                            <Flex alignItems="center" gap="8px">
                               <div>Remove</div>
                               <FiTrash2 size={16} />
                             </Flex>
                           </Button>
                         )}
                       </Flex>
-                      <Flex mb='8px' mt='24px' style={{ color: '#FCFCFC' }}>
-                        <Typography variant='subtitle2'>
+                      <Flex mb="8px" mt="24px" style={{ color: '#FCFCFC' }}>
+                        <Typography variant="subtitle2">
                           Query format
                         </Typography>
                       </Flex>
                       <div className={styles.codeBlock}>{query}</div>
                       <Flex
-                        justifyContent='space-between'
-                        mb='8px'
-                        mt='24px'
+                        justifyContent="space-between"
+                        mb="8px"
+                        mt="24px"
                         style={{ color: '#FCFCFC' }}
                       >
-                        <Typography variant='subtitle2'>
+                        <Typography variant="subtitle2">
                           Endpoint name
                         </Typography>
-                        <Typography variant='subtitle2'>
+                        <Typography variant="subtitle2">
                           Cost: $
                           {creatingNew
                             ? costPerHit
@@ -402,8 +401,8 @@ export default function Endpoints(): JSX.Element {
                       {!creatingNew ? (
                         <div className={styles.codeBlock}>
                           <Flex
-                            alignItems='center'
-                            justifyContent='space-between'
+                            alignItems="center"
+                            justifyContent="space-between"
                           >
                             <div
                               style={{
@@ -437,14 +436,14 @@ export default function Endpoints(): JSX.Element {
                               color: '#FCFCFC',
                               marginBlock: '24px 4px',
                             }}
-                            variant='subtitle2'
+                            variant="subtitle2"
                           >
                             Example Request
                           </Typography>
                           <div className={styles.codeBlock}>
                             <Flex
-                              alignItems='center'
-                              justifyContent='space-between'
+                              alignItems="center"
+                              justifyContent="space-between"
                             >
                               <div
                                 style={{
@@ -467,7 +466,7 @@ export default function Endpoints(): JSX.Element {
                   </Flex>
                   {creatingNew && (
                     <Flex
-                      gap='16px'
+                      gap="16px"
                       style={{
                         bottom: '16px',
                         position: 'absolute',
@@ -475,13 +474,13 @@ export default function Endpoints(): JSX.Element {
                       }}
                     >
                       <Button onClick={() => setCreatingNew(false)}>
-                        <Flex alignItems='center' gap='8px'>
+                        <Flex alignItems="center" gap="8px">
                           <div>Cancel</div>
                           <AiFillCloseCircle size={16} />
                         </Flex>
                       </Button>
                       <Button disabled={disabled} onClick={() => save()}>
-                        <Flex alignItems='center' gap='8px'>
+                        <Flex alignItems="center" gap="8px">
                           <div>Save</div>
                           <AiFillSave size={16} />
                         </Flex>
@@ -491,17 +490,17 @@ export default function Endpoints(): JSX.Element {
                 </>
               ) : (
                 <Flex
-                  alignItems='center'
-                  direction='column'
-                  justifyContent='center'
-                  gap='16px'
+                  alignItems="center"
+                  direction="column"
+                  justifyContent="center"
+                  gap="16px"
                   style={{ color: '#FCFCFC', height: '100%' }}
                 >
-                  <Typography variant='h5'>
+                  <Typography variant="h5">
                     You have not created any endpoints
                   </Typography>
                   <Button onClick={() => renderNew()}>
-                    <Flex alignItems='center' gap='8px'>
+                    <Flex alignItems="center" gap="8px">
                       <div>New</div>
                       <FiPlus size={16} />
                     </Flex>
@@ -513,11 +512,11 @@ export default function Endpoints(): JSX.Element {
         </div>
       </Flex>
       <ConfirmationModal
-        actionText='Remove'
+        actionText="Remove"
         onClose={() => setShowRemovalModal(false)}
         onFinish={() => removeEndpoint()}
         open={showRemovalModal}
-        title='Remove Endpoint?'
+        title="Remove Endpoint?"
       />
     </MainLayout>
   );

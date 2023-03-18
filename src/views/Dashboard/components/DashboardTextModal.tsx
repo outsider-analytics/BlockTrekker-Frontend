@@ -1,14 +1,13 @@
 import Button from 'components/Button';
 import Flex from 'components/Flex';
 import Input from 'components/Input';
-import Modal from 'components/Modal';
-import { DefaultModalProps } from 'components/Modal';
+import Modal, { DefaultModalProps } from 'components/Modal';
 import Typography from 'components/Typography';
 import { useEffect, useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
-import { ALLOWED_MARKDOWN_ELEMENTS } from 'utils/constants';
 import remarkGfm from 'remark-gfm';
+import { ALLOWED_MARKDOWN_ELEMENTS } from 'utils/constants';
 
 const useStyles = createUseStyles({
   markdown: {
@@ -52,17 +51,17 @@ export default function DashboardTextModal({
       }}
     >
       <Flex
-        alignItems='center'
-        justifyContent='space-between'
+        alignItems="center"
+        justifyContent="space-between"
         style={{ color: '#FCFCFC' }}
       >
-        <Typography variant='h5'>Add text</Typography>
-        <Flex gap='16px'>
+        <Typography variant="h5">Add text</Typography>
+        <Flex gap="16px">
           <label>
             <input
               checked={!renderMarkdown}
               onChange={() => setRenderMarkdown(false)}
-              type='checkbox'
+              type="checkbox"
             />
             Plaintext
           </label>
@@ -70,16 +69,16 @@ export default function DashboardTextModal({
             <input
               checked={renderMarkdown}
               onChange={() => setRenderMarkdown(true)}
-              type='checkbox'
+              type="checkbox"
             />
             Markdown
           </label>
         </Flex>
       </Flex>
       <Flex
-        gap='16px'
-        justifyContent='center'
-        mt='12px'
+        gap="16px"
+        justifyContent="center"
+        mt="12px"
         style={{ height: '100%', width: '100%' }}
       >
         <Input
@@ -88,7 +87,7 @@ export default function DashboardTextModal({
           style={{ height: 'calc(100% - 120px)' }}
           value={text}
           textarea
-          title='Text'
+          title="Text"
           wrapperStyle={{
             flex: renderMarkdown ? 0.5 : 1,
             width: renderMarkdown ? '50%' : '100%',
@@ -102,7 +101,7 @@ export default function DashboardTextModal({
               width: renderMarkdown ? '50%' : '100%',
             }}
           >
-            <Typography style={{ textAlign: 'center' }} variant='h6'>
+            <Typography style={{ textAlign: 'center' }} variant="h6">
               Rendered Markdown
             </Typography>
             <ReactMarkdown
@@ -116,7 +115,7 @@ export default function DashboardTextModal({
         )}
       </Flex>
       <Flex
-        justifyContent='space-between'
+        justifyContent="space-between"
         style={{
           bottom: '24px',
           left: '24px',
@@ -124,12 +123,12 @@ export default function DashboardTextModal({
           width: 'calc(100% - 48px)',
         }}
       >
-        <Button onClick={() => onClose()} text='Close' />
+        <Button onClick={() => onClose()} text="Close" />
         <Button
           onClick={() =>
             onFinish(renderMarkdown ? 'markdown' : 'plaintext', text)
           }
-          text='Save'
+          text="Save"
         />
       </Flex>
     </Modal>

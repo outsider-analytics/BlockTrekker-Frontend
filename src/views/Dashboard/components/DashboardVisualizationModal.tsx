@@ -1,13 +1,13 @@
-import Modal from 'components/Modal';
-import { createUseStyles } from 'react-jss';
-import { useEffect, useState } from 'react';
-import Flex from 'components/Flex';
-import Button from 'components/Button';
 import { getVisualizationNames } from 'api/visualizationApi';
-import { useAccount } from 'wagmi';
-import Typography from 'components/Typography';
+import Button from 'components/Button';
 import { ChartTypeToIcon } from 'components/Charts/constants';
+import Flex from 'components/Flex';
+import Modal from 'components/Modal';
+import Typography from 'components/Typography';
 import { capitalize } from 'lodash';
+import { useEffect, useState } from 'react';
+import { createUseStyles } from 'react-jss';
+import { useAccount } from 'wagmi';
 
 const useStyles = createUseStyles({
   row: {
@@ -77,10 +77,10 @@ export default function DashboardVisualizationModal({
         width: 'min(100%, 700px)',
       }}
     >
-      <Typography style={{ color: '#FCFCFC' }} variant='h4'>
+      <Typography style={{ color: '#FCFCFC' }} variant="h4">
         Add Visualization
       </Typography>
-      {!!visualizations.length ? (
+      {visualizations.length ? (
         <div className={styles.selectionContainer}>
           {visualizations.map((visualization, index) => {
             const placed = existingVisualiztions.includes(visualization.id);
@@ -95,15 +95,15 @@ export default function DashboardVisualizationModal({
                   cursor: placed ? 'initial' : 'pointer',
                 }}
               >
-                <Flex alignItems='center' justifyContent='space-between'>
-                  <Flex alignItems='center' gap='16px'>
-                    <Flex alignItems='center' gap='4px'>
+                <Flex alignItems="center" justifyContent="space-between">
+                  <Flex alignItems="center" gap="16px">
+                    <Flex alignItems="center" gap="4px">
                       <div style={{ width: '40px' }}>
                         {capitalize(visualization.chartType)}
                       </div>
                       {ChartTypeToIcon[visualization.chartType]}
                     </Flex>
-                    <Typography variant='subtitle2'>
+                    <Typography variant="subtitle2">
                       {visualization.id}
                     </Typography>
                   </Flex>
@@ -115,28 +115,28 @@ export default function DashboardVisualizationModal({
         </div>
       ) : (
         <Flex
-          alignItems='center'
-          justifyContent='center'
+          alignItems="center"
+          justifyContent="center"
           style={{ height: '50vh' }}
         >
-          <Typography style={{ color: '#FCFCFC' }} variant='h4'>
+          <Typography style={{ color: '#FCFCFC' }} variant="h4">
             No queries
           </Typography>
         </Flex>
       )}
       <Flex
-        justifyContent='space-between'
+        justifyContent="space-between"
         style={{
           bottom: '24px',
           position: 'absolute',
           width: 'calc(100% - 48px)',
         }}
       >
-        <Button onClick={() => onClose()} text='Close' />
+        <Button onClick={() => onClose()} text="Close" />
         <Button
           disabled={selectedVisualization < 0}
           onClick={() => onFinish(visualizations[selectedVisualization])}
-          text='Add'
+          text="Add"
         />
       </Flex>
     </Modal>

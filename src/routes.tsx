@@ -1,11 +1,11 @@
 import { AuthedRoute } from 'components/AuthedRoute';
 import {
-  LoginLocation,
-  RootLocation,
-  QueryLocation,
   DashboardLocationTemplate,
   EndpointsLocation,
+  LoginLocation,
   MarketLocation,
+  QueryLocation,
+  RootLocation,
 } from 'locations';
 import { createBrowserRouter } from 'react-router-dom';
 import Dashboard from 'views/Dashboard';

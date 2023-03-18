@@ -1,10 +1,10 @@
 import { useWeb3Modal } from '@web3modal/react';
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { createUseStyles } from 'react-jss';
-import { useAccount } from 'wagmi';
-import { RootLocation } from 'locations';
 import Button from 'components/Button';
+import { RootLocation } from 'locations';
+import { useEffect } from 'react';
+import { createUseStyles } from 'react-jss';
+import { useNavigate } from 'react-router-dom';
+import { useAccount } from 'wagmi';
 
 const useStyles = createUseStyles({
   container: {
@@ -39,7 +39,7 @@ export default function Login(): JSX.Element {
   return (
     <div className={styles.container}>
       <div className={styles.text}>BlockTrekker</div>
-      <Button onClick={() => open()} text='Login' />
+      <Button onClick={() => open()} text="Login" />
     </div>
   );
 }

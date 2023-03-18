@@ -65,7 +65,7 @@ export default function Modal({
       isOpen={open}
       onRequestClose={onClose}
       style={modalStyles}
-      contentLabel='modal'
+      contentLabel="modal"
     >
       {children}
     </ReactModal>

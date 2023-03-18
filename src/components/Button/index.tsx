@@ -1,5 +1,5 @@
-import { createUseStyles } from 'react-jss';
 import { CSSProperties, ReactNode } from 'react';
+import { createUseStyles } from 'react-jss';
 
 const useStyles = createUseStyles({
   button: ({ disabled }: { disabled?: boolean }) => ({

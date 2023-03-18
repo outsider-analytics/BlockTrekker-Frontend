@@ -1,3 +1,5 @@
+import Button from 'components/Button';
+import ChartWrapper from 'components/Charts/ChartWrapper';
 import {
   ChartScale,
   ChartScales,
@@ -5,19 +7,17 @@ import {
   ChartTypes,
   CurveOptions,
 } from 'components/Charts/constants';
+import Dropdown from 'components/Dropdown';
+import Flex from 'components/Flex';
+import Input from 'components/Input';
+import { useOutsideAlerter } from 'hooks/useOutsideAlerter';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { HexColorPicker } from 'react-colorful';
+import { FiDroplet } from 'react-icons/fi';
+import { createUseStyles } from 'react-jss';
+import { CurveType } from 'recharts/types/shape/Curve';
 
 import Modal from '.';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { CurveType } from 'recharts/types/shape/Curve';
-import Dropdown from 'components/Dropdown';
-import { createUseStyles } from 'react-jss';
-import Flex from 'components/Flex';
-import ChartWrapper from 'components/Charts/ChartWrapper';
-import { HexColorPicker } from 'react-colorful';
-import { useOutsideAlerter } from 'hooks/useOutsideAlerter';
-import Input from 'components/Input';
-import Button from 'components/Button';
-import { FiDroplet } from 'react-icons/fi';
 // import { generateStackData } from 'components/Charts/utils';
 
 const useStyles = createUseStyles({
@@ -109,7 +109,7 @@ export default function VisualizationModal({
       }}
     >
       <div className={styles.title}>Create Visualization</div>
-      <Flex gap='24px'>
+      <Flex gap="24px">
         <div className={styles.chartContainer}>
           <ChartWrapper
             color={color}
@@ -129,28 +129,28 @@ export default function VisualizationModal({
           title='Scale'
         /> */}
       </Flex>
-      <Flex alignItems='flex-end' gap='16px' mt='32px'>
+      <Flex alignItems="flex-end" gap="16px" mt="32px">
         <Dropdown
           onSelect={
             setChartType as React.Dispatch<React.SetStateAction<string>>
           }
           options={ChartTypes.slice(0, 3)}
           selectedOption={chartType as string}
-          title='Chart type'
+          title="Chart type"
         />
         <Dropdown
           onSelect={setXKey}
           options={columns}
-          placeholder='Select x-key'
+          placeholder="Select x-key"
           selectedOption={xKey}
-          title='X-Axis Key'
+          title="X-Axis Key"
         />
         <Dropdown
           onSelect={setYKey}
           options={columns}
-          placeholder='Select y-key'
+          placeholder="Select y-key"
           selectedOption={yKey}
-          title='Y-Axis Key'
+          title="Y-Axis Key"
         />
         {/* <Dropdown
           onSelect={setStackBy}
@@ -159,7 +159,7 @@ export default function VisualizationModal({
           selectedOption={stackBy}
           title='Stack By'
         /> */}
-        <Flex alignItems='center' gap='8px'>
+        <Flex alignItems="center" gap="8px">
           <Button
             onClick={() => setShowPicker(true)}
             style={{ padding: '8px 12px', position: 'relative' }}
@@ -174,17 +174,17 @@ export default function VisualizationModal({
           <div className={styles.color} />
         </Flex>
       </Flex>
-      <Flex gap='16px' mt='8px'>
+      <Flex gap="16px" mt="8px">
         <Input
           onChange={(e) => setXAxisTitle(e.target.value)}
-          placeholder='X-Axis Label'
-          title='X-Axis Label'
+          placeholder="X-Axis Label"
+          title="X-Axis Label"
           value={xAxisTitle}
         />
         <Input
           onChange={(e) => setYAxisTitle(e.target.value)}
-          placeholder='Y-Axis Label'
-          title='Y-Axis Label'
+          placeholder="Y-Axis Label"
+          title="Y-Axis Label"
           value={yAxisTitle}
         />
       </Flex>
@@ -197,7 +197,7 @@ export default function VisualizationModal({
           padding: '8px 10px',
           position: 'absolute',
         }}
-        text='Save'
+        text="Save"
       />
     </Modal>
   );

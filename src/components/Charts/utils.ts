@@ -5,15 +5,15 @@
 //         if(dateObj.hasOwnProperty(xKey)) {
 //             dateObj[xKey].push();
 //         } else {
-//             dateObj[xKey] = 
+//             dateObj[xKey] =
 //         }
 //     });
 // }
 
 export const uniqueValues = (key: string, rows: any[]) => {
-    const set = new Set();
-    rows.forEach(row => {
-        if (row[key] !== null) set.add(row[key]);
-    })
-    return Array.from(set);
-}
+  const set = new Set();
+  rows.forEach((row) => {
+    if (row[key] !== null) set.add(row[key]);
+  });
+  return Array.from(set);
+};

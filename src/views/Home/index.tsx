@@ -1,3 +1,7 @@
+import { getAllQueries } from 'api/queryApi';
+import Button from 'components/Button';
+import Flex from 'components/Flex';
+import Typography from 'components/Typography';
 import MainLayout from 'layouts/MainLayout';
 import {
   DashboardLocation,
@@ -5,22 +9,19 @@ import {
   MarketLocation,
   QueryLocation,
 } from 'locations';
-import { createUseStyles } from 'react-jss';
-import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { getAllQueries } from 'api/queryApi';
-import Flex from 'components/Flex';
-import { useAccount } from 'wagmi';
-import { FiPlus } from 'react-icons/fi';
-import Button from 'components/Button';
-import APIKeyModal from './components/APIKeyModal';
-import { BsFillKeyFill } from 'react-icons/bs';
 import {
   AiFillAppstore,
   AiOutlineAreaChart,
   AiOutlineCloudServer,
 } from 'react-icons/ai';
-import Typography from 'components/Typography';
+import { BsFillKeyFill } from 'react-icons/bs';
+import { FiPlus } from 'react-icons/fi';
+import { createUseStyles } from 'react-jss';
+import { useNavigate } from 'react-router-dom';
+import { useAccount } from 'wagmi';
+
+import APIKeyModal from './components/APIKeyModal';
 
 const useStyles = createUseStyles({
   container: {
@@ -64,27 +65,27 @@ export default function Home(): JSX.Element {
   return (
     <MainLayout>
       <div className={styles.container}>
-        <Flex gap='24px' justifyContent='flex-end' mt='24px'>
+        <Flex gap="24px" justifyContent="flex-end" mt="24px">
           <Button onClick={() => navigate(QueryLocation)}>
-            <Flex alignItems='center' gap='8px'>
+            <Flex alignItems="center" gap="8px">
               <div>New Query</div>
               <FiPlus size={16} />
             </Flex>
           </Button>
           <Button onClick={() => setShowAPIModal(true)}>
-            <Flex alignItems='center' gap='8px'>
+            <Flex alignItems="center" gap="8px">
               <div>API Key</div>
               <BsFillKeyFill size={16} />
             </Flex>
           </Button>
           <Button onClick={() => navigate(MarketLocation)}>
-            <Flex alignItems='center' gap='8px'>
+            <Flex alignItems="center" gap="8px">
               <div>Browse API Market</div>
               <AiFillAppstore size={16} />
             </Flex>
           </Button>
           <Button onClick={() => navigate(EndpointsLocation)}>
-            <Flex alignItems='center' gap='8px'>
+            <Flex alignItems="center" gap="8px">
               <div>Custom Endpoints</div>
               <AiOutlineCloudServer size={16} />
             </Flex>
@@ -93,7 +94,7 @@ export default function Home(): JSX.Element {
             Dashboard
           </Button>
         </Flex>
-        {!!queries.length ? (
+        {queries.length ? (
           <div>
             <div className={styles.queries}>Queries</div>
             {queries.map(({ name, queryId, visualizationCount }) => (
@@ -101,21 +102,21 @@ export default function Home(): JSX.Element {
                 className={styles.row}
                 onClick={() => navigate(`${QueryLocation}/${queryId}`)}
               >
-                <Flex alignItems='center' justifyContent='space-between'>
-                  <Typography style={{ color: '#FCFCFC' }} variant='subtitle1'>
+                <Flex alignItems="center" justifyContent="space-between">
+                  <Typography style={{ color: '#FCFCFC' }} variant="subtitle1">
                     {name}
                   </Typography>
                   {!!visualizationCount && (
                     <Flex
-                      alignItems='center'
-                      gap='16px'
+                      alignItems="center"
+                      gap="16px"
                       style={{ color: '#FCFCFC' }}
                     >
-                      <Typography variant='subtitle1'>
+                      <Typography variant="subtitle1">
                         Visualizations
                       </Typography>
                       <AiOutlineAreaChart size={20} />
-                      <Typography variant='subtitle1'>
+                      <Typography variant="subtitle1">
                         {visualizationCount}
                       </Typography>
                     </Flex>
@@ -126,11 +127,11 @@ export default function Home(): JSX.Element {
           </div>
         ) : (
           <Flex
-            alignItems='center'
-            justifyContent='center'
+            alignItems="center"
+            justifyContent="center"
             style={{ height: '50vh' }}
           >
-            <Typography style={{ color: '#FCFCFC' }} variant='h4'>
+            <Typography style={{ color: '#FCFCFC' }} variant="h4">
               No queries
             </Typography>
           </Flex>

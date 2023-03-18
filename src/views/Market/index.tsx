@@ -1,19 +1,17 @@
-import MainLayout from 'layouts/MainLayout';
-import { useEffect } from 'react';
-import { createUseStyles } from 'react-jss';
-import Flex from 'components/Flex';
-import { useAccount } from 'wagmi';
 import { getAllEndpoints } from 'api/apiApi';
-import { FiArrowLeft } from 'react-icons/fi';
-import { useNavigate } from 'react-router-dom';
-import { BlockTrekkerTheme } from 'theme';
-import { RootLocation } from 'locations';
-import { useState } from 'react';
-import { BeatLoader } from 'react-spinners';
-import Typography from 'components/Typography';
+import Flex from 'components/Flex';
 import Input from 'components/Input';
+import Typography from 'components/Typography';
+import MainLayout from 'layouts/MainLayout';
+import { RootLocation } from 'locations';
+import { useEffect, useState } from 'react';
+import { FiArrowLeft, FiCopy } from 'react-icons/fi';
+import { createUseStyles } from 'react-jss';
+import { useNavigate } from 'react-router-dom';
+import { BeatLoader } from 'react-spinners';
+import { BlockTrekkerTheme } from 'theme';
 import { copyToClipboard, formatNumber, truncateAddress } from 'utils';
-import { FiCopy } from 'react-icons/fi';
+import { useAccount } from 'wagmi';
 
 const { REACT_APP_API_URL: API_URL } = process.env;
 
@@ -100,30 +98,30 @@ export default function Market(): JSX.Element {
         onClick={() => navigate(RootLocation)}
       />
       <Flex
-        alignItems='center'
-        justifyContent='center'
+        alignItems="center"
+        justifyContent="center"
         style={{ minHeight: 'calc(100vh - 80px)' }}
       >
         <div className={styles.container}>
           {loading ? (
             <Flex
-              alignItems='center'
-              justifyContent='center'
+              alignItems="center"
+              justifyContent="center"
               style={{ height: '100%' }}
             >
-              <BeatLoader color='#5451FF' size={30} />
+              <BeatLoader color="#5451FF" size={30} />
             </Flex>
           ) : (
             <>
               <Typography
                 style={{ color: '#FCFCFC', marginBottom: '16px' }}
-                variant='h6'
+                variant="h6"
               >
                 Endpoint Marketplace
               </Typography>
               {endpoints.length ? (
                 <>
-                  <Flex gap='32px'>
+                  <Flex gap="32px">
                     <div className={styles.endpoints}>
                       {endpoints.map((endpoint, index) => (
                         <div
@@ -145,55 +143,55 @@ export default function Market(): JSX.Element {
                       <Input
                         disabled
                         onChange={() => null}
-                        placeholder='Select table'
+                        placeholder="Select table"
                         value={selectedEndpoint.table}
-                        title='Table'
+                        title="Table"
                       />
                       <Input
                         disabled
                         onChange={() => null}
-                        placeholder='Select output column'
+                        placeholder="Select output column"
                         value={selectedEndpoint.outputColumn}
-                        title='Output Column'
+                        title="Output Column"
                         wrapperStyle={{ marginTop: '24px' }}
                       />
                       <Input
                         disabled
                         onChange={() => null}
-                        placeholder='Select input column'
+                        placeholder="Select input column"
                         value={selectedEndpoint.inputColumn}
-                        title='Input Column'
+                        title="Input Column"
                         wrapperStyle={{ marginTop: '24px' }}
                       />
                       <Input
                         currency
                         disabled
                         onChange={() => null}
-                        placeholder='Cost per call (USD)'
+                        placeholder="Cost per call (USD)"
                         value={selectedEndpoint.cost}
-                        title='Cost'
+                        title="Cost"
                         type={'number'}
                         wrapperStyle={{ marginTop: '24px' }}
                       />
                       <Input
                         disabled
-                        placeholder='Endpoint name'
+                        placeholder="Endpoint name"
                         value={selectedEndpoint.name}
-                        title='Name'
+                        title="Name"
                         wrapperStyle={{ marginTop: '24px' }}
                       />
                     </div>
                     <div className={styles.values}>
                       <Typography
                         style={{ color: '#FCFCFC', marginBottom: '8px' }}
-                        variant='subtitle2'
+                        variant="subtitle2"
                       >
                         Owner
                       </Typography>
                       <div className={styles.codeBlock}>
                         <Flex
-                          alignItems='center'
-                          justifyContent='space-between'
+                          alignItems="center"
+                          justifyContent="space-between"
                         >
                           {truncateAddress(selectedEndpoint.user)}
                           <FiCopy
@@ -204,8 +202,8 @@ export default function Market(): JSX.Element {
                           />
                         </Flex>
                       </div>
-                      <Flex mb='8px' mt='24px' style={{ color: '#FCFCFC' }}>
-                        <Typography variant='subtitle2'>
+                      <Flex mb="8px" mt="24px" style={{ color: '#FCFCFC' }}>
+                        <Typography variant="subtitle2">
                           Query format
                         </Typography>
                       </Flex>
@@ -224,22 +222,22 @@ export default function Market(): JSX.Element {
                         />
                       </div>
                       <Flex
-                        justifyContent='space-between'
-                        mb='8px'
-                        mt='24px'
+                        justifyContent="space-between"
+                        mb="8px"
+                        mt="24px"
                         style={{ color: '#FCFCFC' }}
                       >
-                        <Typography variant='subtitle2'>
+                        <Typography variant="subtitle2">
                           Endpoint name
                         </Typography>
-                        <Typography variant='subtitle2'>
+                        <Typography variant="subtitle2">
                           Cost: ${formatNumber(selectedEndpoint.cost, 4)}/call
                         </Typography>
                       </Flex>
                       <div className={styles.codeBlock}>
                         <Flex
-                          alignItems='center'
-                          justifyContent='space-between'
+                          alignItems="center"
+                          justifyContent="space-between"
                         >
                           <div
                             style={{
@@ -258,14 +256,14 @@ export default function Market(): JSX.Element {
                       </div>
                       <Typography
                         style={{ color: '#FCFCFC', marginBlock: '24px 4px' }}
-                        variant='subtitle2'
+                        variant="subtitle2"
                       >
                         Example Request
                       </Typography>
                       <div className={styles.codeBlock}>
                         <Flex
-                          alignItems='center'
-                          justifyContent='space-between'
+                          alignItems="center"
+                          justifyContent="space-between"
                         >
                           <div
                             style={{
@@ -287,13 +285,13 @@ export default function Market(): JSX.Element {
                 </>
               ) : (
                 <Flex
-                  alignItems='center'
-                  direction='column'
-                  justifyContent='center'
-                  gap='16px'
+                  alignItems="center"
+                  direction="column"
+                  justifyContent="center"
+                  gap="16px"
                   style={{ color: '#FCFCFC', height: '90%' }}
                 >
-                  <Typography variant='h5'>No Endpoints</Typography>
+                  <Typography variant="h5">No Endpoints</Typography>
                 </Flex>
               )}
             </>

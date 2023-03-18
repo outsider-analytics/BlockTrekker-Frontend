@@ -1,9 +1,9 @@
-import { CSSProperties, SetStateAction, useRef, useState } from 'react';
-import { createUseStyles } from 'react-jss';
-import { FiChevronDown } from 'react-icons/fi';
 import Flex from 'components/Flex';
-import { useOutsideAlerter } from 'hooks/useOutsideAlerter';
 import InputWrapper from 'components/InputWrapper';
+import { useOutsideAlerter } from 'hooks/useOutsideAlerter';
+import { CSSProperties, SetStateAction, useRef, useState } from 'react';
+import { FiChevronDown } from 'react-icons/fi';
+import { createUseStyles } from 'react-jss';
 
 const useStyles = createUseStyles({
   caret: ({ open }: { open: boolean }) => ({
@@ -72,7 +72,7 @@ export default function Dropdown({
         ref={dropdownRef}
         style={{ ...style }}
       >
-        <Flex alignItems='center' justifyContent='space-between' gap='16px'>
+        <Flex alignItems="center" justifyContent="space-between" gap="16px">
           <div>{selectedOption || placeholder}</div>
           <FiChevronDown className={styles.caret} />
           {open && (
