@@ -3,7 +3,8 @@ import BarChart from 'components/Charts/BarChart';
 import LineChart from 'components/Charts/LineChart';
 import { useMemo } from 'react';
 
-import { ChartScale, ChartType, DEFAULT_DATA } from '../constants';
+import { ChartScale, ChartType, DEFAULT_DATA, StackBy } from '../constants';
+import { generateStackData } from '../utils';
 
 type ChartWrapperProps = {
   chartType: string;
@@ -11,7 +12,9 @@ type ChartWrapperProps = {
   // TODO: Change from any
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any[];
+  grid?: boolean;
   height?: number;
+  stackBy?: StackBy;
   scale?: ChartScale;
   width?: number;
   xAxisTitle?: string;
@@ -25,7 +28,9 @@ export default function ChartWrapper({
   color,
   height,
   data,
+  grid,
   scale = ChartScale.Linear,
+  stackBy,
   width,
   xAxisTitle,
   xKey,
@@ -36,13 +41,20 @@ export default function ChartWrapper({
     return xKey && yKey;
   }, [xKey, yKey]);
 
+  const stackedData = useMemo(() => {
+    if (!stackBy) return [];
+    return generateStackData(data, stackBy, xKey);
+  }, [data, stackBy, xKey]);
+
   if (chartType === ChartType.Area) {
     return (
       <AreaChart
         color={color}
-        data={customSelected ? data : DEFAULT_DATA}
+        data={customSelected ? (stackBy ? stackedData : data) : DEFAULT_DATA}
+        grid={!!grid}
         height={height ?? 300}
         scale={scale}
+        stackBy={stackBy}
         width={width ?? 800}
         xAxisTitle={xAxisTitle ?? ''}
         xKey={xKey || 'x'}
@@ -54,9 +66,11 @@ export default function ChartWrapper({
     return (
       <BarChart
         color={color}
-        data={customSelected ? data : DEFAULT_DATA}
+        data={customSelected ? (stackBy ? stackedData : data) : DEFAULT_DATA}
+        grid={!!grid}
         height={height ?? 300}
         scale={scale}
+        stackBy={stackBy}
         width={width ?? 800}
         xAxisTitle={xAxisTitle ?? ''}
         xKey={xKey || 'x'}
@@ -69,9 +83,11 @@ export default function ChartWrapper({
       <LineChart
         color={color}
         curveType="basis"
-        data={customSelected ? data : DEFAULT_DATA}
+        data={customSelected ? (stackBy ? stackedData : data) : DEFAULT_DATA}
+        grid={!!grid}
         height={height ?? 300}
         scale={scale}
+        stackBy={stackBy}
         width={width ?? 800}
         xAxisTitle={xAxisTitle ?? ''}
         xKey={xKey || 'x'}

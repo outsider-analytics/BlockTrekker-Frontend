@@ -5,15 +5,15 @@ import Typography from 'components/Typography';
 import MainLayout from 'layouts/MainLayout';
 import {
   DashboardLocation,
-  EndpointsLocation,
-  MarketLocation,
+  // EndpointsLocation,
+  // MarketLocation,
   QueryLocation,
 } from 'locations';
 import { useEffect, useState } from 'react';
 import {
-  AiFillAppstore,
+  // AiFillAppstore,
   AiOutlineAreaChart,
-  AiOutlineCloudServer,
+  // AiOutlineCloudServer,
 } from 'react-icons/ai';
 import { BsFillKeyFill } from 'react-icons/bs';
 import { FiPlus } from 'react-icons/fi';
@@ -80,7 +80,7 @@ export default function Home(): JSX.Element {
               <BsFillKeyFill size={16} />
             </Flex>
           </Button>
-          <Button onClick={() => navigate(MarketLocation)}>
+          {/* <Button onClick={() => navigate(MarketLocation)}>
             <Flex alignItems="center" gap="8px">
               <div>Browse API Market</div>
               <AiFillAppstore size={16} />
@@ -91,7 +91,7 @@ export default function Home(): JSX.Element {
               <div>Custom Endpoints</div>
               <AiOutlineCloudServer size={16} />
             </Flex>
-          </Button>
+          </Button> */}
           <Button onClick={() => navigate(DashboardLocation(address ?? ''))}>
             Dashboard
           </Button>

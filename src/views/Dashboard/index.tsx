@@ -28,17 +28,18 @@ const useStyles = createUseStyles({
     color: '#FCFCFC',
     cursor: 'pointer',
   },
-  card: {
+  card: ({ isEditing }: { isEditing: boolean }) => ({
     backgroundColor: '#34383D',
     borderRadius: '4px',
     boxSizing: 'border-box',
     color: '#FCFCFC',
+    cursor: isEditing ? 'move' : 'default',
     fontSize: '24px',
     overflow: 'hidden',
     padding: '16px 40px 16px 16px',
     position: 'relative',
     wordWrap: 'break-word',
-  },
+  }),
   gridLayout: {
     padding: '0px',
     width: '100%',
@@ -68,13 +69,13 @@ type LayoutWidget = {
 export default function Dashboard(): JSX.Element {
   const { address } = useParams();
   const navigate = useNavigate();
-  const styles = useStyles();
   // TODO: Change from any
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [editedLayout, setEditedLayout] = useState<any[] | undefined>(
     undefined
   );
   const [isEditing, setIsEditing] = useState(false);
+  const styles = useStyles({ isEditing });
   const [layout, setLayout] = useState<LayoutWidget[]>([]);
   const [loading, setLoading] = useState(true);
   const [neverSaved, setNeverSaved] = useState(false);

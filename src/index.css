@@ -68,3 +68,12 @@ a {
   color: #5451FF;
   text-decoration: none;
 }
+
+.recharts-tooltip-wrapper {
+  outline: transparent;
+}
+
+/* TODO: Move elsewhere */
+.recharts-cartesian-axis-tick {
+  font-size: 16px;
+}

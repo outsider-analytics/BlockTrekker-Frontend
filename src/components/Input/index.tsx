@@ -26,6 +26,7 @@ const useStyles = createUseStyles({
 type InputProps = {
   currency?: boolean;
   disabled?: boolean;
+  inputStyle?: CSSProperties;
   note?: string;
   onChange?: (
     e:
@@ -46,6 +47,7 @@ type InputProps = {
 export default function Input({
   currency,
   disabled,
+  inputStyle,
   note,
   onChange,
   optional,
@@ -75,6 +77,7 @@ export default function Input({
               onChange={onChange}
               placeholder={placeholder}
               rows={rows}
+              style={{ ...inputStyle }}
               value={value}
             />
           ) : (
@@ -83,6 +86,7 @@ export default function Input({
               disabled={disabled}
               onChange={onChange}
               placeholder={placeholder}
+              style={{ ...inputStyle }}
               type={type}
               value={value}
             />

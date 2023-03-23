@@ -6,6 +6,8 @@ import {
 } from 'react-icons/ai';
 import { CurveType } from 'recharts/types/shape/Curve';
 
+export const AxisChartOptions = ['Standard', 'Stacked'];
+
 export enum ChartScale {
   Linear = 'linear',
   Log = 'log',
@@ -61,14 +63,36 @@ export const DEFAULT_DATA = [
   { x: 10, y: 280 },
 ];
 
+export const PALETTE = [
+  '#a6cee3',
+  '#1f78b4',
+  '#b2df8a',
+  '#33a02c',
+  '#fb9a99',
+  '#e31a1c',
+  '#fdbf6f',
+  '#ff7f00',
+  '#cab2d6',
+  '#6a3d9a',
+  '#ffff99',
+  '#b15928',
+];
+
+export type StackBy = {
+  stackColumn: string;
+  valueColumn: string;
+};
+
 export type AxisChartProps = {
   color: string;
   curveType: CurveType;
   // TODO: Change from any
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  data: any[];
+  data: any;
+  grid: boolean;
   height?: number;
   scale: ChartScale;
+  stackBy?: StackBy;
   width?: number;
   xAxisTitle: string;
   xKey: string;

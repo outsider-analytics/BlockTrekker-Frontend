@@ -4,14 +4,16 @@ import { ChartTypeToIcon } from 'components/Charts/constants';
 import Flex from 'components/Flex';
 import ConfirmationModal from 'components/Modal/ConfirmationModal';
 import Table from 'components/Table';
+import Typography from 'components/Typography';
 import { capitalize } from 'lodash';
 import { SetStateAction, useEffect, useState } from 'react';
-import { AiOutlineUnorderedList } from 'react-icons/ai';
+import { AiFillEdit, AiOutlineUnorderedList } from 'react-icons/ai';
 import { FiTrash2 } from 'react-icons/fi';
 import { createUseStyles } from 'react-jss';
 
 const useStyles = createUseStyles({
-  delete: {
+  icon: {
+    color: '#FCFCFC',
     cursor: 'pointer',
   },
   tab: {
@@ -86,7 +88,7 @@ export default function DataSection({
           alignItems="center"
           justifyContent="space-between"
           mb="24px"
-          mt="24px"
+          mt="32px"
         >
           <div className={styles.tabContainer}>
             {tabs.map((tab, index) => (
@@ -111,12 +113,14 @@ export default function DataSection({
             ))}
           </div>
           {selectedTab > 0 && (
-            <FiTrash2
-              className={styles.delete}
-              color="#FCFCFC"
-              onClick={() => setShowRemoveModal(true)}
-              size={20}
-            />
+            <Flex gap="16px">
+              <AiFillEdit className={styles.icon} size={20} />
+              <FiTrash2
+                className={styles.icon}
+                onClick={() => setShowRemoveModal(true)}
+                size={20}
+              />
+            </Flex>
           )}
         </Flex>
       )}
@@ -132,14 +136,25 @@ export default function DataSection({
           {visualizations.map(
             (vis, index) =>
               selectedTab === index + 1 && (
-                <div key={index} style={{ height: '300px', width: '100%' }}>
-                  <ChartWrapper
-                    chartType={vis.chartType}
-                    color={vis.color}
-                    data={results.rows}
-                    xKey={vis.xKey}
-                    yKey={vis.yKey}
-                  />
+                <div key={index} style={{ color: '#FCFCFC' }}>
+                  <Typography variant="h6">{vis.name}</Typography>
+                  <div style={{ height: '300px', width: '100%' }}>
+                    <ChartWrapper
+                      chartType={vis.chartType}
+                      color={vis.color}
+                      data={results.rows}
+                      grid={vis.renderGrid}
+                      scale={vis.scale}
+                      stackBy={{
+                        stackColumn: vis.stackBy,
+                        valueColumn: vis.yKey,
+                      }}
+                      xAxisTitle={vis.xAxisTitle}
+                      xKey={vis.xKey}
+                      yAxisTitle={vis.yAxisTitle}
+                      yKey={vis.yKey}
+                    />
+                  </div>
                 </div>
               )
           )}

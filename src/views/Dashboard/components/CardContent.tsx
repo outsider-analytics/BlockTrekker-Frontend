@@ -44,7 +44,19 @@ export default function CardContent({
             chartType={content.content.chartType}
             color={content.content.color}
             data={content.content.data}
+            grid={content.content.renderGrid}
+            scale={content.content.scale}
+            stackBy={
+              content.content.stackBy
+                ? {
+                    stackColumn: content.content.stackBy,
+                    valueColumn: content.content.yKey,
+                  }
+                : undefined
+            }
+            xAxisTitle={content.content.xAxisTitle}
             xKey={content.content.xKey}
+            yAxisTitle={content.content.yAxisTitle}
             yKey={content.content.yKey}
           />
         </div>

@@ -10,7 +10,6 @@ import { saveVisualization } from 'api/visualizationApi';
 import Button from 'components/Button';
 import Flex from 'components/Flex';
 import ConfirmationModal from 'components/Modal/ConfirmationModal';
-import VisualizationModal from 'components/Modal/VisualizationModal';
 import Typography from 'components/Typography';
 import MainLayout from 'layouts/MainLayout';
 import { RootLocation } from 'locations';
@@ -23,12 +22,15 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { ClockLoader } from 'react-spinners';
 import { BlockTrekkerTheme } from 'theme';
 import { formatNumber, truncateAddress } from 'utils';
+import VisualizationModal from 'views/Query/components/VisualizationModal';
 import { useAccount } from 'wagmi';
 
 import BQTableColumns from './components/BQTableColumns';
 import DataSection from './components/DataSection';
 import QueryLoader from './components/QueryLoader';
 import QueryModal from './components/QueryModal';
+
+const { REACT_APP_BQ_PROJECT_ID: BQ_ID } = process.env;
 
 const useStyles = createUseStyles((theme: BlockTrekkerTheme) => ({
   completedIn: {
@@ -369,7 +371,9 @@ export default function Query(): JSX.Element {
                             </div>
                             <BiClipboard
                               className={styles.icon}
-                              onClick={() => setQuery((prev) => prev + table)}
+                              onClick={() =>
+                                setQuery((prev) => prev + `${BQ_ID}.${table}`)
+                              }
                               size={18}
                             />
                           </Flex>
