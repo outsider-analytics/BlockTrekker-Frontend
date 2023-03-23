@@ -56,3 +56,8 @@ export const truncateAddress = (address: string): string => {
     len - 1
   )}`;
 };
+
+export const truncateText = (text: string): string => {
+  const len = text.length;
+  return `${text.substring(2, 6)}...${text.substring(len - 6, len - 1)}`;
+};

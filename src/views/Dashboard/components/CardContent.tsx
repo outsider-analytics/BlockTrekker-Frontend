@@ -3,6 +3,7 @@ import Typography from 'components/Typography';
 import { createUseStyles } from 'react-jss';
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
 import remarkGfm from 'remark-gfm';
+import { truncateText } from 'utils';
 import { ALLOWED_MARKDOWN_ELEMENTS } from 'utils/constants';
 
 const useStyles = createUseStyles({
@@ -38,7 +39,13 @@ export default function CardContent({
   } else {
     return (
       <>
-        <Typography variant="h5">Chart Name</Typography>
+        <Typography variant="h5">
+          {content.content.name ||
+            (() => {
+              const id = content.content.id.split('-');
+              return `${truncateText(id[0])} / Viz ${id[1]}`;
+            })()}
+        </Typography>
         <div className={styles.chart}>
           <ChartWrapper
             chartType={content.content.chartType}
