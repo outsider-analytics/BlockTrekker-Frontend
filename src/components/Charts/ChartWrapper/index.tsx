@@ -4,6 +4,7 @@ import LineChart from 'components/Charts/LineChart';
 import { useMemo } from 'react';
 
 import { ChartScale, ChartType, DEFAULT_DATA, StackBy } from '../constants';
+import PieChart from '../PieChart';
 import { generateStackData } from '../utils';
 
 type ChartWrapperProps = {
@@ -96,6 +97,12 @@ export default function ChartWrapper({
       />
     );
   } else {
-    return <div>TODO</div>;
+    return (
+      <PieChart
+        data={customSelected ? data : DEFAULT_DATA}
+        dataKey={yKey || 'y'}
+        nameKey={xKey || 'x'}
+      />
+    );
   }
 }

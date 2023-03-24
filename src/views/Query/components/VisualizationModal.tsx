@@ -2,6 +2,7 @@ import Button from 'components/Button';
 import ChartWrapper from 'components/Charts/ChartWrapper';
 import {
   AxisChartOptions,
+  AxisCharts,
   ChartScale,
   ChartScales,
   ChartType,
@@ -92,6 +93,10 @@ export default function VisualizationModal({
     return !xKey || !yKey;
   }, [xKey, yKey]);
 
+  const hasAxis = useMemo(() => {
+    return AxisCharts.includes(chartType);
+  }, [chartType]);
+
   const save = async () => {
     const payload = {
       chartType,
@@ -158,7 +163,7 @@ export default function VisualizationModal({
           )}
         </Flex>
         {renderOption === 'Stacked' ? (
-          <div>Palette</div>
+          <div></div>
         ) : (
           <Flex alignItems="center" gap="8px">
             <Button
@@ -201,7 +206,7 @@ export default function VisualizationModal({
               onSelect={
                 setChartType as React.Dispatch<React.SetStateAction<string>>
               }
-              options={ChartTypes.slice(0, 3)}
+              options={ChartTypes}
               selectedOption={chartType as string}
               title="Chart type"
             />
