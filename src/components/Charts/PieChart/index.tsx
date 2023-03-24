@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   Cell,
   Pie,
@@ -6,10 +7,9 @@ import {
   Sector,
   Tooltip as RechartsTooltip,
 } from 'recharts';
-import { useState } from 'react';
 
-import { PALETTE } from '../constants';
 import Tooltip from '../components/Tooltip';
+import { PALETTE } from '../constants';
 
 type PieChartProps = {
   // TODO: Change from any
@@ -26,6 +26,8 @@ export default function PieChart({
 }: PieChartProps): JSX.Element {
   const [activeIndex, setActiveIndex] = useState(-1);
 
+  // TODO: Change from any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const activeShape = (props: any) => {
     const { cx, cy, endAngle, fill, innerRadius, outerRadius, startAngle } =
       props;
@@ -42,6 +44,8 @@ export default function PieChart({
     );
   };
 
+  // TODO: Change from any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onPieEnter = (_: any, index: number) => {
     setActiveIndex(index);
   };
