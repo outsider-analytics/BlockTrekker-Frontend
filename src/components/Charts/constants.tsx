@@ -29,6 +29,12 @@ export const ChartTypeToIcon: { [key: string]: JSX.Element } = {
   [ChartType.Pie]: <AiOutlinePieChart size={16} />,
 };
 
+export const AxisCharts: ChartType[] = [
+  ChartType.Area,
+  ChartType.Bar,
+  ChartType.Line,
+];
+
 export const ChartTypes: ChartType[] = [
   ChartType.Area,
   ChartType.Bar,

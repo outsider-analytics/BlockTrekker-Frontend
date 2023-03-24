@@ -2,6 +2,7 @@ import Button from 'components/Button';
 import ChartWrapper from 'components/Charts/ChartWrapper';
 import {
   AxisChartOptions,
+  AxisCharts,
   ChartScale,
   ChartScales,
   ChartType,
@@ -92,6 +93,10 @@ export default function VisualizationModal({
     return !xKey || !yKey;
   }, [xKey, yKey]);
 
+  const hasAxis = useMemo(() => {
+    return AxisCharts.includes(chartType);
+  }, [chartType]);
+
   const save = async () => {
     const payload = {
       chartType,
@@ -157,23 +162,27 @@ export default function VisualizationModal({
             </>
           )}
         </Flex>
-        {renderOption === 'Stacked' ? (
-          <div>Palette</div>
-        ) : (
-          <Flex alignItems="center" gap="8px">
-            <Button
-              onClick={() => setShowPicker(true)}
-              style={{ padding: '8px 12px', position: 'relative' }}
-            >
-              <FiDroplet size={20} />
-              {showPicker && (
-                <div className={styles.colorPicker} ref={colorRef}>
-                  <HexColorPicker color={color} onChange={setColor} />
-                </div>
-              )}
-            </Button>
-            <div className={styles.color} />
-          </Flex>
+        {hasAxis && (
+          <>
+            {renderOption === 'Stacked' ? (
+              <div></div>
+            ) : (
+              <Flex alignItems="center" gap="8px">
+                <Button
+                  onClick={() => setShowPicker(true)}
+                  style={{ padding: '8px 12px', position: 'relative' }}
+                >
+                  <FiDroplet size={20} />
+                  {showPicker && (
+                    <div className={styles.colorPicker} ref={colorRef}>
+                      <HexColorPicker color={color} onChange={setColor} />
+                    </div>
+                  )}
+                </Button>
+                <div className={styles.color} />
+              </Flex>
+            )}
+          </>
         )}
       </Flex>
       <Flex gap="24px">
@@ -201,73 +210,77 @@ export default function VisualizationModal({
               onSelect={
                 setChartType as React.Dispatch<React.SetStateAction<string>>
               }
-              options={ChartTypes.slice(0, 3)}
+              options={ChartTypes}
               selectedOption={chartType as string}
               title="Chart type"
             />
             <Dropdown
               onSelect={setXKey}
               options={columns}
-              placeholder="Select x-key"
+              placeholder={hasAxis ? 'Select x-key' : 'Select name key'}
               selectedOption={xKey}
-              title="X-Axis Key"
+              title={hasAxis ? 'X-Axis Key' : 'Name Key'}
             />
             <Dropdown
               onSelect={setYKey}
               options={columns}
-              placeholder="Select y-key"
+              placeholder={hasAxis ? 'Select y-key' : 'Select value key'}
               selectedOption={yKey}
-              title="Y-Axis Key"
+              title={hasAxis ? 'Y-Axis Key' : 'Value Key'}
             />
           </Flex>
-          <Flex alignItems="center" gap="16px" mt="8px">
-            <Input
-              onChange={(e) => setXAxisTitle(e.target.value)}
-              placeholder="X-Axis Label"
-              title="X-Axis Label"
-              value={xAxisTitle}
-            />
-            <Input
-              onChange={(e) => setYAxisTitle(e.target.value)}
-              placeholder="Y-Axis Label"
-              title="Y-Axis Label"
-              value={yAxisTitle}
-            />
-            <label style={{ color: '#FCFCFC' }}>
-              <input
-                checked={renderGrid}
-                onChange={() => setRenderGrid(!renderGrid)}
-                type="checkbox"
+          {hasAxis && (
+            <Flex alignItems="center" gap="16px" mt="8px">
+              <Input
+                onChange={(e) => setXAxisTitle(e.target.value)}
+                placeholder="X-Axis Label"
+                title="X-Axis Label"
+                value={xAxisTitle}
               />
-              Render grid
-            </label>
-          </Flex>
+              <Input
+                onChange={(e) => setYAxisTitle(e.target.value)}
+                placeholder="Y-Axis Label"
+                title="Y-Axis Label"
+                value={yAxisTitle}
+              />
+              <label style={{ color: '#FCFCFC' }}>
+                <input
+                  checked={renderGrid}
+                  onChange={() => setRenderGrid(!renderGrid)}
+                  type="checkbox"
+                />
+                Render grid
+              </label>
+            </Flex>
+          )}
         </div>
-        <Flex gap="32px">
-          <RadioGroup
-            onChange={setScale as React.Dispatch<SetStateAction<string>>}
-            options={ChartScales}
-            selectedOption={scale}
-            title="Scale"
-          />
-          <div>
+        {hasAxis && (
+          <Flex gap="32px">
             <RadioGroup
-              onChange={setRenderOption}
-              options={AxisChartOptions}
-              selectedOption={renderOption}
-              title="Render option"
+              onChange={setScale as React.Dispatch<SetStateAction<string>>}
+              options={ChartScales}
+              selectedOption={scale}
+              title="Scale"
             />
-            {renderOption === 'Stacked' && (
-              <Dropdown
-                onSelect={setStackBy}
-                options={columns}
-                placeholder="Column to stack by"
-                selectedOption={stackBy}
-                title="Stack by"
+            <div>
+              <RadioGroup
+                onChange={setRenderOption}
+                options={AxisChartOptions}
+                selectedOption={renderOption}
+                title="Render option"
               />
-            )}
-          </div>
-        </Flex>
+              {renderOption === 'Stacked' && (
+                <Dropdown
+                  onSelect={setStackBy}
+                  options={columns}
+                  placeholder="Column to stack by"
+                  selectedOption={stackBy}
+                  title="Stack by"
+                />
+              )}
+            </div>
+          </Flex>
+        )}
       </Flex>
       <Button
         disabled={disabled}

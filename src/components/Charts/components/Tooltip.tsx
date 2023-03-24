@@ -20,8 +20,8 @@ export default function Tooltip(
   if (!payload) return <></>;
   return (
     <div className={styles.container}>
-      {payload.map(({ color, name, value }) => (
-        <Flex key={name} gap="12px" style={{ color }}>
+      {payload.map(({ color, name, payload: { fill }, value }) => (
+        <Flex key={name} gap="12px" style={{ color: color ?? fill }}>
           <div>{name}:</div>
           <div>{value}</div>
         </Flex>

@@ -32,7 +32,10 @@ export default function LineChart({
         margin={{ bottom: 8, left: 0, right: 0 }}
       >
         {grid && <CartesianGrid strokeDasharray="3 3" />}
-        <RechartsTooltip content={<Tooltip />} />
+        <RechartsTooltip
+          content={<Tooltip />}
+          wrapperStyle={{ outline: 'none', zIndex: 100 }}
+        />
         {stackBy ? (
           data.keys?.map((key: string, index: number) => (
             <Line
