@@ -13,7 +13,9 @@ const useStyles = createUseStyles({
   markdown: {
     height: 'calc(100% - 120px)',
     overflowY: 'auto',
-    // width: '100%',
+    '&:img': {
+      maxWidth: '100px',
+    },
   },
   markdownSection: {
     color: '#FCFCFC',
@@ -23,12 +25,14 @@ const useStyles = createUseStyles({
 
 type DashboardTextModalProps = {
   onFinish: (format: string, text: string) => void;
+  previousText?: { format: string; text: string };
 } & DefaultModalProps;
 
 export default function DashboardTextModal({
   onClose,
   onFinish,
   open,
+  previousText,
 }: DashboardTextModalProps): JSX.Element {
   const styles = useStyles();
   const [renderMarkdown, setRenderMarkdown] = useState<boolean>(false);
@@ -37,9 +41,14 @@ export default function DashboardTextModal({
   useEffect(() => {
     if (open) {
       setRenderMarkdown(false);
-      setText('');
+      if (previousText) {
+        setRenderMarkdown(previousText.format === 'markdown');
+        setText(previousText.text);
+      } else {
+        setText('');
+      }
     }
-  }, [open]);
+  }, [open, previousText]);
 
   return (
     <Modal
@@ -107,6 +116,15 @@ export default function DashboardTextModal({
             <ReactMarkdown
               allowedElements={ALLOWED_MARKDOWN_ELEMENTS}
               className={styles.markdown}
+              components={{
+                img: ({ node, ...props }) => (
+                  <img
+                    alt="Component Example"
+                    style={{ maxWidth: '100%' }}
+                    {...props}
+                  />
+                ),
+              }}
               remarkPlugins={[remarkGfm]}
             >
               {text}
@@ -125,6 +143,7 @@ export default function DashboardTextModal({
       >
         <Button onClick={() => onClose()} text="Close" />
         <Button
+          disabled={previousText?.text === text || !text}
           onClick={() =>
             onFinish(renderMarkdown ? 'markdown' : 'plaintext', text)
           }

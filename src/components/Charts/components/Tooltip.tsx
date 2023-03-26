@@ -1,6 +1,7 @@
 import Flex from 'components/Flex';
 import { createUseStyles } from 'react-jss';
 import { TooltipProps } from 'recharts';
+import { formatNumber } from 'utils';
 
 const useStyles = createUseStyles({
   container: {
@@ -23,7 +24,7 @@ export default function Tooltip(
       {payload.map(({ color, name, payload: { fill }, value }) => (
         <Flex key={name} gap="12px" style={{ color: color ?? fill }}>
           <div>{name}:</div>
-          <div>{value}</div>
+          <div>{formatNumber(value ?? 0, 0)}</div>
         </Flex>
       ))}
     </div>

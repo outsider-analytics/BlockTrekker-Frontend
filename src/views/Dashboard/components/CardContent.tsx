@@ -29,6 +29,15 @@ export default function CardContent({
       return (
         <ReactMarkdown
           allowedElements={ALLOWED_MARKDOWN_ELEMENTS}
+          components={{
+            img: ({ node, ...props }) => (
+              <img
+                alt="Component Example"
+                style={{ maxWidth: '100%' }}
+                {...props}
+              />
+            ),
+          }}
           remarkPlugins={[remarkGfm]}
         >
           {content.content.text}
