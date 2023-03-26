@@ -8,6 +8,7 @@ export const ALLOWED_MARKDOWN_ELEMENTS = [
   'h5',
   'h6',
   'hr',
+  'img',
   'li',
   'ol',
   'p',

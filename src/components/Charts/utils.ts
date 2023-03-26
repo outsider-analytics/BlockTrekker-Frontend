@@ -1,6 +1,11 @@
 import { StackBy } from './constants';
 
 export const formatXAxisTicks = (tick: string): string => {
+  // Check if tick is date
+  // const date = new Date(tick);
+  // if (!isNaN(date.getTime())) {
+  //   return moment(tick).format('MMM, D');
+  // }
   return tick;
 };
 

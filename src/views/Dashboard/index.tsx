@@ -2,6 +2,7 @@ import {
   addWidgetToDashboard,
   getDashboard,
   saveDashboard,
+  updateTextWidget,
 } from 'api/dashboardApi';
 import Button from 'components/Button';
 import Flex from 'components/Flex';
@@ -74,6 +75,8 @@ export default function Dashboard(): JSX.Element {
   const [editedLayout, setEditedLayout] = useState<any[] | undefined>(
     undefined
   );
+  const [editingTextWidget, setEditingTextWidget] =
+    useState<LayoutWidget | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const styles = useStyles({ isEditing });
   const [layout, setLayout] = useState<LayoutWidget[]>([]);
@@ -273,6 +276,21 @@ export default function Dashboard(): JSX.Element {
       .map((widget) => widget.item.content.id);
   }, [layout]);
 
+  const updateText = async (format: string, text: string) => {
+    if (!address) return;
+    const id = editingTextWidget?.gridInstructions.i;
+    await updateTextWidget(address, { id, format, text });
+    setLayout((prev) => {
+      const index = prev.findIndex((el) => el.gridInstructions.i === id);
+      prev[index].item.content = {
+        format,
+        text,
+      };
+      return prev;
+    });
+    setEditingTextWidget(null);
+  };
+
   useEffect(() => {
     if (!address) return;
     (async () => {
@@ -359,34 +377,42 @@ export default function Dashboard(): JSX.Element {
             onLayoutChange={onLayoutChange}
             rowHeight={ROW_HEIGHT}
           >
-            {(editedLayout ?? layout).map(
-              ({ gridInstructions, item }, index) => {
-                if (item.elementType === 'visualization' && item.content.id) {
-                  const queryId = item.content.id.split('-')[0];
-                  item.content = { ...item.content, data: queryData[queryId] };
-                }
-                return (
-                  <div className={styles.card} key={gridInstructions.i}>
-                    <Flex
-                      style={{
-                        position: 'absolute',
-                        right: '10px',
-                        top: '10px',
-                      }}
-                    >
-                      {isEditing && (
+            {(editedLayout ?? layout).map((widget, index) => {
+              const { gridInstructions, item } = widget;
+              if (item.elementType === 'visualization' && item.content.id) {
+                const queryId = item.content.id.split('-')[0];
+                item.content = { ...item.content, data: queryData[queryId] };
+              }
+              return (
+                <div className={styles.card} key={gridInstructions.i}>
+                  <Flex
+                    style={{
+                      position: 'absolute',
+                      right: '10px',
+                      top: '10px',
+                    }}
+                  >
+                    {isEditing && (
+                      <Flex gap="8px">
+                        {item.elementType === 'text' && (
+                          <AiFillEdit
+                            onClick={() => setEditingTextWidget(widget)}
+                            size={16}
+                            style={{ cursor: 'pointer' }}
+                          />
+                        )}
                         <FiTrash2
                           onClick={() => setShowRemove(index)}
                           size={16}
                           style={{ cursor: 'pointer' }}
                         />
-                      )}
-                    </Flex>
-                    <CardContent content={item} />
-                  </div>
-                );
-              }
-            )}
+                      </Flex>
+                    )}
+                  </Flex>
+                  <CardContent content={item} />
+                </div>
+              );
+            })}
           </ResponsiveGridLayout>
           <DashboardVisualizationModal
             existingVisualiztions={visualizations}
@@ -395,9 +421,22 @@ export default function Dashboard(): JSX.Element {
             open={showVisualizationModal}
           />
           <DashboardTextModal
-            onClose={() => setShowTextModal(false)}
-            onFinish={addText}
-            open={showTextModal}
+            onClose={() => {
+              if (showTextModal) {
+                setShowTextModal(false);
+              } else {
+                setEditingTextWidget(null);
+              }
+            }}
+            onFinish={(format: string, text: string) => {
+              if (editingTextWidget) {
+                updateText(format, text);
+              } else {
+                addText(format, text);
+              }
+            }}
+            open={showTextModal || !!editingTextWidget}
+            previousText={editingTextWidget?.item.content}
           />
           <ConfirmationModal
             actionText="Remove"
