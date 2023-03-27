@@ -20,6 +20,7 @@ import { FiArrowLeft, FiDownload, FiSave } from 'react-icons/fi';
 import { createUseStyles } from 'react-jss';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ClockLoader } from 'react-spinners';
+import { toast } from 'react-toastify';
 import { BlockTrekkerTheme } from 'theme';
 import { formatNumber, truncateAddress } from 'utils';
 import VisualizationModal from 'views/Query/components/VisualizationModal';
@@ -205,17 +206,26 @@ export default function Query(): JSX.Element {
 
   const execute = async () => {
     setIsExecuting(true);
-    const payload = { id: '', name, query, user: address };
+    const payload = { id: '', cost, name, query, user: address };
     if (id) {
       payload.id = id;
     }
-    const res = await executeQuery(payload);
-    const data = await res.json();
-    const columns = Object.keys(data.rows[0]);
-    setQueryResults({ columns, rows: data.rows });
-    setCompleteIn(elapsed);
-    setElapsed(0);
-    setIsExecuting(false);
+    try {
+      const res = await executeQuery(payload);
+      const data = await res.json();
+      const columns = Object.keys(data.rows[0]);
+      setQueryResults({ columns, rows: data.rows });
+      setCompleteIn(elapsed);
+    } catch (err) {
+      if ((err as Error).message) {
+        toast.error('Insufficient credits.');
+      } else {
+        toast.error('Error occurred executing.');
+      }
+    } finally {
+      setElapsed(0);
+      setIsExecuting(false);
+    }
   };
 
   const executeText = useMemo(() => {
