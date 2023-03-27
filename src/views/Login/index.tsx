@@ -1,4 +1,5 @@
 import { useWeb3Modal } from '@web3modal/react';
+import logo from 'assets/images/logo.png';
 import Button from 'components/Button';
 import { RootLocation } from 'locations';
 import { useEffect } from 'react';
@@ -11,16 +12,13 @@ const useStyles = createUseStyles({
     alignItems: 'center',
     display: 'flex',
     flexDirection: 'column',
-    gap: '24px',
+    gap: '48px',
     justifyContent: 'center',
     minHeight: '100vh',
   },
-  text: {
-    color: '#FCFCFC',
-    fontSize: '64px',
-    fontWeight: 500,
-    maxWidth: '750px',
-    textAlign: 'center',
+  logo: {
+    height: '200px',
+    width: '200px',
   },
 });
 
@@ -38,7 +36,7 @@ export default function Login(): JSX.Element {
 
   return (
     <div className={styles.container}>
-      <div className={styles.text}>BlockTrekker</div>
+      <img alt="Logo" className={styles.logo} src={logo} />
       <Button onClick={() => open()} text="Login" />
     </div>
   );

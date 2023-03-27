@@ -6,6 +6,7 @@ import {
   walletConnectProvider,
 } from '@web3modal/ethereum';
 import { Web3Modal } from '@web3modal/react';
+import { UserProvider } from 'contexts/UserContext';
 import { ThemeProvider } from 'react-jss';
 import { RouterProvider } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -37,11 +38,13 @@ const ethereumClient = new EthereumClient(wagmiClient, [mainnet]);
 function App(): JSX.Element {
   return (
     <>
-      <ThemeProvider theme={theme}>
-        <WagmiConfig client={wagmiClient}>
-          <RouterProvider router={router} />
-        </WagmiConfig>
-      </ThemeProvider>
+      <UserProvider>
+        <ThemeProvider theme={theme}>
+          <WagmiConfig client={wagmiClient}>
+            <RouterProvider router={router} />
+          </WagmiConfig>
+        </ThemeProvider>
+      </UserProvider>
       <ToastContainer
         position="top-right"
         style={{ zIndex: 10000000000 }}
