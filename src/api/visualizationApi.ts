@@ -1,7 +1,7 @@
 import { RequestTypes, serverRequest } from './serverRequest';
 
-export const getVisualizationNames = async (user: string): Promise<Response> =>
-  serverRequest(`visualization/names?user=${user}`);
+export const getVisualizationNames = async (): Promise<Response> =>
+  serverRequest('visualization/names');
 
 export const saveVisualization = async (
   queryId: string,

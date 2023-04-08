@@ -1,20 +1,18 @@
 import { RequestTypes, serverRequest } from './serverRequest';
 
 export const addWidgetToDashboard = (
-  user: string,
   // TODO: Change from any
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
   payload: any
 ): Promise<Response> =>
-  serverRequest(`dashboard/widget/${user}`, RequestTypes.Post, payload);
+  serverRequest('dashboard/widget', RequestTypes.Post, payload);
 
-export const getDashboard = (user: string): Promise<Response> =>
-  serverRequest(`dashboard/${user}`);
+export const getDashboard = (): Promise<Response> => serverRequest('dashboard');
 
 // TODO: Change from any
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
-export const saveDashboard = (user: string, payload: any): Promise<Response> =>
-  serverRequest(`dashboard/save/${user}`, RequestTypes.Post, payload);
+export const saveDashboard = (payload: any): Promise<Response> =>
+  serverRequest('dashboard/save', RequestTypes.Post, payload);
 
 export const updateTextWidget = (
   user: string,

@@ -1,11 +1,11 @@
 import { useWeb3Modal } from '@web3modal/react';
 import logo from 'assets/images/logo.png';
 import Button from 'components/Button';
+import { useTrekkerProfile } from 'contexts/UserContext';
 import { RootLocation } from 'locations';
 import { useEffect } from 'react';
 import { createUseStyles } from 'react-jss';
 import { useNavigate } from 'react-router-dom';
-import { useAccount } from 'wagmi';
 
 const useStyles = createUseStyles({
   container: {
@@ -23,21 +23,23 @@ const useStyles = createUseStyles({
 });
 
 export default function Login(): JSX.Element {
-  const { isConnected } = useAccount();
   const navigate = useNavigate();
+  const { signedIn } = useTrekkerProfile();
   const { open } = useWeb3Modal();
   const styles = useStyles();
 
   useEffect(() => {
-    if (isConnected) {
+    if (signedIn) {
       navigate(RootLocation);
     }
-  }, [isConnected, navigate]);
+  }, [navigate, signedIn]);
 
   return (
-    <div className={styles.container}>
-      <img alt="Logo" className={styles.logo} src={logo} />
-      <Button onClick={() => open()} text="Login" />
-    </div>
+    <>
+      <div className={styles.container}>
+        <img alt="Logo" className={styles.logo} src={logo} />
+        <Button onClick={() => open()} text="Sign-In" />
+      </div>
+    </>
   );
 }

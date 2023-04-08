@@ -30,11 +30,19 @@ export const serverRequest = async (
         headers,
         method,
         body: data,
+        credentials: 'include',
       };
     } else {
-      request = { headers, method, body: JSON.stringify(data) };
+      request = {
+        headers,
+        method,
+        body: JSON.stringify(data),
+        credentials: 'include',
+      };
     }
+    // eslint-disable-next-line
+    //  @ts-ignore
     return fetch(url, request);
   }
-  return fetch(url, { headers });
+  return fetch(url, { headers, credentials: 'include' });
 };

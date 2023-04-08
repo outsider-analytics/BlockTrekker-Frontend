@@ -2,10 +2,8 @@ import { RequestTypes, serverRequest } from './serverRequest';
 
 export const downloadResults = async (
   id: string,
-  type: string,
-  user: string
-): Promise<Response> =>
-  serverRequest(`query/download/${id}/?type=${type}&user=${user}`);
+  type: string
+): Promise<Response> => serverRequest(`query/download/${id}/?type=${type}`);
 
 // TODO: Change from any
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
@@ -17,8 +15,8 @@ export const executeQuery = async (payload: any): Promise<Response> =>
 export const executeWithDryRun = async (payload: any): Promise<Response> =>
   serverRequest(`query/dry-run`, RequestTypes.Post, payload);
 
-export const getAllQueries = async (user: string): Promise<Response> =>
-  serverRequest(`query/all?user=${user}`);
+export const getAllQueries = async (): Promise<Response> =>
+  serverRequest(`query/all`);
 
 export const getPublicDatasets = async (): Promise<Response> =>
   serverRequest(`query/datasets`);
@@ -32,8 +30,8 @@ export const getTableColumns = async (
 ): Promise<Response> =>
   serverRequest(`query/columns?table=${table}&dataset=${dataset}`);
 
-export const getTables = async (user: string): Promise<Response> =>
-  serverRequest(`query/tables?user=${user}`);
+export const getTables = async (): Promise<Response> =>
+  serverRequest('query/tables');
 
 // TODO: Change from any
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any

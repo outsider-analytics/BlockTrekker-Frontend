@@ -181,7 +181,7 @@ export default function Query(): JSX.Element {
   const download = async (type: string) => {
     if (!address || !id) return;
     setExporting(type);
-    const res = await downloadResults(id, type, address);
+    const res = await downloadResults(id, type);
     const disposition = res.headers.get('content-disposition');
     const fileName = disposition?.substring(21).replace(/^"(.*)"$/, '$1') ?? '';
     const data = await res.blob();

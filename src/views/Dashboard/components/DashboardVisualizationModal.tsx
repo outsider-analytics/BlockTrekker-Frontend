@@ -7,7 +7,6 @@ import Typography from 'components/Typography';
 import { capitalize } from 'lodash';
 import { useEffect, useState } from 'react';
 import { createUseStyles } from 'react-jss';
-import { useAccount } from 'wagmi';
 
 const useStyles = createUseStyles({
   row: {
@@ -51,17 +50,15 @@ export default function DashboardVisualizationModal({
   open,
 }: DashboardVisualizationModalProps): JSX.Element {
   const styles = useStyles();
-  const { address } = useAccount();
   const [selectedVisualization, setSelectedVisualization] = useState(-1);
   // TODO: Change from any
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [visualizations, setVisualizations] = useState<any[]>([]);
 
   useEffect(() => {
-    if (!address) return;
     if (open) {
       (async () => {
-        const res = await getVisualizationNames(address);
+        const res = await getVisualizationNames();
         const data = await res.json();
         setVisualizations(
           // TODO: Change from any
@@ -72,7 +69,7 @@ export default function DashboardVisualizationModal({
     } else {
       setSelectedVisualization(-1);
     }
-  }, [address, open]);
+  }, [open]);
 
   return (
     <Modal

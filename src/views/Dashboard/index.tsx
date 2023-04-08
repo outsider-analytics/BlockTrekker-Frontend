@@ -93,18 +93,17 @@ export default function Dashboard(): JSX.Element {
   // TODO: Change from any
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const addVisulization = async (visualization: any) => {
-    if (!address) return;
     const widget = generateNewWidget(visualization, 'visualization');
     let res;
     if (neverSaved) {
       const dashboard = transformDashboardForSave([...layout, widget]);
       // TODO: Clean this up and make more efficient
-      res = await addWidgetToDashboard(address, {
+      res = await addWidgetToDashboard({
         dashboard,
         widget,
       });
     } else {
-      res = await addWidgetToDashboard(address, {
+      res = await addWidgetToDashboard({
         widget,
       });
     }
@@ -119,18 +118,17 @@ export default function Dashboard(): JSX.Element {
   };
 
   const addText = async (format: string, text: string) => {
-    if (!address) return;
     const content = { format, text };
     const widget = generateNewWidget(content, 'text');
     if (neverSaved) {
       const dashboard = transformDashboardForSave([...layout, widget]);
       // TODO: Clean this up and make more efficient
-      await addWidgetToDashboard(address, {
+      await addWidgetToDashboard({
         dashboard,
         widget,
       });
     } else {
-      await addWidgetToDashboard(address, {
+      await addWidgetToDashboard({
         widget,
       });
     }
@@ -235,9 +233,9 @@ export default function Dashboard(): JSX.Element {
 
   const save = async () => {
     setSaving(true);
-    if (!address || !editedLayout) return;
+    if (!editedLayout) return;
     const dashboard = transformDashboardForSave(editedLayout);
-    await saveDashboard(address, dashboard);
+    await saveDashboard(dashboard);
     setSaving(false);
     setLayout(editedLayout.slice());
     setEditedLayout(undefined);
@@ -292,9 +290,8 @@ export default function Dashboard(): JSX.Element {
   };
 
   useEffect(() => {
-    if (!address) return;
     (async () => {
-      const res = await getDashboard(address);
+      const res = await getDashboard();
       const { dashboard, queryData } = await res.json();
       if (!dashboard) {
         const layoutWidgets = dataToLayout(DEFAULT_LAYOUT);
@@ -306,7 +303,7 @@ export default function Dashboard(): JSX.Element {
       setQuerydata(queryData);
       setLoading(false);
     })();
-  }, [address]);
+  }, []);
 
   return (
     <MainLayout>
