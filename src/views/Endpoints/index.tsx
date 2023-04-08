@@ -228,11 +228,10 @@ export default function Endpoints(): JSX.Element {
   };
 
   useEffect(() => {
-    if (!address) return;
     (async () => {
-      const endpointsRes = await getEndpointsByUser(address);
+      const endpointsRes = await getEndpointsByUser('TODO');
       const endpointsData = await endpointsRes.json();
-      const tableRes = await getTables(address);
+      const tableRes = await getTables();
       const tableData = await tableRes.json();
       setTables(tableData);
       if (endpointsData.length) {
@@ -241,7 +240,7 @@ export default function Endpoints(): JSX.Element {
       setEndpoints(endpointsData);
       setLoading(false);
     })();
-  }, [address]);
+  }, []);
 
   useEffect(() => {
     setSelectedInputColumn('');

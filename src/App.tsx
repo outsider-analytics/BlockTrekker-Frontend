@@ -38,13 +38,13 @@ const ethereumClient = new EthereumClient(wagmiClient, [mainnet]);
 function App(): JSX.Element {
   return (
     <>
-      <UserProvider>
-        <ThemeProvider theme={theme}>
-          <WagmiConfig client={wagmiClient}>
+      <ThemeProvider theme={theme}>
+        <WagmiConfig client={wagmiClient}>
+          <UserProvider>
             <RouterProvider router={router} />
-          </WagmiConfig>
-        </ThemeProvider>
-      </UserProvider>
+          </UserProvider>
+        </WagmiConfig>
+      </ThemeProvider>
       <ToastContainer
         position="top-right"
         style={{ zIndex: 10000000000 }}

@@ -58,7 +58,7 @@ export default function Home(): JSX.Element {
   useEffect(() => {
     if (!address) return;
     (async () => {
-      const res = await getAllQueries(address);
+      const res = await getAllQueries();
       const data = await res.json();
       setQueries(data.queries);
     })();

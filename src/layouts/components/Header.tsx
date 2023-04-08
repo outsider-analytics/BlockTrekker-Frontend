@@ -9,7 +9,7 @@ import { AiOutlineUser } from 'react-icons/ai';
 import { createUseStyles } from 'react-jss';
 import { useNavigate } from 'react-router-dom';
 import { truncateAddress } from 'utils';
-import { useAccount, useDisconnect } from 'wagmi';
+import { useAccount } from 'wagmi';
 
 const useStyles = createUseStyles({
   container: {
@@ -56,12 +56,11 @@ const useStyles = createUseStyles({
 
 export default function Header(): JSX.Element {
   const { address } = useAccount();
-  const { disconnect } = useDisconnect();
   const navigate = useNavigate();
   const [showPopover, setShowPopover] = useState(false);
   const popoverRef = useRef(null);
   const styles = useStyles();
-  const { credits } = useTrekkerProfile();
+  const { credits, disconnect } = useTrekkerProfile();
 
   useOutsideAlerter(popoverRef, () => setShowPopover(false));
 
